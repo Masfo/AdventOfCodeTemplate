@@ -1,0 +1,7 @@
+.vs
+out
+bin
+*.pdb
+pdb
+*.xml
+*.tmp
