@@ -4,7 +4,7 @@ module;
 
 
 export module debug;
-import standard;
+
 using namespace std::string_view_literals;
 
 struct FormatLocation
@@ -63,11 +63,6 @@ export
 {
 	using namespace std::string_view_literals;
 
-	void DebugHalt()
-	{
-		if (IsDebuggerPresent())
-			DebugBreak();
-	}
 
 	void dbgln() noexcept { print_to_debug("\n"); }
 
@@ -114,7 +109,7 @@ export
 
 #ifdef _DEBUG
 	template<typename... Args>
-	void dbg(std::string_view [[maybe_unused]] fmts, Args [[maybe_unused]] && ...args) noexcept
+	void dbg(std::string_view fmts, Args && ...args) noexcept
 	{
 		if constexpr (sizeof...(args) > 0)
 		{
@@ -128,7 +123,7 @@ export
 	}
 
 	template<typename... Args>
-	void dbg_if(bool condition, std::string_view [[maybe_unused]] fmts, Args [[maybe_unused]] && ...args) noexcept
+	void dbg_if(bool condition, std::string_view fmts, Args &&...args) noexcept
 	{
 		if (condition)
 			dbg(fmts, args...);
@@ -148,7 +143,7 @@ export
 	// trace
 #ifdef _DEBUG
 	template<typename... Args>
-	void trace(FormatLocation [[maybe_unused]] fmt, Args [[maybe_unused]] && ...args) noexcept
+	void trace(FormatLocation fmt, Args && ...args) noexcept
 	{
 		if constexpr (sizeof...(Args) > 0)
 			dbgln("{}({}): {}", fmt.loc.file_name(), fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...)));
@@ -161,4 +156,19 @@ export
 	{
 	}
 #endif
+
+
+	void DebugHalt()
+	{
+		if (IsDebuggerPresent())
+		{
+			auto traces = std::stacktrace::current(1);
+
+			for (const auto &trace : traces | std::views::reverse)
+				dbgln("{}({}): {}", trace.source_file(), trace.source_line(), trace.description());
+
+			DebugBreak();
+		}
+	}
+
 } // namespace piku

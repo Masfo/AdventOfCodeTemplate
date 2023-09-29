@@ -4,11 +4,33 @@ module;
 
 export module math;
 import types;
-import standard;
 
 
 export
 {
+	
+	struct Range {
+		u64 start;
+		u64 end;
+    bool operator<(Range other) const {
+        return start < other.start;
+    }
+};
+
+	template<typename T>
+	i64 hash_combine(i64 & seed, const T &value)
+	{
+		auto hasher = std::hash<T>{};
+		seed ^= hasher(value) + 0x9e37'79b9 + (seed << 6) + (seed >> 2);
+		return seed;
+	}
+
+	template<typename T, typename... Rest>
+	i64 hash_combine(i64 & seed, const T &v, const Rest &...rest)
+	{
+		seed = hash_combine(seed, v);
+		return hash_combine(seed, rest...);
+	}
 
 	template<typename T>
 	struct vec2_helper

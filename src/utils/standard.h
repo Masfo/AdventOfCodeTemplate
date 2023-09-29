@@ -15,6 +15,7 @@
 #include <set>
 #include <source_location>
 #include <span>
+#include <stacktrace>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -37,7 +38,7 @@ namespace fs = std::filesystem;
 			{                                                                                                                              \
 				i64 result = 0;                                                                                                            \
 				hash_combine(result, __VA_ARGS__);                                                                                         \
-				return result;                                                                                                             \
+				return static_cast<size_t>(result);                                                                                        \
 			}                                                                                                                              \
 		};                                                                                                                                 \
 	}

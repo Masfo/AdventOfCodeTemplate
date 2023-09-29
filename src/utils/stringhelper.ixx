@@ -5,7 +5,6 @@ export module stringhelper;
 
 import types;
 import math;
-import standard;
 
 
 const static std::string digit_string{"0123456789"};
@@ -589,7 +588,7 @@ export
 
 		for (const auto &line : vec)
 		{
-			int y = 0;
+			size_t y = 0;
 			for (const auto &c : line)
 				ret[y++].push_back(c);
 		}
@@ -606,7 +605,7 @@ export
 
 		for (const auto &line : vec)
 		{
-			int y = 0;
+			size_t y = 0;
 			for (const auto &c : line)
 				ret[y++].push_back(c);
 		}
@@ -627,12 +626,12 @@ export
 
 	std::deque<char> to_deque(std::string_view str) noexcept { return {str.begin(), str.end()}; }
 
-	i64 to_i64(std::string_view str, int base) noexcept { return to_number<i64>(str); }
+	i64 to_i64(std::string_view str) noexcept { return to_number<i64>(str); }
 
-	u64 to_u64(std::string_view str, int base) noexcept { return to_number<u64>(str); }
+	u64 to_u64(std::string_view str) noexcept { return to_number<u64>(str); }
 
-	i32 to_i32(std::string_view str, int base) noexcept { return to_number<i32>(str); }
+	i32 to_i32(std::string_view str) noexcept { return to_number<i32>(str); }
 
-	u32 to_u32(std::string_view str, int base) noexcept { return to_number<u32>(str); }
+	u32 to_u32(std::string_view str) noexcept { return to_number<u32>(str); }
 
 } // namespace aoc

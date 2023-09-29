@@ -9,7 +9,6 @@ import debug;
 import types;
 import print;
 import stringhelper;
-import standard;
 
 
 enum class include_emptys
@@ -20,6 +19,15 @@ enum class include_emptys
 
 export
 {
+	
+	// 
+	std::generator<std::string_view> read_lines(std::filesystem::path &file, std::string_View delims = "\n", bool include_empty=false)
+	{
+		
+	}
+	
+	
+	
 	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims = "\n", bool include_empty = false);
 
 
@@ -60,7 +68,8 @@ export
 		}
 		catch (const std::exception &e)
 		{
-			trace("Exception:\n{}\n", e.what());
+			std::string w{strip(e.what(), "\n")};
+			trace("Exception:\n{:>10}{}\n", "", w);
 			DebugHalt();
 			return {};
 		}

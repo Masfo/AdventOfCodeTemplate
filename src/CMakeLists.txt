@@ -32,10 +32,14 @@ target_sources(aoc PRIVATE
 	main.cpp
 )
 
-add_subdirectory(utils)
-target_link_libraries(aoc PRIVATE utils)
+target_precompile_headers(aoc
+  INTERFACE 
+  utils/glm/glm.hpp
+  utils/standard.hpp
+)
 
-#target_include_directories(aoc PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+
+target_include_directories(aoc SYSTEM PRIVATE ${CMAKE_CURRENT_LIST_DIR}/utils/glm)
 
 
 # Modules here
@@ -43,6 +47,13 @@ target_sources(aoc
     PRIVATE 
 	FILE_SET cxx_modules TYPE CXX_MODULES FILES
     
+    utils/aoc.ixx
+    utils/debug.ixx
+    utils/math.ixx 
+    utils/types.ixx
+    utils/print.ixx
+    utils/stringhelper.ixx
+    utils/readfile.ixx
 )
 
 

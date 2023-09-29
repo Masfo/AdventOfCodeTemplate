@@ -3,7 +3,6 @@ module;
 #include "standard.h"
 
 export module types;
-import standard;
 
 
 export
@@ -51,22 +50,6 @@ export
 	i64 as_i64(T t)
 	{
 		return as<i64>(t);
-	}
-
-
-	template<typename T>
-	i64 hash_combine(i64 & seed, const T &value)
-	{
-		auto hasher = std::hash<T>{};
-		seed ^= hasher(value) + 0x9e37'79b9 + (seed << 6) + (seed >> 2);
-		return seed;
-	}
-
-	template<typename T, typename... Rest>
-	i64 hash_combine(i64 & seed, const T &v, const Rest &...rest)
-	{
-		seed = hash_combine(seed, v);
-		return hash_combine(seed, rest...);
 	}
 
 

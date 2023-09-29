@@ -1,36 +1,38 @@
 module;
-#include "standard.h"
+#include <format>
+#include <print>
+#include <string_view>
 
 
 export module print;
-import debug;
-import standard;
 
+// import debug;
 
-export
+export namespace aoc
 {
 
 	template<typename... Args>
-	void print(std::string_view fmts, Args... args) noexcept
+	void print(const std::string_view fmts, Args... args) noexcept
 	{
 #ifdef _DEBUG
-		std::string tmp = std::vformat(fmts, std::make_format_args(args...));
-		dbg("{}", tmp);
-		std::print("{}", tmp);
+		// std::string tmp = std::vformat(fmts, std::make_format_args(args...));
+		//  dbg("{}", tmp);
+		//  std::print("{}", tmp);
 #endif
 	}
 
 	template<typename... Args>
-	void println(std::string_view fmts, Args... args) noexcept
+	void println(std::string_view fmts, Args&&... args) noexcept
 	{
-		std::string tmp = std::vformat(fmts, std::make_format_args(args...));
-		dbgln("{}", tmp);
-		std::println("{}", tmp);
+		if constexpr (sizeof...(args) > 0)
+		{
+			std::string tmp = std::vformat(fmts, std::make_format_args(args...));
+			std::println(tmp);
+		}
+		else
+		{
+			std::println(fmts);
+		}
 	}
 
-	void println() noexcept
-	{
-		dbgln();
-		std::println("");
-	}
-}
+} // namespace aoc
