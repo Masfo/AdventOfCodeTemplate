@@ -52,5 +52,83 @@ export
 		return as<i64>(t);
 	}
 
+	/*
+	template <typename T, typename U=u64> U hash_combine(U &seed, const T &value)
+	{
+		auto hasher = std::hash<T>{};
+		seed ^= hasher(value) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+		return seed;
+	}
+	
+	template <typename T, typename... Rest> i64 hash_combine(i64 &seed, const T &v, const Rest &...rest)
+	{
+		seed = hash_combine(seed, v);
+		return hash_combine(seed, rest...);
+	}
+	
+	struct S
+	{
+		std::string first;
+		std::string last;
+		bool operator==(const S&) const = default; // since C++20
+	};
+	
+	struct MyHash
+	{
+		std::size_t operator()(const S& s) const noexcept
+		{
+			std::size_t result = 0;
+			hash_combine(result, s.first);
+			hash_combine(result, s.last);
+			return result;
+		}
+	};
+
+	// std specialization
+	namespace std
+	{
+	template <>
+	struct hash<S>
+	{
+		std::size_t operator()(const S& c) const
+		{
+			std::size_t result = 0;
+			hash_combine(result, s.first);
+			hash_combine(result, s.last);
+			return result;
+		}
+	};
+	}
+	
+	
+
+    struct MyType
+    {
+        float float_x;
+        std::string my_string
+    };
+
+    // note: value. (dot)
+    IMPLEMENT_STD_HASH(MyType, value.float_x, value.my_string);
+
+
+
+#define STD_HASH(T, ...)                                                                                                                   \
+    namespace std                                                                                                                          \
+    {                                                                                                                                      \
+        template <> struct hash<T>                                                                                                         \
+        {                                                                                                                                  \
+            size_t operator()(const T &value) const                                                                                        \
+            {                                                                                                                              \
+                i64 result = 0;                                                                                                            \
+                hash_combine(result, __VA_ARGS__);                                                                                         \
+                return result;                                                                                                             \
+            }                                                                                                                              \
+        };                                                                                                                                 \
+    }
+
+	
+	
+	*/
 
 } // namespace aoc
