@@ -58,7 +58,7 @@ target_sources(aoc
     
     utils/aoc.ixx
     utils/types.ixx
-    #utils/debug.ixx
+    utils/debug.ixx
     utils/math.ixx 
     utils/stringhelper.ixx
     utils/readfile.ixx

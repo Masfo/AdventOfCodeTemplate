@@ -27,7 +27,7 @@ struct alignas(64) FormatLocation
 
 static_assert(64 == sizeof(FormatLocation), "FormatLocation is not 64 bytes");
 
-#if 0
+
 export
 {
 	using namespace std::string_view_literals;
@@ -93,4 +93,3 @@ export
 
 	[[noreturn]] void panic() noexcept { panic(""); }
 }
-#endif

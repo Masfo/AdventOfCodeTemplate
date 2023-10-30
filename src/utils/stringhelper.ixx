@@ -15,7 +15,6 @@ const static std::string alphanum_string{"0123456789abcdefghijklmnopqrstuvwxyzAB
 
 export
 {
-	using namespace aoc;
 
 	enum class ignore : u32
 	{
@@ -138,7 +137,8 @@ export
 
 
 	// Split
-	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	std::vector<std::string> split_vector(
+		const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
 	{
 		std::string new_str{strip(str, option)};
 
@@ -155,24 +155,14 @@ export
 		}
 		return tokens;
 	}
+	template<typename T>
+	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept;
 
-	template<typename T = i64>
-	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept
-	{
-		std::string new_str{strip(str, option)};
-
-		std::vector<T> ret;
-		auto           s = split(new_str, delims);
-
-		for (auto &word : s)
-			ret.push_back(to_number<T>(word));
-		return ret;
-	}
 
 	template<size_t N>
 	auto split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none)
 	{
-		const auto s = split(str, delims, option);
+		const auto s = split_vector(str, delims, option);
 		if (s.size() < N)
 			throw std::range_error(std::format("Invalid delimiter/strip character, expected to get {} splits, got {}", N, s.size()));
 
@@ -187,7 +177,7 @@ export
 	template<typename T, size_t N>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none)
 	{
-		const auto s = split(str, delims, option);
+		const auto s = split_vector(str, delims, option);
 		if (s.size() < N)
 			throw std::range_error(std::format("Invalid delimiter/strip character, expected to get {} splits, got {}", N, s.size()));
 
@@ -210,7 +200,7 @@ export
 
 		if constexpr (std::is_same_v<T, char>)
 		{
-			auto              s = split(str, delims, option);
+			auto              s = split_vector(str, delims, option);
 			std::vector<char> ret;
 			for (const auto &c : s)
 				ret.push_back(c[0]);
@@ -233,7 +223,7 @@ export
 		}
 		else if constexpr (std::is_same_v<T, std::deque<std::string>>)
 		{
-			auto                    s = split(str, delims, option);
+			auto                    s = split_vector(str, delims, option);
 			std::deque<std::string> ret;
 			ret.assign_range(s);
 			return s;
@@ -316,7 +306,7 @@ export
 	template<typename T1, typename T2>
 	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
 	{
-		const auto s = split(str, delims, option);
+		const auto s = split<2>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size())
 			throw std::range_error(std::format(
@@ -384,20 +374,20 @@ export
 		return std::make_tuple(t1, t2, t3, t4);
 	}
 
-	template<typename T = aoc::i64>
+	template<typename T>
 	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept
 	{
 
 		std::string new_str{strip(str, option)};
 
 		std::vector<T> ret;
-		auto           s = split(new_str, delims);
+		auto           s = split_vector(new_str, delims);
 
 		for (auto &word : s)
 			ret.push_back(to_number<T>(word));
 		return ret;
 	}
-	template<size_t count, typename T = aoc::i64>
+	template<size_t count, typename T>
 	auto split_to_integer(std::string_view str, std::string_view delims = " \t\n", ignore option = ignore::none) noexcept
 		-> std::array<T, count>
 	{
@@ -548,6 +538,7 @@ export
 
 		return tokens;
 	}
+
 
 	std::vector<std::string> split_exact(
 		std::string_view str, std::string_view delims, bool include_empty, ignore option = ignore::none) noexcept
