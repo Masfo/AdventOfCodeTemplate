@@ -1,14 +1,11 @@
 module;
 
-#include "standard.h"
 
-
-export module readfile;
-
-import debug;
-import types;
-import print;
-import stringhelper;
+export module aoc.readfile;
+import std;
+import aoc.debug;
+import aoc.types;
+import aoc.stringhelper;
 
 
 enum class include_emptys
@@ -19,16 +16,16 @@ enum class include_emptys
 
 export
 {
-	
-	// 
-	std::generator<std::string_view> read_lines(std::filesystem::path &file, std::string_View delims = "\n", bool include_empty=false)
+
+	//
+	std::generator<std::string_view> read_lines(
+		std::filesystem::path & file, std::string_View delims = "\n", include_emptys ie = include_emptys::no)
 	{
-		
 	}
-	
-	
-	
-	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims = "\n", bool include_empty = false);
+
+
+	std::vector<std::string> read_lines_exact(
+		std::string_view filename, std::string_view delims = "\n", include_emptys ie = include_emptys::no);
 
 
 	std::vector<std::string> read_all_lines(const std::filesystem::path &path, include_emptys ie = include_emptys::no)
@@ -75,16 +72,16 @@ export
 		}
 	}
 
-	std::vector<std::string> read_lines_delimiter(std::string_view filename, std::string_view delim, bool include_empty = false)
+	std::vector<std::string> read_lines_delimiter(std::string_view filename, std::string_view delim, include_emptys ie = include_emptys::no)
 	{
 		auto s = read_file(filename);
 
 		std::vector<std::string> ret;
 
-		if (!include_empty)
+		if (ie == include_emptys::no)
 			ret = split(s, delim);
 		else
-			ret = read_lines_exact(filename, delim, include_empty);
+			ret = read_lines_exact(filename, delim, ie);
 
 		return ret;
 	}
@@ -95,15 +92,15 @@ export
 		return split(f, delims);
 	}
 
-	std::vector<std::string> read_lines(std::string_view filename, std::string_view delims = "\n", bool include_empty = false)
+	std::vector<std::string> read_lines(std::string_view filename, std::string_view delims = "\n", include_emptys ie = include_emptys::no)
 	{
-		return read_lines_delimiter(filename, delims, include_empty);
+		return read_lines_delimiter(filename, delims, ie);
 	}
 
-	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims, bool include_empty)
+	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims, include_emptys ie = include_emptys::no)
 	{
 		auto s  = read_file(filename);
-		auto sl = split_exact(s, delims, include_empty);
+		auto sl = split_exact(s, delims, ie);
 		return sl;
 	}
 

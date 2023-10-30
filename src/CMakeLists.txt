@@ -41,6 +41,15 @@ target_precompile_headers(aoc
 
 target_include_directories(aoc SYSTEM PRIVATE ${CMAKE_CURRENT_LIST_DIR}/utils/glm)
 
+set(CMAKE_DISABLE_SOURCE_CHANGES OFF)
+configure_file(	
+        $ENV{VCToolsInstallDir}modules/std.ixx
+        ${CMAKE_CURRENT_LIST_DIR}/utils/std.ixx
+        COPYONLY
+)
+set(CMAKE_DISABLE_SOURCE_CHANGES ON)
+
+
 
 # Modules here
 target_sources(aoc 
@@ -48,13 +57,15 @@ target_sources(aoc
 	FILE_SET cxx_modules TYPE CXX_MODULES FILES
     
     utils/aoc.ixx
-    utils/debug.ixx
-    utils/math.ixx 
     utils/types.ixx
-    utils/print.ixx
+    #utils/debug.ixx
+    utils/math.ixx 
     utils/stringhelper.ixx
     utils/readfile.ixx
+
+	utils/std.ixx
 )
+
 
 
 

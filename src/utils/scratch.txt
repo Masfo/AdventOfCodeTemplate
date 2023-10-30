@@ -1,0 +1,16 @@
+		
+		
+		
+		std::string t{"-One-Two-Three-Four-Five-Six-"};
+		const auto  dash      = [](char x, char y) { return not(x == '-' or y == '-'); };
+		const auto  dash3     = [](char x) { return x == '-'; };
+		const auto  not_empty = [](auto x) { return not x.empty(); };
+
+
+		auto words = t | std::views::lazy_split('-') | std::views::filter(not_empty) | std::views::stride(2) |
+					 std::ranges::to<std::vector<std::string>>();
+
+		for (const auto& word : words)
+		{
+			dbgln("{}", word);
+		}

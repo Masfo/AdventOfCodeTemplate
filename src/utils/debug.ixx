@@ -1,13 +1,13 @@
 module;
-#include <windows.h>
-#include "standard.h"
+#include <Windows.h>
 
+export module aoc.debug;
 
-export module debug;
+import std;
 
-using namespace std::string_view_literals;
+void output_message(const std::string_view message) noexcept { OutputDebugStringA(message.data()); }
 
-struct FormatLocation
+struct alignas(64) FormatLocation
 {
 	std::string_view     fmt;
 	std::source_location loc;
@@ -25,150 +25,72 @@ struct FormatLocation
 	}
 };
 
-void print_to_debugln(std::string_view data) noexcept
-{
-#ifdef _DEBUG
-#if defined(_WIN32)
-	OutputDebugStringA(data.data());
-	OutputDebugStringA("\n");
-#endif
-#endif
-}
+static_assert(64 == sizeof(FormatLocation), "FormatLocation is not 64 bytes");
 
-void print_to_debug(std::string_view data) noexcept
-{
-#ifdef _DEBUG
-#if defined(_WIN32)
-	OutputDebugStringA(data.data());
-#endif
-#endif
-}
-
-void print_to_debugln(std::span<uint8_t> data) noexcept
-{
-#ifdef _DEBUG
-#if defined(_WIN32)
-	std::string buffer;
-	buffer.reserve(data.size());
-	for (const auto &i : data)
-		buffer.push_back((char)i);
-
-	buffer.push_back('\n');
-	OutputDebugStringA(buffer.c_str());
-#endif
-#endif
-}
-
+#if 0
 export
 {
 	using namespace std::string_view_literals;
 
-
-	void dbgln() noexcept { print_to_debug("\n"); }
-
-#ifdef _DEBUG
+	// debug
 	template<typename... Args>
-	void dbgln(std::string_view fmts, Args... args) noexcept
+	void dbg(std::string_view fmt, Args && ...args) noexcept
 	{
-		if constexpr (sizeof...(args) > 0)
-		{
-			std::string tmp = std::vformat(fmts, std::make_format_args(args...));
-			print_to_debugln(tmp);
-		}
-		else
-		{
-			print_to_debugln(fmts);
-		}
+		output_message(std::format("{}"sv, std::vformat(fmt, std::make_format_args(args...))));
 	}
 
+	void dbg(std::string_view fmt) noexcept { output_message(std::format("{}"sv, fmt)); }
+
+	// debugln
 	template<typename... Args>
-	void dbgln_if(bool condition, std::string_view fmts, Args... args) noexcept
+	void dbgln(std::string_view fmt, Args && ...args) noexcept
 	{
-		if (condition)
-			dbgln(fmts, args...);
+		output_message(std::format("{}\n"sv, std::vformat(fmt, std::make_format_args(args...))));
 	}
 
-	void dbgln(std::span<uint8_t> data) noexcept { print_to_debugln(data); }
+	void dbgln(std::string_view fmt) noexcept { output_message(std::format("{}\n"sv, fmt)); }
 
-#else
-	template<typename... Args>
-	void dbgln(std::string_view, Args && ...) noexcept
-	{
-	}
-
-	void dbgln(std::span<uint8_t>) noexcept { }
+	void dbgln() noexcept { output_message("\n"); }
 
 	template<typename... Args>
-	void dbgln_if(bool, std::string_view, Args...) noexcept
+	void dbgln_if(bool cond, std::string_view fmt, Args &&...args) noexcept
 	{
+		if (cond)
+			dbgln(fmt, args...);
 	}
-
-
-#endif
-
-
-#ifdef _DEBUG
-	template<typename... Args>
-	void dbg(std::string_view fmts, Args && ...args) noexcept
-	{
-		if constexpr (sizeof...(args) > 0)
-		{
-			std::string tmp = std::vformat(fmts, std::make_format_args(args...));
-			print_to_debug(tmp);
-		}
-		else
-		{
-			print_to_debug(fmts);
-		}
-	}
-
-	template<typename... Args>
-	void dbg_if(bool condition, std::string_view fmts, Args &&...args) noexcept
-	{
-		if (condition)
-			dbg(fmts, args...);
-	}
-#else
-	template<typename... Args>
-	void dbg(std::string_view, Args && ...) noexcept
-	{
-	}
-
-	template<typename... Args>
-	void dbg_if(bool, std::string_view, Args &&...) noexcept
-	{
-	}
-#endif
 
 	// trace
-#ifdef _DEBUG
 	template<typename... Args>
 	void trace(FormatLocation fmt, Args && ...args) noexcept
 	{
-		if constexpr (sizeof...(Args) > 0)
-			dbgln("{}({}): {}", fmt.loc.file_name(), fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...)));
-		else
-			dbgln("{}({}): {}", fmt.loc.file_name(), fmt.loc.line(), fmt.fmt);
+		output_message(
+			std::format("{}({}): {}\n"sv, fmt.loc.file_name(), fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
 	}
-#else
+
+	void trace(FormatLocation fmt) noexcept { output_message(std::format("{}({}): {}\n"sv, fmt.loc.file_name(), fmt.loc.line(), fmt.fmt)); }
+
+	void trace() noexcept { output_message("\n"); }
+
+	// Panic
 	template<typename... Args>
-	void trace(FormatLocation, Args && ...) noexcept
+	[[noreturn]] void panic(std::string_view fmt, Args && ...args) noexcept
 	{
-	}
-#endif
-
-
-	void DebugHalt()
-	{
+		if constexpr (sizeof...(args) > 0)
+		{
+			trace("PANIC: ", std::vformat(fmt, std::make_format_args(args...)));
+		}
+		else
+		{
+			trace("PANIC: {}", fmt);
+		}
 		if (IsDebuggerPresent())
 		{
-			auto traces = std::stacktrace::current(1);
-
-			for (const auto &trace : traces | std::views::reverse)
-				dbgln("{}({}): {}", trace.source_file(), trace.source_line(), trace.description());
-
 			DebugBreak();
 		}
+		FatalExit(0);
+		std::unreachable();
 	}
 
-} // namespace piku
+	[[noreturn]] void panic() noexcept { panic(""); }
+}
+#endif

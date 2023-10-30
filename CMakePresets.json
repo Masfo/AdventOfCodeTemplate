@@ -28,7 +28,7 @@
                     "enableMicrosoftCodeAnalysis": true
                 }
             },
-            // "cmakeExecutable": "cmake.exe"
+            "cmakeExecutable": "cmake.exe"
         },
         {
             "name": "x64-debug",

@@ -1,11 +1,10 @@
 module;
 
-#include "standard.h"
-export module stringhelper;
+export module aoc.stringhelper;
 
-import types;
-import math;
-
+import std;
+import aoc.types;
+import aoc.math;
 
 const static std::string digit_string{"0123456789"};
 const static std::string whitespace_string{" \t\f\n\r\v"};
@@ -16,7 +15,7 @@ const static std::string alphanum_string{"0123456789abcdefghijklmnopqrstuvwxyzAB
 
 export
 {
-
+	using namespace aoc;
 
 	enum class ignore : u32
 	{
@@ -139,10 +138,36 @@ export
 
 
 	// Split
-	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept;
-	template<typename T>
-	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option = ignore::none) noexcept;
+	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	{
+		std::string new_str{strip(str, option)};
 
+		auto start = new_str.find_first_not_of(delims, 0);
+		auto stop  = new_str.find_first_of(delims, start);
+
+		std::vector<std::string> tokens;
+		while (std::string::npos != stop || std::string::npos != start)
+		{
+			tokens.emplace_back(new_str.substr(start, stop - start));
+
+			start = new_str.find_first_not_of(delims, stop);
+			stop  = new_str.find_first_of(delims, start);
+		}
+		return tokens;
+	}
+
+	template<typename T = i64>
+	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept
+	{
+		std::string new_str{strip(str, option)};
+
+		std::vector<T> ret;
+		auto           s = split(new_str, delims);
+
+		for (auto &word : s)
+			ret.push_back(to_number<T>(word));
+		return ret;
+	}
 
 	template<size_t N>
 	auto split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none)
@@ -359,7 +384,7 @@ export
 		return std::make_tuple(t1, t2, t3, t4);
 	}
 
-	template<typename T = i64>
+	template<typename T = aoc::i64>
 	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept
 	{
 
@@ -372,7 +397,7 @@ export
 			ret.push_back(to_number<T>(word));
 		return ret;
 	}
-	template<size_t count, typename T = i64>
+	template<size_t count, typename T = aoc::i64>
 	auto split_to_integer(std::string_view str, std::string_view delims = " \t\n", ignore option = ignore::none) noexcept
 		-> std::array<T, count>
 	{
@@ -476,6 +501,7 @@ export
 		return newstr;
 	}
 
+
 	std::string_view trim(const std::string_view s)
 	{
 		auto front = std::find_if_not(s.begin(), s.end(), [](int c) { return std::isspace(c); });
@@ -491,6 +517,8 @@ export
 			ret.emplace_back(trim(i));
 		return ret;
 	}
+
+	inline auto trim_transform = [](std::string_view str) -> std::string_view { return trim(str); };
 
 	// ###############################################
 
@@ -609,6 +637,15 @@ export
 			for (const auto &c : line)
 				ret[y++].push_back(c);
 		}
+		return ret;
+	}
+
+
+	std::string input(std::string_view ask)
+	{
+		std::string ret;
+		std::print("{}", ask);
+		std::getline(std::cin, ret);
 		return ret;
 	}
 

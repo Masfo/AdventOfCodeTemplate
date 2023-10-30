@@ -25,13 +25,17 @@ void day23();
 void day24();
 void day25();
 
-#include "utils/standard.h"
+import std;
 
 #define ALL 1
 
 int main()
 {
-	std::println("AOC 2022:\n\n");
+	std::println("AOC 2023:\n\n");
+
+	// pass command line option for test/real input
+	// if not set use ifdef the usual day02.txt
+	// if set override
 
 	try
 	{
