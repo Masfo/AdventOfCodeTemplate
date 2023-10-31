@@ -1,4 +1,5 @@
-expoimport std;
+export module aoc.day04;
+import std;
 import aoc;
 
 export void day04()

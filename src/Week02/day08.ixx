@@ -1,4 +1,5 @@
-export mimport std;
+export module aoc.day08;
+import std;
 import aoc;
 
 export void day08()
