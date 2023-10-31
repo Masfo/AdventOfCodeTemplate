@@ -50,20 +50,30 @@ export
 		return as<i64>(t);
 	}
 
-	/*
-	template <typename T, typename U=u64> U hash_combine(U &seed, const T &value)
+
+	template<typename T>
+	void hash_combine(std::size_t & seed, const T &val)
 	{
-		auto hasher = std::hash<T>{};
-		seed ^= hasher(value) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+		seed ^= std::hash<T>()(val) + 0x9e37'79b9 + (seed << 6) + (seed >> 2);
+	}
+
+	template<typename T, typename... Types>
+	void hash_combine(std::size_t & seed, const T &val, const Types &...args)
+	{
+		hash_combine(seed, val);
+		hash_combine(seed, args...);
+	}
+	void hash_combine(std::size_t &) { }
+
+	template<typename... Types>
+	std::size_t hash_val(const Types &...args)
+	{
+		std::size_t seed = 0;
+		hash_combine(seed, args...);
 		return seed;
 	}
 
-	template <typename T, typename... Rest> i64 hash_combine(i64 &seed, const T &v, const Rest &...rest)
-	{
-		seed = hash_combine(seed, v);
-		return hash_combine(seed, rest...);
-	}
-
+	/*
 	struct S
 	{
 		std::string first;
@@ -128,5 +138,4 @@ export
 
 
 	*/
-
-} // namespace aoc
+}

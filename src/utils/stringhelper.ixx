@@ -5,6 +5,7 @@ export module aoc.stringhelper;
 import std;
 import aoc.types;
 import aoc.math;
+import aoc.vec;
 
 const static std::string digit_string{"0123456789"};
 const static std::string whitespace_string{" \t\f\n\r\v"};
@@ -137,8 +138,7 @@ export
 
 
 	// Split
-	std::vector<std::string> split_vector(
-		const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
 	{
 		std::string new_str{strip(str, option)};
 
@@ -160,9 +160,9 @@ export
 
 
 	template<size_t N>
-	auto split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none)
+	auto split_n(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none)
 	{
-		const auto s = split_vector(str, delims, option);
+		const auto s = split(str, delims, option);
 		if (s.size() < N)
 			throw std::range_error(std::format("Invalid delimiter/strip character, expected to get {} splits, got {}", N, s.size()));
 
@@ -172,12 +172,11 @@ export
 		return ret;
 	}
 
-	// TODO ivec2 split
 
 	template<typename T, size_t N>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none)
 	{
-		const auto s = split_vector(str, delims, option);
+		const auto s = split(str, delims, option);
 		if (s.size() < N)
 			throw std::range_error(std::format("Invalid delimiter/strip character, expected to get {} splits, got {}", N, s.size()));
 
@@ -200,7 +199,7 @@ export
 
 		if constexpr (std::is_same_v<T, char>)
 		{
-			auto              s = split_vector(str, delims, option);
+			auto              s = split(str, delims, option);
 			std::vector<char> ret;
 			for (const auto &c : s)
 				ret.push_back(c[0]);
@@ -223,7 +222,7 @@ export
 		}
 		else if constexpr (std::is_same_v<T, std::deque<std::string>>)
 		{
-			auto                    s = split_vector(str, delims, option);
+			auto                    s = split(str, delims, option);
 			std::deque<std::string> ret;
 			ret.assign_range(s);
 			return s;
@@ -252,7 +251,7 @@ export
 	template<typename T1, typename T2>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none) noexcept
 	{
-		const auto [c1, c2] = split<2>(str, delims, option);
+		const auto [c1, c2] = split_n<2>(str, delims, option);
 
 		T1 t1 = convert_to_type<T1>(c1);
 		T2 t2 = convert_to_type<T2>(c2);
@@ -263,7 +262,7 @@ export
 	template<typename T1, typename T2, typename T3>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none) noexcept
 	{
-		const auto s = split<3>(str, delims, option);
+		const auto s = split_n<3>(str, delims, option);
 
 		T1 t1 = convert_to_type<T1>(s[0]);
 		T2 t2 = convert_to_type<T2>(s[1]);
@@ -275,7 +274,7 @@ export
 	template<typename T1, typename T2, typename T3, typename T4>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none) noexcept
 	{
-		const auto s = split<4>(str, delims, option);
+		const auto s = split_n<4>(str, delims, option);
 
 		T1 t1 = convert_to_type<T1>(s[0]);
 		T2 t2 = convert_to_type<T2>(s[1]);
@@ -285,28 +284,12 @@ export
 		return std::make_tuple(t1, t2, t3, t4);
 	}
 
-	std::vector<std::string> split(const std::string_view str, const std::string_view delims, ignore option) noexcept
-	{
-		std::string new_str{strip(str, option)};
 
-		auto start = new_str.find_first_not_of(delims, 0);
-		auto stop  = new_str.find_first_of(delims, start);
-
-		std::vector<std::string> tokens;
-		while (std::string::npos != stop || std::string::npos != start)
-		{
-			tokens.emplace_back(new_str.substr(start, stop - start));
-
-			start = new_str.find_first_not_of(delims, stop);
-			stop  = new_str.find_first_of(delims, start);
-		}
-		return tokens;
-	}
 	// ## With index
 	template<typename T1, typename T2>
 	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
 	{
-		const auto s = split<2>(str, delims, option);
+		const auto s = split_n<2>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size())
 			throw std::range_error(std::format(
@@ -328,7 +311,7 @@ export
 	template<typename T1, typename T2, typename T3>
 	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, size_t I3, ignore option = ignore::none)
 	{
-		const auto s = split(str, delims, option);
+		const auto s = split_n<3>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size())
 			throw std::range_error(std::format(
@@ -352,7 +335,7 @@ export
 	auto split(
 		const std::string_view str, const std::string_view delims, size_t I1, size_t I2, size_t I3, size_t I4, ignore option = ignore::none)
 	{
-		const auto s = split(str, delims, option);
+		const auto s = split_n<4>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size() || I4 >= s.size())
 			throw std::range_error(std::format(
@@ -380,8 +363,8 @@ export
 
 		std::string new_str{strip(str, option)};
 
-		std::vector<T> ret;
-		auto           s = split_vector(new_str, delims);
+		std::vector<T>           ret;
+		std::vector<std::string> s = split(new_str, delims);
 
 		for (auto &word : s)
 			ret.push_back(to_number<T>(word));

@@ -46,7 +46,7 @@ export
 		return lines;
 	}
 
-	std::string read_file(std::string_view filename)
+	inline std::string read_file(std::string_view filename)
 	{
 		try
 		{
@@ -73,7 +73,7 @@ export
 	std::vector<std::string> read_csv(std::string_view filename, std::string_view delims = ",\n")
 	{
 		auto f = read_file(filename.data());
-		return split_vector(f, delims);
+		return split(f, delims);
 	}
 
 
@@ -93,7 +93,7 @@ export
 		std::vector<std::string> ret;
 
 		if (ie == include_emptys::no)
-			ret = split_vector(s, delim);
+			ret = split(s, delim);
 		else
 			ret = read_lines_exact(filename, delim, ie);
 
