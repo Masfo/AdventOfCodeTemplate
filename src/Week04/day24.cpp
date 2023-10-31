@@ -1,10 +1,13 @@
+import std;
 import aoc;
 
 void day24()
 {
+    auto lines = read_lines("input\\day24.txt");
 
-    println("Day 24:");
-    println("\t- Part 1: {}", 0);
-    println("\t- Part 2: {}", 0);
-    println("");
+
+    aoc::println("Day 24 :");
+    aoc::println("	- Part 1: {}", 0);
+    aoc::println("	- Part 2: {}", 0);
+    aoc::println();
 }
