@@ -5,9 +5,9 @@ module;
 
 
 export module aoc.math;
-import aoc.vec;
 import std;
 import aoc.types;
+import aoc.vec;
 
 
 #define STD_HASH(T, ...)                                                                                                                   \
