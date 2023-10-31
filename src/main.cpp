@@ -31,7 +31,7 @@ void day24();
 void day25();
 
 
-#define ALL 1
+#define ALL 0
 namespace fs = std::filesystem;
 
 void write_to_file(fs::path directory, int day, std::string_view content)
@@ -158,7 +158,7 @@ int main()
 	}
 	catch (const std::exception &e)
 	{
-		std::println("Exception: {}", e.what());
+		aoc::println("Exception: {}", e.what());
 		return -1;
 	}
 
