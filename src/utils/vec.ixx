@@ -174,7 +174,7 @@ struct vec
 	}
 
 	template<typename U = T>
-	[[nodiscard("Use the distance")]] constexpr U distance(const vec_type& other) const noexcept
+	constexpr U distance(const vec_type& other) const noexcept
 	{
 		T result{};
 		for (size_t i = 0; i < length; ++i)
@@ -182,19 +182,19 @@ struct vec
 		return as<U>(result);
 	}
 
-	[[nodiscard("Use the coordinate")]] constexpr T x() const noexcept
+	[[nodiscard("Use the coordinate")]] T x() const noexcept
 	{
 		assert_index(0);
 		return data[0];
 	};
 
-	[[nodiscard("Use the coordinate")]] constexpr T y() const noexcept
+	[[nodiscard("Use the coordinate")]] T y() const noexcept
 	{
 		assert_index(1);
 		return data[1];
 	};
 
-	[[nodiscard("Use the coordinate")]] constexpr T z() const noexcept
+	[[nodiscard("Use the coordinate")]] T z() const noexcept
 	{
 		assert_index(2);
 		return data[2];

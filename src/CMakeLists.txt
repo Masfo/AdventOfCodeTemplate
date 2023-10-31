@@ -32,10 +32,11 @@ target_sources(aoc PRIVATE
 	main.cpp
 )
 
-#target_precompile_headers(aoc
-#  INTERFACE 
-#  utils/glm/glm.hpp
-#)
+target_precompile_headers(aoc
+  INTERFACE 
+  utils/glm/glm.hpp
+  utils/standard.hpp
+)
 
 
 target_include_directories(aoc SYSTEM PRIVATE ${CMAKE_CURRENT_LIST_DIR}/utils/glm)
@@ -61,8 +62,6 @@ target_sources(aoc
     utils/math.ixx 
     utils/stringhelper.ixx
     utils/readfile.ixx
-	utils/vec.ixx
-	utils/walker.ixx
 
 	utils/std.ixx
 )
