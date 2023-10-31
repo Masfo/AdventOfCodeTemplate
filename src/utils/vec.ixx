@@ -240,29 +240,12 @@ export
 	using ivec2 = vec<i64, 2>;
 	using ivec3 = vec<i64, 3>;
 	using ivec4 = vec<i64, 4>;
-
-
-	template<typename T, size_t len>
-	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
-	{
-		return lhs.min(rhs);
-	}
-
-	template<typename T, size_t len>
-	[[nodiscard("Use the maximum value")]] constexpr vec<T, len> max(const vec<T, len>& lhs, const vec<T, len>& rhs)
-	{
-		return lhs.max(rhs);
-	}
-
-	template<typename T, size_t len>
-	[[nodiscard("Use the absolute value")]] constexpr vec<T, len> abs(const vec<T, len>& lhs)
-	{
-		return lhs.abs();
-	}
 }
 
+// STD specials
 namespace std
 {
+
 	template<>
 	struct hash<ivec2>
 	{
@@ -288,7 +271,8 @@ namespace std
 
 		auto format(const vec<T, len>& vec, std::format_context& ctx) const
 		{
-			//
+			// return std::format_to(ctx.out(), "{}", vec.data());
+
 			std::format_to(ctx.out(), "[");
 			for (size_t i = 0; i < len; ++i)
 				std::format_to(ctx.out(), "{}{}", vec[i], i < len - 1 ? "," : "");
@@ -297,4 +281,27 @@ namespace std
 		}
 	};
 
+
 } // namespace std
+
+//
+export
+{
+	template<typename T, size_t len>
+	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	{
+		return lhs.min(rhs);
+	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the maximum value")]] constexpr vec<T, len> max(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	{
+		return lhs.max(rhs);
+	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the absolute value")]] constexpr vec<T, len> abs(const vec<T, len>& lhs)
+	{
+		return lhs.abs();
+	}
+}
