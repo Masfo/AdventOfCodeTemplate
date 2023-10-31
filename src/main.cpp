@@ -1,34 +1,37 @@
 import std;
 import aoc.debug;
+import aoc.day01;
+import aoc.day02;
 
-void day01();
-void day02();
-void day03();
-void day04();
-void day05();
-void day06();
-void day07();
 
-void day08();
-void day09();
-void day10();
-void day11();
-void day12();
-void day13();
-void day14();
-
-void day15();
-void day16();
-void day17();
-void day18();
-void day19();
-void day20();
-void day21();
-
-void day22();
-void day23();
-void day24();
-void day25();
+// void day01();
+// void day02();
+// void day03();
+// void day04();
+// void day05();
+// void day06();
+// void day07();
+//
+// void day08();
+// void day09();
+// void day10();
+// void day11();
+// void day12();
+// void day13();
+// void day14();
+//
+// void day15();
+// void day16();
+// void day17();
+// void day18();
+// void day19();
+// void day20();
+// void day21();
+//
+// void day22();
+// void day23();
+// void day24();
+// void day25();
 
 
 #define ALL 0
@@ -36,7 +39,7 @@ namespace fs = std::filesystem;
 
 void write_to_file(fs::path directory, int day, std::string_view content)
 {
-	std::string file     = std::format("day{:02d}.cpp", day);
+	std::string file     = std::format("day{:02d}.ixx", day);
 	fs::path    filepath = fs::current_path() / directory / file;
 	if (fs::exists(filepath))
 	{
@@ -65,10 +68,11 @@ void generate_days()
 	{
 		aoc::println("Gen day: {}", day);
 		std::string temp;
+		temp.append("export module day{:02d};\n", day);
 		temp.append("import std;\n");
 		temp.append("import aoc;\n");
 		temp.append("\n");
-		temp.append(std::format("void day{:02d}()\n", day));
+		temp.append(std::format("export void day{:02d}()\n", day));
 		temp.append("{\n");
 		temp.append(std::format("    auto lines = read_lines(\"input\\\\day{}.txt\");\n", day));
 		temp.append("\n");
@@ -109,7 +113,7 @@ void generate_days()
 
 int main()
 {
-	// generate_days();
+	generate_days();
 	std::println("AOC 2023:\n\n");
 
 	// pass command line option for test/real input
@@ -127,33 +131,33 @@ int main()
 
 		if constexpr (ALL == 1)
 		{
-			day02(); //
-			day03(); //
-			day04(); //
-			day05(); //
-			day06(); //
-			day07(); //
-
-			day08(); //
-			day09(); //
-			day10(); //
-			day11(); //
-			day12(); //
-			day13(); //
-			day14(); //
-
-			day15(); //
-			day16(); //
-			day17(); //
-			day18(); //
-			day19(); //
-			day20(); //
-			day21(); //
-
-			day22(); //
-			day23(); //
-			day24(); //
-			day25(); //
+			// day02(); //
+			// day03(); //
+			// day04(); //
+			// day05(); //
+			// day06(); //
+			// day07(); //
+			//
+			// day08(); //
+			// day09(); //
+			// day10(); //
+			// day11(); //
+			// day12(); //
+			// day13(); //
+			// day14(); //
+			//
+			// day15(); //
+			// day16(); //
+			// day17(); //
+			// day18(); //
+			// day19(); //
+			// day20(); //
+			// day21(); //
+			//
+			// day22(); //
+			// day23(); //
+			// day24(); //
+			// day25(); //
 		}
 	}
 	catch (const std::exception &e)

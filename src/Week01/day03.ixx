@@ -1,12 +1,12 @@
-import std;
+expimport std;
 import aoc;
 
-void day25()
+export void day03()
 {
-    auto lines = read_lines("input\\day25.txt");
+    auto lines = read_lines("input\\day3.txt");
 
 
-    aoc::println("Day 25 :");
+    aoc::println("Day 03 :");
     aoc::println("	- Part 1: {}", 0);
     aoc::println("	- Part 2: {}", 0);
     aoc::println();

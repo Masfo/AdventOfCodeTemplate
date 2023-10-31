@@ -8,6 +8,13 @@ import aoc.vec;
 export
 {
 
+	class grid
+	{
+	public:
+	private:
+		std::unordered_map<ivec2, char> m_data;
+	};
+
 	// DAY 8, 2022, walk lines all_of iota...
 
 
