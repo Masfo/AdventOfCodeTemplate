@@ -259,18 +259,6 @@ export
 	{
 		return lhs.abs();
 	}
-
-	// template<>
-	// struct std::formatter<ivec2> : std::formatter<string_view>
-	//{
-	//	auto format(const ivec2& v, std::format_context& ctx)
-	//	{
-	//		std::string temp;
-	//		std::format_to(std::back_inserter(temp), "({}, {})", v[0], v[1]);
-	//		return std::formatter<string_view>::format(temp, ctx);
-	//	}
-	// };
-	//
 }
 
 namespace std
@@ -292,19 +280,6 @@ namespace std
 	{
 		size_t operator()(const ivec4& value) const { return hash_val(value[0], value[1], value[2], value[3]); }
 	};
-
-	//
-	// 	template<>
-	// 	struct formatter<ivec2>
-	// 	{
-	// 		constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
-	//
-	// 		auto format(const ivec2& vec, std::format_context& ctx) const
-	// 		{
-	// 			//
-	// 			return std::format_to(ctx.out(), "({}, {})", vec[0], vec[1]);
-	// 		}
-	// 	};
 
 	template<typename T, size_t len>
 	struct formatter<vec<T, len>>
