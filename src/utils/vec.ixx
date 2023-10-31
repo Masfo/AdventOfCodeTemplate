@@ -129,6 +129,9 @@ struct vec
 
 	constexpr vec_type& operator+() { return *this; }
 
+	//
+
+
 	// compare
 	constexpr bool operator==(const vec_type& other) const noexcept
 	{
@@ -179,7 +182,38 @@ struct vec
 		return as<U>(result);
 	}
 
+	[[nodiscard("Use the coordinate")]] T x() const noexcept
+	{
+		assert_index(0);
+		return data[0];
+	};
+
+	[[nodiscard("Use the coordinate")]] T y() const noexcept
+	{
+		assert_index(1);
+		return data[1];
+	};
+
+	[[nodiscard("Use the coordinate")]] T z() const noexcept
+	{
+		assert_index(2);
+		return data[2];
+	};
+
+	[[nodiscard("Use the coordinate")]] T w() const noexcept
+	{
+		assert_index(3);
+		return data[3];
+	};
+
 	std::array<T, length> data{{0}};
+
+private:
+	constexpr void assert_index(size_t index) const noexcept
+	{
+		trace("Out of bounds for index {}", index);
+		assert_msg(index <= length, "Not valid index");
+	}
 };
 
 export
