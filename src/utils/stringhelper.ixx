@@ -645,4 +645,14 @@ export
 
 	u32 to_u32(std::string_view str) noexcept { return to_number<u32>(str); }
 
+
+	std::string string_intersection(std::string a, std::string b) noexcept
+	{
+		std::ranges::sort(a);
+		std::ranges::sort(b);
+		std::string ret;
+		std::ranges::set_intersection(a, b, std::back_inserter(ret));
+		return ret;
+	}
+
 } // namespace aoc
