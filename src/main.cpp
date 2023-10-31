@@ -1,37 +1,6 @@
 import std;
 import aoc.debug;
-import aoc.day01;
-import aoc.day02;
-
-
-// void day01();
-// void day02();
-// void day03();
-// void day04();
-// void day05();
-// void day06();
-// void day07();
-//
-// void day08();
-// void day09();
-// void day10();
-// void day11();
-// void day12();
-// void day13();
-// void day14();
-//
-// void day15();
-// void day16();
-// void day17();
-// void day18();
-// void day19();
-// void day20();
-// void day21();
-//
-// void day22();
-// void day23();
-// void day24();
-// void day25();
+import aoc.days;
 
 
 #define ALL 0
@@ -41,6 +10,10 @@ void write_to_file(fs::path directory, int day, std::string_view content)
 {
 	std::string file     = std::format("day{:02d}.ixx", day);
 	fs::path    filepath = fs::current_path() / directory / file;
+
+	if (day == -1)
+		filepath = fs::current_path() / directory;
+
 	if (fs::exists(filepath))
 	{
 		println("Could not write to file '{}'", file);
@@ -64,11 +37,19 @@ void generate_days()
 	fs::create_directory("Week03");
 	fs::create_directory("Week04");
 
+	std::string days;
+	days.append("export module aoc.days;\n\n");
+	for (int i = 1; i <= 25; ++i)
+		days.append(std::format("export import aoc.day{:02d};\n", i));
+	days.append("\n");
+
+	write_to_file("days.ixx", -1, days);
+
 	auto gen_day = [](int day) -> std::string
 	{
 		aoc::println("Gen day: {}", day);
 		std::string temp;
-		temp.append("export module day{:02d};\n", day);
+		temp.append(std::format("export module aoc.day{:02d};\n", day));
 		temp.append("import std;\n");
 		temp.append("import aoc;\n");
 		temp.append("\n");
@@ -113,7 +94,7 @@ void generate_days()
 
 int main()
 {
-	generate_days();
+	// generate_days();
 	std::println("AOC 2023:\n\n");
 
 	// pass command line option for test/real input

@@ -69,8 +69,37 @@ target_sources(aoc
     utils/stringhelper.ixx
     utils/readfile.ixx
 
-	Week01/day01.ixx
+	#
+	days.ixx
+	#
+    Week01/day01.ixx
 	Week01/day02.ixx
+	Week01/day03.ixx
+	Week01/day04.ixx
+	Week01/day05.ixx
+	Week01/day06.ixx
+	Week01/day07.ixx
+	#
+	Week02/day08.ixx
+	Week02/day09.ixx
+	Week02/day10.ixx
+	Week02/day11.ixx
+	Week02/day12.ixx
+	Week02/day13.ixx
+	Week02/day14.ixx
+	#
+	Week03/day15.ixx
+	Week03/day16.ixx
+	Week03/day17.ixx
+	Week03/day18.ixx
+	Week03/day19.ixx
+	Week03/day20.ixx
+	Week03/day21.ixx
+	#
+	Week04/day22.ixx
+	Week04/day23.ixx
+	Week04/day24.ixx
+	Week04/day25.ixx
 
 
 
