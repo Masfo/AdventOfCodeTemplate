@@ -1,7 +1,6 @@
-module;
 
 
-export module tree;
+export module aoc.tree;
 import std;
 
 export

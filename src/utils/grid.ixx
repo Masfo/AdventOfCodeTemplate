@@ -1,10 +1,10 @@
-module;
 
 
-export module grid;
+export module aoc.grid;
 
 import std;
-#if 0
+import aoc.vec;
+
 export
 {
 
@@ -67,4 +67,3 @@ export
 		{"nw", ivec2(0, -1)},
 	};
 }
-#endif

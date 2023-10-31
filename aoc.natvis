@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-     <Type Name="vec&lt;*,2&gt;">
-        <DisplayString>[{data[0]}, {data[1]}]</DisplayString>
-        <Expand>
-            <Item Name="[x]">data[0]</Item>
-            <Item Name="[y]">data[1]</Item>
-        </Expand>
-    </Type>
+	<Type Name="vec&lt;*,2&gt;">
+		<DisplayString>[{m_data[0]}, {m_data[1]}]</DisplayString>
+		<Expand>
+			<Item Name="[x]">m_data[0]</Item>
+			<Item Name="[y]">m_data[1]</Item>
+		</Expand>
+	</Type>
 
 	<Type Name="vec&lt;*,3&gt;">
-		<DisplayString>[{data[0]}, {data[1]}, {data[2]}]</DisplayString>
+		<DisplayString>[{m_data[0]}, {m_data[1]}, {m_data[2]}]</DisplayString>
 		<Expand>
-			<Item Name="[x]">data[0]</Item>
-			<Item Name="[y]">data[1]</Item>
-			<Item Name="[z]">data[2]</Item>
+			<Item Name="[x]">m_data[0]</Item>
+			<Item Name="[y]">m_data[1]</Item>
+			<Item Name="[z]">m_data[2]</Item>
 		</Expand>
 	</Type>
 
 	<Type Name="vec&lt;*,4&gt;">
-		<DisplayString>[{data[0]}, {data[1]}, {data[2]}, {data[3]}]</DisplayString>
+		<DisplayString>[{m_data[0]}, {m_data[1]}, {m_data[2]}, {m_data[3]}]</DisplayString>
 		<Expand>
-			<Item Name="[x]">data[0]</Item>
-			<Item Name="[y]">data[1]</Item>
-			<Item Name="[z]">data[2]</Item>
-			<Item Name="[w]">data[3]</Item>
+			<Item Name="[x]">m_data[0]</Item>
+			<Item Name="[y]">m_data[1]</Item>
+			<Item Name="[z]">m_data[2]</Item>
+			<Item Name="[w]">m_data[3]</Item>
 		</Expand>
 	</Type>
 

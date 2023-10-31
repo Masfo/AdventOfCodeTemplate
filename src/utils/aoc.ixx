@@ -9,3 +9,5 @@ export import aoc.vec;
 export import aoc.readfile;
 export import aoc.stringhelper;
 export import aoc.types;
+export import aoc.tree;
+export import aoc.grid;

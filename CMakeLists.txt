@@ -57,14 +57,14 @@ target_compile_options(aoc PRIVATE
     #
     /wd4820 # bytes padding added after data member
     #
-    #/wd4626 # assignment operator was implicitly defined as deleted
-    #/wd5027 # move assignment operator was implicitly defined as deleted
-    #/wd5026 # move constructor was implicitly defined as deleted
+    /wd4626 # assignment operator was implicitly defined as deleted
+    /wd5027 # move assignment operator was implicitly defined as deleted
+    /wd5026 # move constructor was implicitly defined as deleted
     #/wd4061 # switch of enum is not explicitly handled by a case label
     #
     /wd4355 # 'this': used in base member initializer list
-    #/wd4625 # copy constructor was implicitly defined as deleted
-    #/wd5220 # a non-static data member with a volatile qualified type no longer implies
+    /wd4625 # copy constructor was implicitly defined as deleted
+    /wd5220 # a non-static data member with a volatile qualified type no longer implies
     #        # that compiler generated copy/move constructors and copy/move assignment operators are not trivial
     /wd5204 # class has virtual functions, but its trivial destructor is not virtual; instances of 
     #        # objects derived from this class may not be destructed correctly

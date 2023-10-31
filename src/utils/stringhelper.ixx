@@ -2,10 +2,11 @@ module;
 
 export module aoc.stringhelper;
 
-import std;
 import aoc.types;
 import aoc.math;
 import aoc.vec;
+import std;
+
 
 const static std::string digit_string{"0123456789"};
 const static std::string whitespace_string{" \t\f\n\r\v"};
@@ -654,5 +655,4 @@ export
 		std::ranges::set_intersection(a, b, std::back_inserter(ret));
 		return ret;
 	}
-
-} // namespace aoc
+}

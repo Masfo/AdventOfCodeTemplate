@@ -172,7 +172,7 @@ export
 		i64 x = (b2 * c1 - b1 * c2) / determinant;
 		i64 y = (a1 * c2 - a2 * c1) / determinant;
 
-		return ivec2{x, y};
+		return ivec2(x, y);
 	}
 
 	std::optional<ivec2> intersect(const line &a, const line &b) noexcept { return intersect(a.p1, a.p2, b.p1, b.p2); }

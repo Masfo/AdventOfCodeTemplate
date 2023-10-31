@@ -2,10 +2,21 @@ module;
 #include <Windows.h>
 
 export module aoc.debug;
-
 import std;
 
 void output_message(const std::string_view message) noexcept { OutputDebugStringA(message.data()); }
+
+template<typename... Args>
+inline auto print_util(const std::string &str) noexcept
+{
+
+	HANDLE const output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	const DWORD char_count = static_cast<DWORD>(str.length());
+	WriteConsoleA(output_handle, str.data(), char_count, nullptr, nullptr);
+
+	return str;
+}
 
 struct alignas(64) FormatLocation
 {
@@ -25,27 +36,27 @@ struct alignas(64) FormatLocation
 	}
 };
 
-static_assert(64 == sizeof(FormatLocation), "FormatLocation is not 64 bytes");
-
-
-export
+export namespace aoc
 {
 	using namespace std::string_view_literals;
 
 	// debug
 	template<typename... Args>
-	void dbg(std::string_view fmt, Args && ...args) noexcept
+	void dbg(std::string_view fmt, Args &&...args) noexcept
 	{
-		output_message(std::format("{}"sv, std::vformat(fmt, std::make_format_args(args...))));
+		auto out = std::vformat(fmt, std::make_format_args(args...));
+		output_message(out);
 	}
 
 	void dbg(std::string_view fmt) noexcept { output_message(std::format("{}"sv, fmt)); }
 
 	// debugln
 	template<typename... Args>
-	void dbgln(std::string_view fmt, Args && ...args) noexcept
+	void dbgln(std::string_view fmt, Args &&...args) noexcept
 	{
-		output_message(std::format("{}\n"sv, std::vformat(fmt, std::make_format_args(args...))));
+		auto out = std::vformat(fmt, std::make_format_args(args...));
+		out.append("\n");
+		output_message(out);
 	}
 
 	void dbgln(std::string_view fmt) noexcept { output_message(std::format("{}\n"sv, fmt)); }
@@ -61,7 +72,7 @@ export
 
 	// trace
 	template<typename... Args>
-	void trace(FormatLocation fmt, Args && ...args) noexcept
+	void trace(FormatLocation fmt, Args &&...args) noexcept
 	{
 		output_message(
 			std::format("{}({}): {}\n"sv, fmt.loc.file_name(), fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
@@ -73,7 +84,7 @@ export
 
 	// Panic
 	template<typename... Args>
-	[[noreturn]] void panic(std::string_view fmt, Args && ...args) noexcept
+	[[noreturn]] void panic(std::string_view fmt, Args &&...args) noexcept
 	{
 		if constexpr (sizeof...(args) > 0)
 		{
@@ -85,16 +96,40 @@ export
 		}
 		if (IsDebuggerPresent())
 		{
-			//DebugBreak();
+			// DebugBreak();
 		}
-		//FatalExit(0);
-		//std::unreachable();
+		// FatalExit(0);
+		// std::unreachable();
 	}
 
 	[[noreturn]] void panic() noexcept { panic(""); }
 
+	// print, println
 
-	// assert
+
+	template<typename... Args>
+	void println(std::string_view fmts, Args... args) noexcept
+	{
+		std::string tmp = std::vformat(fmts, std::make_format_args(args...));
+		tmp.append("\n");
+		auto str = print_util(tmp);
+		OutputDebugStringA(str.data());
+	}
+
+	void println(std::string_view fmt) noexcept
+	{
+		auto tmp = std::format("{}\n", fmt);
+		auto str = print_util(tmp);
+		OutputDebugStringA(str.data());
+	}
+
+	void println() noexcept
+	{
+		print_util("\n");
+		OutputDebugStringA("\n");
+	}
+
+// assert
 #ifdef _DEBUG
 
 
@@ -132,4 +167,4 @@ export
 	void assert(bool) noexcept { }
 
 #endif
-}
+} // namespace aoc
