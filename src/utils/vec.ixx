@@ -13,8 +13,23 @@ struct vec
 
 	vec(T value)
 	{
-		trace("Are you sure you want to add just a single value?");
-		data.fill(value);
+		assert_index(1);
+		data[0] = x;
+	}
+
+	vec(T x, T y)
+	{
+		assert_index(2);
+		data[0] = x;
+		data[1] = y;
+	}
+
+	vec(T x, T y, T z)
+	{
+		assert_index(3);
+		data[0] = x;
+		data[1] = y;
+		data[2] = z;
 	}
 
 	vec(std::initializer_list<T> list)
@@ -34,25 +49,29 @@ struct vec
 
 	constexpr T& at(size_t index) noexcept
 	{
-		assert_msg(index <= length, "Index larger than array");
+		assert_index(index);
+
 		return data[index];
 	}
 
 	constexpr const T& at(size_t index) const noexcept
 	{
-		assert_msg(index <= length, "Index larger than array");
+		assert_index(index);
+
 		return data[index];
 	}
 
 	constexpr T& operator[](size_t index) noexcept
 	{
-		assert_msg(index <= length, "Index larger than array");
+		assert_index(index);
+
 		return data[index];
 	}
 
 	constexpr const T& operator[](size_t index) const noexcept
 	{
-		assert_msg(index <= length, "Index larger than array");
+		assert_index(index);
+
 		return data[index];
 	}
 
@@ -211,8 +230,8 @@ struct vec
 private:
 	constexpr void assert_index(size_t index) const noexcept
 	{
-		trace("Out of bounds for index {}", index);
 		assert_msg(index <= length, "Not valid index");
+		dbgln_if(index > length, "Out of bounds for index {}", index);
 	}
 };
 
@@ -241,7 +260,18 @@ export
 		return lhs.abs();
 	}
 
-} // namespace aoc
+	// template<>
+	// struct std::formatter<ivec2> : std::formatter<string_view>
+	//{
+	//	auto format(const ivec2& v, std::format_context& ctx)
+	//	{
+	//		std::string temp;
+	//		std::format_to(std::back_inserter(temp), "({}, {})", v[0], v[1]);
+	//		return std::formatter<string_view>::format(temp, ctx);
+	//	}
+	// };
+	//
+}
 
 namespace std
 {
@@ -262,4 +292,34 @@ namespace std
 	{
 		size_t operator()(const ivec4& value) const { return hash_val(value[0], value[1], value[2], value[3]); }
 	};
+
+	//
+	// 	template<>
+	// 	struct formatter<ivec2>
+	// 	{
+	// 		constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+	//
+	// 		auto format(const ivec2& vec, std::format_context& ctx) const
+	// 		{
+	// 			//
+	// 			return std::format_to(ctx.out(), "({}, {})", vec[0], vec[1]);
+	// 		}
+	// 	};
+
+	template<typename T, size_t len>
+	struct formatter<vec<T, len>>
+	{
+		constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+
+		auto format(const vec<T, len>& vec, std::format_context& ctx) const
+		{
+			//
+			std::format_to(ctx.out(), "[");
+			for (size_t i = 0; i < len; ++i)
+				std::format_to(ctx.out(), "{}{}", vec[i], i < len - 1 ? "," : "");
+
+			return std::format_to(ctx.out(), "]");
+		}
+	};
+
 } // namespace std
