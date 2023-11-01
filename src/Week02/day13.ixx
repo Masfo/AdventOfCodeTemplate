@@ -10,5 +10,5 @@ export void day13()
     aoc::println("Day 13 :");
     aoc::println("	- Part 1: {}", 0);
     aoc::println("	- Part 2: {}", 0);
-    aoc::println();
+    aoc::println("");
 }
