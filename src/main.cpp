@@ -93,9 +93,43 @@ void generate_days()
 	}
 }
 
-int main()
+void clear_days()
 {
-	// generate_days();
+	auto home = fs::current_path();
+	fs::remove_all(home / "Week01");
+	fs::remove_all(home / "Week02");
+	fs::remove_all(home / "Week03");
+	fs::remove_all(home / "Week04");
+	fs::remove(home / "days.ixx");
+}
+
+int main(int argc, char **argv)
+{
+	std::vector<std::string> params(argv + 1, argv + argc);
+
+	if (params.size() == 1 && params[0] == "--gen")
+	{
+		std::println("Generate advent days...");
+		generate_days();
+		return 0;
+	}
+	else if (params.size() == 1 && params[0] == "--clear")
+	{
+		std::println("Clearing old advent days...");
+		clear_days();
+		return 0;
+	}
+	else if (params.size() == 1 && params[0] == "--help")
+	{
+		aoc::println("");
+		aoc::println("{: >10} --gen   {: <15} {:<20}", argv[0], "", "Generate advent days from template"sv);
+		aoc::println("{: >10} --clear {: <15} {:<20}", argv[0], "", "Clear generated advent days"sv);
+		aoc::println("{: >10} --help  {: <15} {:<20}", argv[0], "", "This screen"sv);
+
+		return 0;
+	}
+
+
 	std::println("AOC 2023:\n\n");
 
 	// pass command line option for test/real input

@@ -7,7 +7,7 @@
             "project": "CMakeLists.txt",
             "currentDir": "${workspaceRoot}\\bin",
             "name": "Debug w/ argument(s)",
-            "args": [ "debug" ]
+            "args": [ "--help" ]
         },
         {
             "type": "debug",
