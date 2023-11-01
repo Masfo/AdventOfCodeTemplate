@@ -45,7 +45,7 @@ struct vec
 	vec(std::initializer_list<T> list)
 	{
 
-		aoc::assert_msg(list.size() <= length, "Too big initializer list");
+		assert_msg(list.size() <= length, "Too big initializer list");
 		std::copy(list.begin(), list.end(), m_data.begin());
 		//
 	}

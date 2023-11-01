@@ -62,7 +62,7 @@ void generate_days()
 		temp.append(std::format("    aoc::println(\"Day {:02d} :\");\n", day));
 		temp.append("    aoc::println(\"\t- Part 1: {}\", 0);\n");
 		temp.append("    aoc::println(\"\t- Part 2: {}\", 0);\n");
-		temp.append("    aoc::println();\n");
+		temp.append("    aoc::println(\"\");\n");
 		temp.append("}\n");
 		return temp;
 	};

@@ -36,13 +36,14 @@ struct alignas(64) FormatLocation
 	}
 };
 
-export namespace aoc
+export
 {
+
 	using namespace std::string_view_literals;
 
 	// debug
 	template<typename... Args>
-	void dbg(std::string_view fmt, Args &&...args) noexcept
+	void dbg(std::string_view fmt, Args && ...args) noexcept
 	{
 		auto out = std::vformat(fmt, std::make_format_args(args...));
 		output_message(out);
@@ -52,7 +53,7 @@ export namespace aoc
 
 	// debugln
 	template<typename... Args>
-	void dbgln(std::string_view fmt, Args &&...args) noexcept
+	void dbgln(std::string_view fmt, Args && ...args) noexcept
 	{
 		auto out = std::vformat(fmt, std::make_format_args(args...));
 		out.append("\n");
@@ -72,7 +73,7 @@ export namespace aoc
 
 	// trace
 	template<typename... Args>
-	void trace(FormatLocation fmt, Args &&...args) noexcept
+	void trace(FormatLocation fmt, Args && ...args) noexcept
 	{
 		output_message(
 			std::format("{}({}): {}\n"sv, fmt.loc.file_name(), fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
@@ -84,7 +85,7 @@ export namespace aoc
 
 	// Panic
 	template<typename... Args>
-	[[noreturn]] void panic(std::string_view fmt, Args &&...args) noexcept
+	[[noreturn]] void panic(std::string_view fmt, Args && ...args) noexcept
 	{
 		if constexpr (sizeof...(args) > 0)
 		{
@@ -104,30 +105,6 @@ export namespace aoc
 
 	[[noreturn]] void panic() noexcept { panic(""); }
 
-	// print, println
-
-
-	template<typename... Args>
-	void println(std::string_view fmts, Args... args) noexcept
-	{
-		std::string tmp = std::vformat(fmts, std::make_format_args(args...));
-		tmp.append("\n");
-		auto str = print_util(tmp);
-		OutputDebugStringA(str.data());
-	}
-
-	void println(std::string_view fmt) noexcept
-	{
-		auto tmp = std::format("{}\n", fmt);
-		auto str = print_util(tmp);
-		OutputDebugStringA(str.data());
-	}
-
-	void println() noexcept
-	{
-		print_util("\n");
-		OutputDebugStringA("\n");
-	}
 
 // assert
 #ifdef _DEBUG
@@ -167,4 +144,32 @@ export namespace aoc
 	void assert(bool) noexcept { }
 
 #endif
+}
+
+export namespace aoc
+{
+	// print, println
+
+
+	template<typename... Args>
+	void println(std::string_view fmts, Args... args) noexcept
+	{
+		std::string tmp = std::vformat(fmts, std::make_format_args(args...));
+		tmp.append("\n");
+		auto str = print_util(tmp);
+		OutputDebugStringA(str.data());
+	}
+
+	void println(std::string_view fmt) noexcept
+	{
+		auto tmp = std::format("{}\n", fmt);
+		auto str = print_util(tmp);
+		OutputDebugStringA(str.data());
+	}
+
+	void println() noexcept
+	{
+		print_util("\n");
+		OutputDebugStringA("\n");
+	}
 } // namespace aoc
