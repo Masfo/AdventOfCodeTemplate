@@ -1,9 +1,6 @@
 module;
 #pragma once
 
-// #include "glm.hpp"
-
-
 export module aoc.math;
 import std;
 import aoc.types;

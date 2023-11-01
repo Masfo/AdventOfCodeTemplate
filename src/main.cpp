@@ -11,6 +11,7 @@ void write_to_file(fs::path directory, int day, std::string_view content)
 	std::string file     = std::format("day{:02d}.ixx", day);
 	fs::path    filepath = fs::current_path() / directory / file;
 
+	// HACK
 	if (day == -1)
 		filepath = fs::current_path() / directory;
 
@@ -112,38 +113,38 @@ int main()
 
 		if constexpr (ALL == 1)
 		{
-			// day02(); //
-			// day03(); //
-			// day04(); //
-			// day05(); //
-			// day06(); //
-			// day07(); //
-			//
-			// day08(); //
-			// day09(); //
-			// day10(); //
-			// day11(); //
-			// day12(); //
-			// day13(); //
-			// day14(); //
-			//
-			// day15(); //
-			// day16(); //
-			// day17(); //
-			// day18(); //
-			// day19(); //
-			// day20(); //
-			// day21(); //
-			//
-			// day22(); //
-			// day23(); //
-			// day24(); //
-			// day25(); //
+			day02(); //
+			day03(); //
+			day04(); //
+			day05(); //
+			day06(); //
+			day07(); //
+
+			day08(); //
+			day09(); //
+			day10(); //
+			day11(); //
+			day12(); //
+			day13(); //
+			day14(); //
+
+			day15(); //
+			day16(); //
+			day17(); //
+			day18(); //
+			day19(); //
+			day20(); //
+			day21(); //
+
+			day22(); //
+			day23(); //
+			day24(); //
+			day25(); //
 		}
 	}
 	catch (const std::exception &e)
 	{
-		aoc::println("Exception: {}", e.what());
+		std::println("Exception: {}", e.what());
 		return -1;
 	}
 

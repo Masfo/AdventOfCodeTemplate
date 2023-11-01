@@ -9,16 +9,16 @@ export namespace aoc
 	constexpr uint32_t minor = 0;
 
 	 // Do not modify these
-	constexpr uint32_t build = 307;
+	constexpr uint32_t build = 326;
 	
 	constexpr uint32_t version = major * 10000 + minor * 1000 + build;
-	constexpr uint64_t random_seed = 0x98c4cfbe6e7224bf;
+	constexpr uint64_t random_seed = 0x79e2979ac73f362d;
 	
-	constexpr char version_string[] = "v0.0.307";
-	constexpr char build_time_string[] = "2023-11-01 00:52:57";
-	constexpr char phrase[] = "thermal-strongbox-folic";
-	constexpr char calver[] = "2023.44.307";
-	constexpr char uuid[] = "3FBC1F7F-FA4A-4F63-B0AF-A3E202E378FA";
+	constexpr char version_string[] = "v0.0.326";
+	constexpr char build_time_string[] = "2023-11-01 18:45:43";
+	constexpr char phrase[] = "exhaust-feisty-mummified";
+	constexpr char calver[] = "2023.44.326";
+	constexpr char uuid[] = "E544CB94-8B49-4C0A-AC98-DB928F1579E6";
 
 	// Copy paste to import to your project
 	/*

@@ -74,3 +74,69 @@ export
 		{"nw", ivec2(0, -1)},
 	};
 }
+
+#if 0
+auto read_simple_grid(std::string_view filename, std::string_view interesting) -> std::unordered_set<ivec2>
+{
+    auto lines = read_all_lines(filename);
+
+    std::unordered_set<ivec2> simple;
+    ivec2                     pos;
+    for (const auto &line : lines)
+    {
+        pos.x = 0;
+        for (const auto &c : line)
+        {
+            if (interesting.contains(c))
+                simple.insert(pos);
+            pos.x++;
+        }
+        pos.y++;
+    }
+    return simple;
+}
+
+auto simple_grid_bounds(const std::unordered_set<ivec2> &grid) -> std::tuple<i64, i64, i64, i64>
+{
+    i64 minx{MAX_I64}, miny{MAX_I64}, maxx{0}, maxy{0};
+    for (const auto &g : grid)
+    {
+        minx = std::min(minx, g.x);
+        maxx = std::max(maxx, g.x);
+
+        miny = std::min(miny, g.y);
+        maxy = std::max(maxy, g.y);
+    }
+    return {minx, miny, maxx + 1, maxy + 1};
+}
+
+auto simple_grid_area(const std::unordered_set<ivec2> &grid) -> std::tuple<i64, i64, i64>
+{
+    const auto [minx, miny, maxx, maxy] = simple_grid_bounds(grid);
+    const i64 width                     = std::abs(minx - maxx);
+    const i64 height                    = std::abs(miny - maxy);
+
+    return {width * height, width, height};
+}
+
+void simple_grid_print(const std::unordered_set<ivec2> &grid)
+{
+    const auto [minx, miny, maxx, maxy] = simple_grid_bounds(grid);
+    for (int y = miny; y <= maxy; ++y)
+    {
+        for (int x = minx; x <= maxx; ++x)
+        {
+            if (grid.contains({x, y}))
+                print("#");
+            else
+                print(".");
+        }
+        println();
+    }
+    println();
+}
+
+    auto no_elf_in_dirs = [&](ivec2 pos, ivec2 d1, ivec2 d2, ivec2 d3) { return (!elfs.contains(pos + d1) && !elfs.contains(pos + d2) && !elfs.contains(pos + d3)); };
+    auto no_neighbours  = [&](ivec2 pos) { return std::ranges::all_of(directions_8_way, [&](const ivec2 &dir) { return !elfs.contains(pos + dir); }); };
+	// 2022, day 23
+#endif

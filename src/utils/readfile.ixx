@@ -64,13 +64,13 @@ export
 		catch (const std::filesystem::filesystem_error &e)
 		{
 			std::string w{strip(e.what(), "\n")};
-			// trace("{}", w);
+			aoc::trace("{}", w);
 			return {};
 		}
 		catch (const std::exception &e)
 		{
 			std::string w{strip(e.what(), "\n")};
-			// trace("Exception:\n{:>10}{}\n", "", w);
+			aoc::trace("Exception:\n{:>10}{}\n", "", w);
 			return {};
 		}
 	}
