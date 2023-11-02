@@ -1,6 +1,5 @@
 module;
 
-
 export module aoc.readfile;
 import std;
 
@@ -24,7 +23,6 @@ export
 	//	std::filesystem::path & file, std::string_View delims = "\n", include_emptys ie = include_emptys::no)
 	//{
 	//}
-
 
 	std::vector<std::string> read_all_lines(const std::filesystem::path &path, include_emptys ie = include_emptys::no)
 	{
@@ -65,7 +63,7 @@ export
 		{
 			std::string w{strip(e.what(), "\n")};
 			trace("{}", w);
-			//panic(w);
+			// panic(w);
 			return {};
 		}
 		catch (const std::exception &e)
@@ -77,13 +75,11 @@ export
 		}
 	}
 
-
 	std::vector<std::string> read_csv(std::string_view filename, std::string_view delims = ",\n")
 	{
 		auto f = read_file(filename.data());
 		return split(f, delims);
 	}
-
 
 	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims, include_emptys ie = include_emptys::no)
 	{
@@ -92,7 +88,6 @@ export
 		auto sl            = split_exact(s, delims, include_empty);
 		return sl;
 	}
-
 
 	std::vector<std::string> read_lines_delimiter(std::string_view filename, std::string_view delim, include_emptys ie = include_emptys::no)
 	{
@@ -113,19 +108,19 @@ export
 		return read_lines_delimiter(filename, delims, ie);
 	}
 
-	std::vector<i64> read_lines_integers(std::string_view filename)
+	template<typename T = i64>
+	std::vector<T> read_lines_integers(std::string_view filename)
 	{
 		auto v = read_lines(filename);
 
-		std::vector<i64> ret;
+		std::vector<T> ret;
 		ret.reserve(v.size());
 
 		for (const auto &i : v)
-			ret.push_back(to_number<i64>(trim(i).data()));
+			ret.push_back(to_number<T>(trim(i).data()));
 
 		return ret;
 	}
-
 
 	std::vector<i64> read_lines_integers_delimiter(std::string_view filename, std::string_view delim = ",\n")
 	{
