@@ -7,7 +7,6 @@ import aoc.math;
 import aoc.vec;
 import std;
 
-
 const static std::string digit_string{"0123456789"};
 const static std::string whitespace_string{" \t\f\n\r\v"};
 const static std::string lowercase_string{"abcdefghijklmnopqrstuvwxyz"};
@@ -88,12 +87,12 @@ export
 		}
 		else if (ec == std::errc::invalid_argument)
 		{
-			println("to_number: Invalid argument '{}'", str);
+			dbgln("to_number: Invalid argument '{}'", str);
 			throw std::invalid_argument(std::format("Invalid argument: '{}'", str));
 		}
 		else if (ec == std::errc::result_out_of_range)
 		{
-			println("to_number: out of range '{}'", str);
+			dbgln("to_number: out of range '{}'", str);
 			throw std::out_of_range(std::format("Out of range: '{}'", str));
 		}
 		return {0};
@@ -112,7 +111,6 @@ export
 
 		return std::nullopt;
 	}
-
 
 	template<typename Type>
 	Type convert_to_type(std::string_view str)
@@ -137,7 +135,6 @@ export
 		}
 	}
 
-
 	// Split
 	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
 	{
@@ -159,7 +156,6 @@ export
 	template<typename T>
 	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept;
 
-
 	template<size_t N>
 	auto split_n(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none)
 	{
@@ -172,7 +168,6 @@ export
 
 		return ret;
 	}
-
 
 	template<typename T, size_t N>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none)
@@ -284,7 +279,6 @@ export
 
 		return std::make_tuple(t1, t2, t3, t4);
 	}
-
 
 	// ## With index
 	template<typename T1, typename T2>
@@ -405,7 +399,6 @@ export
 		return tokens;
 	}
 
-
 	std::string replace(std::string & subject, const std::string_view search, std::string_view replace) noexcept
 	{
 		size_t pos = 0;
@@ -475,7 +468,6 @@ export
 		return newstr;
 	}
 
-
 	std::string_view trim(const std::string_view s)
 	{
 		auto front = std::find_if_not(s.begin(), s.end(), [](int c) { return std::isspace(c); });
@@ -495,7 +487,6 @@ export
 	inline auto trim_transform = [](std::string_view str) -> std::string_view { return trim(str); };
 
 	// ###############################################
-
 
 	// Split delimiter with it
 	std::vector<std::string> split_keep(std::string_view str, const std::string_view delims, ignore option = ignore::none) noexcept
@@ -522,7 +513,6 @@ export
 
 		return tokens;
 	}
-
 
 	std::vector<std::string> split_exact(
 		std::string_view str, std::string_view delims, bool include_empty, ignore option = ignore::none) noexcept
@@ -573,7 +563,6 @@ export
 
 	// ###############################################
 
-
 	std::string reverse_copy(const std::string &str) noexcept
 	{
 		std::string ret = str;
@@ -615,7 +604,6 @@ export
 		return ret;
 	}
 
-
 	std::string input(std::string_view ask)
 	{
 		std::string ret;
@@ -623,7 +611,6 @@ export
 		std::getline(std::cin, ret);
 		return ret;
 	}
-
 
 	std::vector<std::string> pass(const std::vector<std::string> &vec) noexcept { return vec; }
 
@@ -645,7 +632,6 @@ export
 	i32 to_i32(std::string_view str) noexcept { return to_number<i32>(str); }
 
 	u32 to_u32(std::string_view str) noexcept { return to_number<u32>(str); }
-
 
 	std::string string_intersection(std::string a, std::string b) noexcept
 	{
