@@ -10,23 +10,19 @@ struct vec
 
 	using vec_type = vec<T, length>;
 
-
 	vec() = default;
 
-	// vec(T value) { m_data[0] = x; }
-	//
 	vec(T x, T y)
 	{
-		static_assert(length == 2);
+		static_assert(length == 2, "this vector does not have 2 elements");
 
 		m_data[0] = x;
 		m_data[1] = y;
 	}
 
-	//
 	vec(T x, T y, T z)
 	{
-		static_assert(length == 3);
+		static_assert(length == 3, "this vector does not have 4 elements");
 
 		m_data[0] = x;
 		m_data[1] = y;
@@ -35,7 +31,7 @@ struct vec
 
 	vec(T x, T y, T z, T w)
 	{
-		static_assert(length == 4);
+		static_assert(length == 4, "this vector does not have 4 elements");
 		m_data[0] = x;
 		m_data[1] = y;
 		m_data[2] = z;
@@ -44,10 +40,8 @@ struct vec
 
 	vec(std::initializer_list<T> list)
 	{
-
 		assert_msg(list.size() <= length, "Too big initializer list");
 		std::copy(list.begin(), list.end(), m_data.begin());
-		//
 	}
 
 	constexpr operator vec_type() const noexcept
@@ -139,7 +133,6 @@ struct vec
 	constexpr vec_type& operator+() { return *this; }
 
 	//
-
 
 	// compare
 	constexpr bool operator==(const vec_type& other) const noexcept
@@ -236,8 +229,6 @@ namespace std
 
 		auto format(const vec<T, len>& vec, std::format_context& ctx) const
 		{
-			// return std::format_to(ctx.out(), "{}", vec.data());
-
 			std::format_to(ctx.out(), "[");
 			for (size_t i = 0; i < len; ++i)
 				std::format_to(ctx.out(), "{}{}", vec[i], i < len - 1 ? "," : "");
@@ -245,7 +236,6 @@ namespace std
 			return std::format_to(ctx.out(), "]");
 		}
 	};
-
 
 } // namespace std
 
