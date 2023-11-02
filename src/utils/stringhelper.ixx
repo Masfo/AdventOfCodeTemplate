@@ -2,6 +2,7 @@ module;
 
 export module aoc.stringhelper;
 
+import aoc.debug;
 import aoc.types;
 import aoc.math;
 import aoc.vec;
