@@ -18,10 +18,11 @@ AlignConsecutiveDeclarations: Consecutive
 AlignTrailingComments:
   Kind: Always
   OverEmptyLines: 2
+  
 Cpp11BracedListStyle: true
 DerivePointerAlignment: true
 IndentPPDirectives: None
-MaxEmptyLinesToKeep: 2
+MaxEmptyLinesToKeep: 1
 SpaceBeforeCpp11BracedList: false
 NamespaceIndentation: All
 SortIncludes: CaseSensitive
@@ -34,8 +35,10 @@ IndentRequiresClause: false
 
 IntegerLiteralSeparator:
     Binary: 4
-    Decimal: 0
+    Decimal: 4
     Hex: 4
+    DecimalMinDigits: 4
+    HexMinDigits:    6
 
 
 BinPackArguments: false
