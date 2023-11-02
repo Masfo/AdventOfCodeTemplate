@@ -65,12 +65,14 @@ export
 		{
 			std::string w{strip(e.what(), "\n")};
 			trace("{}", w);
+			//panic(w);
 			return {};
 		}
 		catch (const std::exception &e)
 		{
 			std::string w{strip(e.what(), "\n")};
-			trace("Exception:\n{:>10}{}\n", "", w);
+			trace("Exception:\n{:>10}{}", "", w);
+			panic(w);
 			return {};
 		}
 	}
