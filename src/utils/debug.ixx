@@ -97,10 +97,10 @@ export
 		}
 		if (IsDebuggerPresent())
 		{
-			// DebugBreak();
+			DebugBreak();
 		}
-		// FatalExit(0);
-		// std::unreachable();
+		 FatalExit(0);
+		 std::unreachable();
 	}
 
 	[[noreturn]] void panic() noexcept { panic(""); }
