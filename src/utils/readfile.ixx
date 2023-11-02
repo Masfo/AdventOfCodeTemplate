@@ -56,7 +56,6 @@ export
 			std::ifstream ifile(filename.data());
 			std::string   str{(std::istreambuf_iterator<char>(ifile)), std::istreambuf_iterator<char>()};
 
-			// str.push_back('\n');
 			return str;
 		}
 		catch (const std::filesystem::filesystem_error &e)
