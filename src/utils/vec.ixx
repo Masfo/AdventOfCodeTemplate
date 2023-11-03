@@ -259,4 +259,10 @@ export
 	{
 		return lhs.abs();
 	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the distance value")]] constexpr vec<T, len> distance(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	{
+		return lhs.distance(rhs);
+	}
 }
