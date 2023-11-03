@@ -81,21 +81,25 @@ export
 	template<typename... Args>
 	void trace(FormatLocation fmt, [[maybe_unused]] Args && ...args) noexcept
 	{
+		fs::path    filename = fmt.loc.file_name();
+		std::string file     = filename.string();
+
 		if constexpr (sizeof...(args) > 1)
 		{
-			fs::path    filename = fmt.loc.file_name();
-			std::string file     = filename.string();
 			output_message(std::format("{}({}): {}\n"sv, file, fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
 		}
 		else
 		{
-			fs::path filename = fmt.loc.file_name();
 
-			output_message(std::format("{}({}): {}\n"sv, filename.filename().string(), fmt.loc.line(), fmt.fmt));
+			output_message(std::format("{}({}): {}\n"sv, file, fmt.loc.line(), fmt.fmt));
 		}
 	}
 
-	void trace() { output_message("\n"); }
+	void trace(const std::source_location &loc = std::source_location::current())
+	{
+		//
+		output_message(std::format("{}({}):\n", loc.file_name(), loc.line()));
+	}
 
 	// Panic
 	template<typename... Args>
