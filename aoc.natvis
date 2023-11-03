@@ -8,6 +8,7 @@
 		</Expand>
 	</Type>
 
+
 	<Type Name="vec&lt;*,3&gt;">
 		<DisplayString>[{m_data[0]}, {m_data[1]}, {m_data[2]}]</DisplayString>
 		<Expand>
@@ -26,5 +27,7 @@
 			<Item Name="[w]">m_data[3]</Item>
 		</Expand>
 	</Type>
+
+
 
 </AutoVisualizer>

@@ -16,9 +16,9 @@ struct vec
 
 	vec() = default;
 
-	explicit vec(T v) { m_data.fill(v); }
+	explicit vec(T v) noexcept { m_data.fill(v); }
 
-	explicit vec(T x, T y)
+	explicit vec(T x, T y) noexcept
 	requires(length >= 2)
 
 	{
@@ -26,7 +26,7 @@ struct vec
 		m_data[1] = y;
 	}
 
-	explicit vec(T x, T y, T z)
+	explicit vec(T x, T y, T z) noexcept
 	requires(length >= 3)
 
 	{
@@ -35,7 +35,7 @@ struct vec
 		m_data[2] = z;
 	}
 
-	explicit vec(T x, T y, T z, T w)
+	explicit vec(T x, T y, T z, T w) noexcept
 	requires(length >= 4)
 	{
 		m_data[0] = x;
@@ -44,16 +44,11 @@ struct vec
 		m_data[3] = w;
 	}
 
-	explicit vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current())
-	requires(length > 4)
+	explicit vec(std::initializer_list<T> list) noexcept
 	{
-		if (list.size() > length)
-		{
-			dbgln("\nInitializing with too much data:\n\t{}({})\n", loc.file_name(), loc.line());
-			panic();
-		}
-
-		std::copy(list.begin(), list.end(), m_data.begin());
+		std::copy_n(list.begin(), length, m_data.begin());
+		dbgln_if(
+			list.size() > length, "Warning: initializer list (length: {}) is longer than the container (length: {})", list.size(), length);
 	}
 
 	constexpr operator vec_type() const noexcept
