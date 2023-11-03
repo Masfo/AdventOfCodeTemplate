@@ -198,7 +198,31 @@ export
 	using ivec2 = vec<i64, 2>;
 	using ivec3 = vec<i64, 3>;
 	using ivec4 = vec<i64, 4>;
-};
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	{
+		return lhs.min(rhs);
+	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the maximum value")]] constexpr vec<T, len> max(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	{
+		return lhs.max(rhs);
+	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the absolute value")]] constexpr vec<T, len> abs(const vec<T, len>& lhs)
+	{
+		return lhs.abs();
+	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the distance value")]] constexpr vec<T, len> distance(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	{
+		return lhs.distance(rhs);
+	}
+}
 
 // STD specials
 namespace std
@@ -238,31 +262,3 @@ namespace std
 	};
 
 } // namespace std
-
-//
-export
-{
-	template<typename T, size_t len>
-	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
-	{
-		return lhs.min(rhs);
-	}
-
-	template<typename T, size_t len>
-	[[nodiscard("Use the maximum value")]] constexpr vec<T, len> max(const vec<T, len>& lhs, const vec<T, len>& rhs)
-	{
-		return lhs.max(rhs);
-	}
-
-	template<typename T, size_t len>
-	[[nodiscard("Use the absolute value")]] constexpr vec<T, len> abs(const vec<T, len>& lhs)
-	{
-		return lhs.abs();
-	}
-
-	template<typename T, size_t len>
-	[[nodiscard("Use the distance value")]] constexpr vec<T, len> distance(const vec<T, len>& lhs, const vec<T, len>& rhs)
-	{
-		return lhs.distance(rhs);
-	}
-}
