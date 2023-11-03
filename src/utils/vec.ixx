@@ -3,7 +3,11 @@ import std;
 import aoc.debug;
 import aoc.types;
 
+template<typename Data, size_t size>
+concept HasEnoughData = requires(Data data) { data.size() >= size; };
+
 template<typename T, std::size_t length>
+requires(std::integral<T> or std::floating_point<T>) and (length > 1)
 struct vec
 {
 	std::array<T, length> m_data{{0}};
@@ -140,9 +144,9 @@ struct vec
 		for (size_t i = 0; i < length; ++i)
 		{
 			if (m_data[i] != other[i])
-				return true;
+				return false;
 		}
-		return false;
+		return true;
 	}
 
 	auto operator<=>(const vec_type&) const = default;
@@ -184,13 +188,32 @@ struct vec
 		return as<U>(result);
 	}
 
-	[[nodiscard("Use the coordinate")]] T x() const noexcept { return m_data[0]; };
+	[[nodiscard("Use the coordinate")]] T x() const noexcept
+	{
+		static_assert(length >= 1, "Cant view x-axis. No data");
+		return m_data[0];
+	};
 
-	[[nodiscard("Use the coordinate")]] T y() const noexcept { return m_data[1]; };
+	[[nodiscard("Use the coordinate")]] T y() const noexcept
+	{
+		static_assert(length >= 2, "Cant view y-axis. No such data.");
 
-	[[nodiscard("Use the coordinate")]] T z() const noexcept { return m_data[2]; };
+		return m_data[1];
+	};
 
-	[[nodiscard("Use the coordinate")]] T w() const noexcept { return m_data[3]; };
+	[[nodiscard("Use the coordinate")]] T z() const noexcept
+	{
+		static_assert(length >= 3, "Cant view z-axis. No such data.");
+
+		return m_data[2];
+	};
+
+	[[nodiscard("Use the coordinate")]] T w() const noexcept
+	{
+		static_assert(length >= 4, "Cant view w-axis. No such data.");
+
+		return m_data[3];
+	};
 };
 
 export
