@@ -84,7 +84,7 @@ export
 		fs::path    filename = fmt.loc.file_name();
 		std::string file     = filename.string();
 
-		if constexpr (sizeof...(args) > 1)
+		if constexpr (sizeof...(args) >0)
 		{
 			output_message(std::format("{}({}): {}\n"sv, file, fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
 		}
