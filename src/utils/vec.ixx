@@ -6,7 +6,7 @@ import aoc.types;
 template<typename Data, size_t size>
 concept HasEnoughData = requires(Data data) { data.size() >= size; };
 
-template<typename T, std::size_t length>
+export template<typename T, std::size_t length>
 requires(std::integral<T> or std::floating_point<T>) and (length > 1)
 struct vec
 {
@@ -45,7 +45,7 @@ struct vec
 	}
 
 	explicit vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current())
-	 requires(length > 4)
+	requires(length > 4)
 	{
 		if (list.size() > length)
 		{
@@ -226,10 +226,14 @@ struct vec
 
 export
 {
+
 	using ivec2 = vec<i64, 2>;
 	using ivec3 = vec<i64, 3>;
 	using ivec4 = vec<i64, 4>;
-	using ivec5 = vec<i64, 5>;
+
+	using uvec2 = vec<u64, 2>;
+	using uvec3 = vec<u64, 3>;
+	using uvec4 = vec<u64, 4>;
 
 	template<typename T, size_t len>
 	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
@@ -254,6 +258,60 @@ export
 	{
 		return lhs.distance(rhs);
 	}
+
+#if 0
+	// Scalar add
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the added value")]] inline constexpr vec<T, len> operator+(const vec<T, len>& lhs, const U scalar)
+	{
+		return lhs + vec<T, len>(scalar);
+	}
+
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the added value")]] inline constexpr vec<T, len> operator+(const U scalar, const vec<T, len>& rhs)
+	{
+		return vec<T, len>(scalar) + rhs;
+	}
+
+	// Scalar sub
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the subtracted value")]] inline constexpr vec<T, len> operator-(const vec<T, len>& lhs, const U scalar)
+	{
+		return lhs - vec<T, len>(scalar);
+	}
+
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the added value")]] inline constexpr vec<T, len> operator-(const U scalar, const vec<T, len>& rhs)
+	{
+		return vec<T, len>(scalar) - rhs;
+	}
+
+	// Scalar mul
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the multiplied value")]] inline constexpr vec<T, len> operator*(const vec<T, len>& lhs, const U scalar)
+	{
+		return lhs * vec<T, len>(scalar);
+	}
+
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the multiplied value")]] inline constexpr vec<T, len> operator*(const U scalar, const vec<T, len>& rhs)
+	{
+		return vec<T, len>(scalar) * rhs;
+	}
+
+	// Scalar div
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the divided value")]] inline constexpr vec<T, len> operator/(const vec<T, len>& lhs, const U scalar)
+	{
+		return lhs / vec<T, len>(scalar);
+	}
+
+	template<typename T, typename U, size_t len>
+	[[nodiscard("Use the divided value")]] inline constexpr vec<T, len> operator/(const U scalar, const vec<T, len>& rhs)
+	{
+		return vec<T, len>(scalar) / rhs;
+	}
+#endif
 }
 
 // STD specials
