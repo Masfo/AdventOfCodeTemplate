@@ -46,7 +46,7 @@ export
 {
 
 	using namespace std::string_view_literals;
-
+#ifdef _DEBUG
 	// debug
 	template<typename... Args>
 	void dbg(std::string_view fmt, Args && ...args) noexcept
@@ -55,7 +55,7 @@ export
 		output_message(out);
 	}
 
-	void dbg(std::string_view fmt) noexcept { output_message(std::format("{}"sv, fmt)); }
+	void dbg([[maybe_unused]] std::string_view fmt) noexcept { output_message(std::format("{}"sv, fmt)); }
 
 	// debugln
 	template<typename... Args>
@@ -84,7 +84,7 @@ export
 		fs::path    filename = fmt.loc.file_name();
 		std::string file     = filename.string();
 
-		if constexpr (sizeof...(args) >0)
+		if constexpr (sizeof...(args) > 0)
 		{
 			output_message(std::format("{}({}): {}\n"sv, file, fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
 		}
@@ -95,7 +95,7 @@ export
 		}
 	}
 
-	void trace(const std::source_location &loc = std::source_location::current())
+	void trace(const std::source_location &loc = std::source_location::current()) noexcept
 	{
 		//
 		output_message(std::format("{}({}):\n", loc.file_name(), loc.line()));
@@ -123,8 +123,7 @@ export
 
 	[[noreturn]] void panic() noexcept { panic(""); }
 
-// assert
-#ifdef _DEBUG
+	// assert
 
 	void assert_msg(bool expr, std::string_view message, const std::source_location &loc = std::source_location::current()) noexcept
 	{
@@ -154,6 +153,41 @@ export
 	}
 
 #else
+
+	template<typename... Args>
+	void dbg(std::string_view, Args && ...) noexcept
+	{
+	}
+
+	void dbg(std::string_view) noexcept { }
+
+	template<typename... Args>
+	void dbgln(std::string_view, Args && ...) noexcept
+	{
+	}
+
+	void dbgln(std::string_view) noexcept { }
+	void dbgln() noexcept { }
+
+	template<typename... Args>
+	void dbgln_if(bool, std::string_view, Args &&...) noexcept
+	{
+	}
+
+	template<typename... Args>
+	void trace(FormatLocation, Args && ...) noexcept
+	{
+	}
+
+	void trace() noexcept { }
+
+	template<typename... Args>
+	void panic(std::string_view, Args && ...) noexcept
+	{
+	}
+
+	void panic() noexcept { }
+
 	void assert_msg(bool, std::string_view) noexcept { }
 
 	void assert(bool) noexcept { }
