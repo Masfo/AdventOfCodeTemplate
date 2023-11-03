@@ -4,7 +4,13 @@ module;
 export module aoc.debug;
 import std;
 
-void output_message(const std::string_view message) noexcept { OutputDebugStringA(message.data()); }
+namespace fs = std::filesystem;
+
+void output_message(const std::string_view message) noexcept
+{
+	OutputDebugStringA(message.data());
+	std::println("{}", message);
+}
 
 template<typename... Args>
 inline auto print_util(const std::string &str) noexcept
@@ -73,15 +79,23 @@ export
 
 	// trace
 	template<typename... Args>
-	void trace(FormatLocation fmt, Args && ...args) noexcept
+	void trace(FormatLocation fmt, [[maybe_unused]] Args && ...args) noexcept
 	{
-		output_message(
-			std::format("{}({}): {}\n"sv, fmt.loc.file_name(), fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
+		if constexpr (sizeof...(args) > 1)
+		{
+			fs::path    filename = fmt.loc.file_name();
+			std::string file     = filename.string();
+			output_message(std::format("{}({}): {}\n"sv, file, fmt.loc.line(), std::vformat(fmt.fmt, std::make_format_args(args...))));
+		}
+		else
+		{
+			fs::path filename = fmt.loc.file_name();
+
+			output_message(std::format("{}({}): {}\n"sv, filename.filename().string(), fmt.loc.line(), fmt.fmt));
+		}
 	}
 
-	void trace(FormatLocation fmt) noexcept { output_message(std::format("{}({}): {}\n"sv, fmt.loc.file_name(), fmt.loc.line(), fmt.fmt)); }
-
-	void trace() noexcept { output_message("\n"); }
+	void trace() { output_message("\n"); }
 
 	// Panic
 	template<typename... Args>
@@ -99,16 +113,14 @@ export
 		{
 			DebugBreak();
 		}
-		 FatalExit(0);
-		 std::unreachable();
+		FatalExit(0);
+		std::unreachable();
 	}
 
 	[[noreturn]] void panic() noexcept { panic(""); }
 
-
 // assert
 #ifdef _DEBUG
-
 
 	void assert_msg(bool expr, std::string_view message, const std::source_location &loc = std::source_location::current()) noexcept
 	{
@@ -137,7 +149,6 @@ export
 		assert_msg(expr, "assert", loc);
 	}
 
-
 #else
 	void assert_msg(bool, std::string_view) noexcept { }
 
@@ -149,7 +160,6 @@ export
 export namespace aoc
 {
 	// print, println
-
 
 	template<typename... Args>
 	void println(std::string_view fmts, Args... args) noexcept
