@@ -20,16 +20,12 @@ struct vec
 
 	explicit vec(T x, T y)
 	{
-		static_assert(length == 2, "this vector does not have 2 elements");
-
 		m_data[0] = x;
 		m_data[1] = y;
 	}
 
 	explicit vec(T x, T y, T z)
 	{
-		static_assert(length == 3, "this vector does not have 3 elements");
-
 		m_data[0] = x;
 		m_data[1] = y;
 		m_data[2] = z;
@@ -37,14 +33,14 @@ struct vec
 
 	explicit vec(T x, T y, T z, T w)
 	{
-		static_assert(length == 4, "this vector does not have 4 elements");
 		m_data[0] = x;
 		m_data[1] = y;
 		m_data[2] = z;
 		m_data[3] = w;
 	}
 
-	vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current())
+	explicit vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current())
+	requires(length > 4)
 	{
 		if (list.size() > length)
 		{
