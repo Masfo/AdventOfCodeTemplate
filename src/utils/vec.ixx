@@ -16,7 +16,9 @@ struct vec
 
 	vec() = default;
 
-	vec(T x, T y)
+	explicit vec(T v) { m_data.fill(v); }
+
+	explicit vec(T x, T y)
 	{
 		static_assert(length == 2, "this vector does not have 2 elements");
 
@@ -24,16 +26,16 @@ struct vec
 		m_data[1] = y;
 	}
 
-	vec(T x, T y, T z)
+	explicit vec(T x, T y, T z)
 	{
-		static_assert(length == 3, "this vector does not have 4 elements");
+		static_assert(length == 3, "this vector does not have 3 elements");
 
 		m_data[0] = x;
 		m_data[1] = y;
 		m_data[2] = z;
 	}
 
-	vec(T x, T y, T z, T w)
+	explicit vec(T x, T y, T z, T w)
 	{
 		static_assert(length == 4, "this vector does not have 4 elements");
 		m_data[0] = x;
@@ -42,9 +44,14 @@ struct vec
 		m_data[3] = w;
 	}
 
-	vec(std::initializer_list<T> list)
+	vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current())
 	{
-		assert_msg(list.size() <= length, "Too big initializer list");
+		if (list.size() > length)
+		{
+			dbgln("\nInitializing with too much data:\n\t{}({})\n", loc.file_name(), loc.line());
+			panic();
+		}
+
 		std::copy(list.begin(), list.end(), m_data.begin());
 	}
 
@@ -132,7 +139,7 @@ struct vec
 	}
 
 	// unary
-	constexpr vec_type& operator-() { return *this * -1; }
+	constexpr vec_type& operator-() { return *this * vec_type(-1); }
 
 	constexpr vec_type& operator+() { return *this; }
 
