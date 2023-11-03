@@ -19,12 +19,16 @@ struct vec
 	explicit vec(T v) { m_data.fill(v); }
 
 	explicit vec(T x, T y)
+	requires(length >= 2)
+
 	{
 		m_data[0] = x;
 		m_data[1] = y;
 	}
 
 	explicit vec(T x, T y, T z)
+	requires(length >= 3)
+
 	{
 		m_data[0] = x;
 		m_data[1] = y;
@@ -32,6 +36,7 @@ struct vec
 	}
 
 	explicit vec(T x, T y, T z, T w)
+	requires(length >= 4)
 	{
 		m_data[0] = x;
 		m_data[1] = y;
@@ -40,7 +45,7 @@ struct vec
 	}
 
 	explicit vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current())
-	requires(length > 4)
+	 requires(length > 4)
 	{
 		if (list.size() > length)
 		{
@@ -224,6 +229,7 @@ export
 	using ivec2 = vec<i64, 2>;
 	using ivec3 = vec<i64, 3>;
 	using ivec4 = vec<i64, 4>;
+	using ivec5 = vec<i64, 5>;
 
 	template<typename T, size_t len>
 	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
