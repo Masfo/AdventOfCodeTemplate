@@ -102,7 +102,7 @@ function(setup_project target outputname)
         #target_compile_options(${target} PRIVATE /experimental:module)
         target_compile_options(${target} PRIVATE /Zc:preprocessor)
         target_compile_options(${target} PRIVATE /permissive-)
-        target_compile_options(${target} PRIVATE /std:c++latest /await)
+        target_compile_options(${target} PRIVATE /std:c++latest /await:strict)
         target_compile_options(${target} PRIVATE /Zc:__cplusplus)
 
         target_compile_options(${target} PRIVATE /W4)

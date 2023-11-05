@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 	}
 	catch (const std::exception &e)
 	{
-		std::println("Exception: {}", e.what());
+		aoc::println("Exception: {}", e.what());
 		return -1;
 	}
 
