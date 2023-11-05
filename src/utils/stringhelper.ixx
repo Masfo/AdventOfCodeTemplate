@@ -675,5 +675,6 @@ export
 	inline auto chunk_by_emptyline = std::views::chunk_by([](std::string x, std::string) { return !x.empty(); });
 
 	template<typename T = i64>
-	inline auto transform_to_number = std::views::transform([](std::string x) { return try_to_number<T>(x); });
+	requires(std::integral<T> || std::floating_point<T>)
+	auto try_to = std::views::transform([](std::string_view x) { return try_to_number<T>(x); });
 }
