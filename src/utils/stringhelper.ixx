@@ -677,4 +677,13 @@ export
 	template<typename T = i64>
 	requires(std::integral<T> || std::floating_point<T>)
 	auto try_to = std::views::transform([](std::string_view x) { return try_to_number<T>(x); });
+
+	template<typename T = i64, T DefaultValue = T{}>
+	requires(std::integral<T> || std::floating_point<T>)
+	auto to = std::views::transform(
+		[](std::string_view x) -> T
+		{
+			auto v = try_to_number<T>(x);
+			return v ? *v : DefaultValue;
+		});
 }
