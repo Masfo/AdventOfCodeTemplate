@@ -58,11 +58,12 @@ export
 		return split(f, delims);
 	}
 
-	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims, include_emptys ie = include_emptys::no)
+	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims, include_emptys ie = include_emptys::yes)
 	{
 		auto s             = read_file(filename);
 		bool include_empty = ie == include_emptys::yes;
-		auto sl            = split_exact(s, delims, include_empty);
+
+		auto sl = split_exact(s, delims, include_empty);
 		return sl;
 	}
 
