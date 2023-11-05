@@ -9,8 +9,7 @@ import aoc.stringhelper;
 
 namespace fs = std::filesystem;
 
-enum class include_emptys
-{
+export enum class include_emptys {
 	yes,
 	no,
 };
@@ -23,27 +22,6 @@ export
 	//	std::filesystem::path & file, std::string_View delims = "\n", include_emptys ie = include_emptys::no)
 	//{
 	//}
-
-	std::vector<std::string> read_all_lines(const std::filesystem::path &path, include_emptys ie = include_emptys::no)
-	{
-		auto lines = std::vector<std::string>{};
-
-		if (!fs::exists(path))
-			throw fs::filesystem_error(std::format("File not found: {}\n", path.filename().string()),
-									   std::make_error_code(std::errc::no_such_file_or_directory));
-
-		auto stream = std::ifstream{path};
-		auto line   = std::string{};
-		while (std::getline(stream, line))
-		{
-			if (line.empty() && ie == include_emptys::no)
-				continue;
-
-			lines.emplace_back(line);
-		}
-
-		return lines;
-	}
 
 	inline std::string read_file(std::string_view filename)
 	{
@@ -105,6 +83,11 @@ export
 	std::vector<std::string> read_lines(std::string_view filename, std::string_view delims = "\n", include_emptys ie = include_emptys::no)
 	{
 		return read_lines_delimiter(filename, delims, ie);
+	}
+
+	std::vector<std::string> read_all_lines(std::string_view filename, std::string_view delims = "\n")
+	{
+		return read_lines_delimiter(filename, delims, include_emptys::yes);
 	}
 
 	template<typename T = i64>
