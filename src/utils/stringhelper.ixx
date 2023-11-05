@@ -25,6 +25,7 @@ export
 		digits       = 1 << 3,
 		alphanumeric = 1 << 4,
 		alphabet     = lowercase | uppercase,
+		whitealpha   = whitespace | alphabet,
 
 		none = 0 << 0,
 		n    = none,
@@ -33,6 +34,7 @@ export
 		a    = l | u,
 		w    = whitespace,
 		d    = digits,
+		wa   = w | a,
 		an   = lowercase | uppercase | digits,
 	};
 
@@ -113,6 +115,12 @@ export
 		return std::nullopt;
 	}
 
+	template<typename T>
+	constexpr bool is_optional = false;
+
+	template<typename T>
+	constexpr bool is_optional<std::optional<T>> = true;
+
 	template<typename Type>
 	Type convert_to_type(std::string_view str)
 	{
@@ -124,15 +132,19 @@ export
 			return str[0];
 		else if constexpr (std::is_integral_v<Type> || std::is_floating_point_v<Type>)
 			return to_number<Type>(str);
-		else if constexpr (std::is_same_v<Type, std::optional<i64>>)
-			return try_to_number<i64>(str);
-		else if constexpr (std::is_same_v<Type, std::optional<char>>)
-			return std::optional<char>(str[0]);
-		else if constexpr (std::is_same_v<Type, std::optional<std::string>>)
-			return std::optional<std::string>(str);
+		else if constexpr (is_optional<Type>)
+		{
+			using T = Type::value_type;
+			if constexpr (std::is_same_v<T, char>)
+				return std::optional<char>(str[0]);
+			else if constexpr (std::is_integral_v<T> or std::is_floating_point_v<T>)
+				return try_to_number<T>(str);
+			else
+				return std::optional<T>(str);
+		}
 		else
 		{
-			static_assert(true, "Conversion not implemented");
+			static_assert(true, "Not implemented");
 		}
 	}
 
@@ -400,6 +412,189 @@ export
 		return tokens;
 	}
 
+	// split_optional
+	template<typename T1>
+	auto split_optional(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	{
+		const auto        s = split(str, delims, option);
+		std::optional<T1> t1{};
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<T1>(s[0]);
+
+		return t1;
+	}
+
+	template<typename T1, typename T2>
+	auto split_optional(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	{
+		const auto        s = split(str, delims, option);
+		std::optional<T1> t1{};
+		std::optional<T2> t2{};
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<T1>(s[0]);
+		if (s.size() >= 2)
+			t2 = convert_to_type<T2>(s[1]);
+
+		return std::make_tuple(t1, t2);
+	}
+
+	template<typename T1, typename T2, typename T3>
+	auto split_optional(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	{
+		const auto s = split(str, delims, option);
+
+		std::optional<T1> t1{};
+		std::optional<T2> t2{};
+		std::optional<T3> t3{};
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<T1>(s[0]);
+		if (s.size() >= 2)
+			t2 = convert_to_type<T2>(s[1]);
+		if (s.size() >= 3)
+			t3 = convert_to_type<T2>(s[2]);
+
+		return std::make_tuple(t1, t2, t3);
+	}
+
+	template<typename T1, typename T2, typename T3, typename T4>
+	auto split_optional(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	{
+		const auto s = split(str, delims, option);
+
+		std::optional<T1> t1{};
+		std::optional<T2> t2{};
+		std::optional<T3> t3{};
+		std::optional<T3> t4{};
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<T1>(s[0]);
+		if (s.size() >= 2)
+			t2 = convert_to_type<T2>(s[1]);
+		if (s.size() >= 3)
+			t3 = convert_to_type<T2>(s[2]);
+		if (s.size() >= 4)
+			t4 = convert_to_type<T2>(s[3]);
+
+		return std::make_tuple(t1, t2, t3, t4);
+	}
+
+	// Split optional index
+	// auto [op, value] = split_optional<char, i64>(str, " ", <index>, <index>);
+
+	template<typename T1>
+	auto split_optional(const std::string_view str, const std::string_view delims, size_t I1, ignore option = ignore::none) noexcept
+	{
+		const auto        s = split(str, delims, option);
+		std::optional<T1> t1{};
+
+		if (I1 >= s.size())
+			dbgln(
+				"split_optional<T1,T2>(\"{}\", \"{}\", {}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				str,
+				delims,
+				I1,
+				I1,
+				s.size() - 1);
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<std::optional<T1>>(s[I1]);
+
+		return t1;
+	}
+
+	template<typename T1, typename T2>
+	auto split_optional(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
+	{
+		const auto        s = split(str, delims, option);
+		std::optional<T1> t1{};
+		std::optional<T2> t2{};
+
+		if (I1 >= s.size() || I2 >= s.size())
+			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. "
+				  "Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  std::max(I1, I2),
+				  s.size() - 1);
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<std::optional<T1>>(s[I1]);
+		if (s.size() >= 2)
+			t2 = convert_to_type<std::optional<T2>>(s[I2]);
+
+		return std::make_tuple(t1, t2);
+	}
+
+	template<typename T1, typename T2, typename T3>
+	auto split_optional(
+		const std::string_view str, const std::string_view delims, size_t I1, size_t I2, size_t I3, ignore option = ignore::none)
+	{
+		const auto        s = split(str, delims, option);
+		std::optional<T1> t1{};
+		std::optional<T2> t2{};
+		std::optional<T3> t3{};
+
+		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size())
+			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. "
+				  "Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  I3,
+				  vmax(I1, I2, I3),
+				  s.size() - 1);
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<std::optional<T1>>(s[I1]);
+		if (s.size() >= 2)
+			t2 = convert_to_type<std::optional<T2>>(s[I2]);
+		if (s.size() >= 3)
+			t3 = convert_to_type<std::optional<T3>>(s[I3]);
+
+		return std::make_tuple(t1, t2, t3);
+	}
+
+	template<typename T1, typename T2, typename T3, typename T4>
+	auto split_optional(
+		const std::string_view str, const std::string_view delims, size_t I1, size_t I2, size_t I3, size_t I4, ignore option = ignore::none)
+	{
+		const auto        s = split(str, delims, option);
+		std::optional<T1> t1{};
+		std::optional<T2> t2{};
+		std::optional<T3> t3{};
+		std::optional<T4> t4{};
+
+		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size() || I4 >= s.size())
+			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was "
+				  "splitted. Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  I3,
+				  I4,
+				  vmax(I1, I2, I3),
+				  s.size() - 1);
+
+		if (s.size() >= 1)
+			t1 = convert_to_type<std::optional<T1>>(s[I1]);
+		if (s.size() >= 2)
+			t2 = convert_to_type<std::optional<T2>>(s[I2]);
+		if (s.size() >= 3)
+			t3 = convert_to_type<std::optional<T3>>(s[I3]);
+		if (s.size() >= 4)
+			t4 = convert_to_type<std::optional<T3>>(s[I4]);
+
+		return std::make_tuple(t1, t2, t3, t4);
+	}
+
+	// replace
 	std::string replace(std::string & subject, const std::string_view search, std::string_view replace) noexcept
 	{
 		size_t pos = 0;
@@ -469,21 +664,20 @@ export
 		return newstr;
 	}
 
-	inline auto is_whitespace = [](char c) { return whitespace_string.contains(c); };
-
-	inline auto trim_front_view = std::views::drop_while(is_whitespace);
-	inline auto trim_back_view  = std::views::reverse | trim_front_view | std::views::reverse;
-	inline auto trim_view       = trim_front_view | trim_back_view;
-	inline auto to_string       = std::ranges::to<std::string>();
-
 	std::string_view trim_front(std::string_view s) noexcept
 	{
+		if (s.empty())
+			return s;
+
 		s.remove_prefix(s.find_first_not_of(whitespace_string));
 		return s;
 	}
 
 	std::string_view trim_back(std::string_view s) noexcept
 	{
+		if (s.empty())
+			return s;
+
 		s.remove_suffix(s.size() - s.find_last_not_of(whitespace_string) - 1);
 		return s;
 	}
@@ -670,14 +864,37 @@ export
 		return ret;
 	}
 
+	// #####################################
 	// ranges
 
-	inline auto chunk_by_emptyline = std::views::chunk_by([](std::string x, std::string) { return !x.empty(); });
+	inline auto is_whitespace = [](char c) { return whitespace_string.contains(c); };
+	inline auto empty         = [](const auto str) { return not str.empty(); };
+	inline auto empty_string  = [](const std::string str, const auto &) { return not str.empty(); };
 
+	auto newlines = [](auto x, auto y) { return not(x == "\n" && y == "\n"); };
+
+	auto newline = [](char x, char) { return not(x == '\n'); };
+
+	inline auto trim_front_view = std::views::drop_while(is_whitespace);
+	inline auto trim_back_view  = std::views::reverse | trim_front_view | std::views::reverse;
+	inline auto trim_view       = trim_front_view | trim_back_view;
+	inline auto to_string       = std::ranges::to<std::string>();
+
+	template<typename T>
+	inline auto to_vector = std::ranges::to<std::vector<T>>();
+
+	inline auto chunk_by_empty    = std::views::chunk_by(empty_string);
+	inline auto chunk_by_newlines = std::views::chunk_by(newlines);
+	inline auto chunk_by_newline  = std::views::chunk_by(newline);
+
+	inline auto filter_empty = std::views::filter(empty);
+
+	// try_to
 	template<typename T = i64>
 	requires(std::integral<T> || std::floating_point<T>)
 	auto try_to = std::views::transform([](std::string_view x) { return try_to_number<T>(x); });
 
+	// to
 	template<typename T = i64, T DefaultValue = T{}>
 	requires(std::integral<T> || std::floating_point<T>)
 	auto to = std::views::transform(
