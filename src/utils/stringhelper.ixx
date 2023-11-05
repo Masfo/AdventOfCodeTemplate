@@ -112,6 +112,7 @@ export
 		if (ec == std::errc())
 			return val;
 
+		trace("try_to_number(\"{}\", base({})). Is not a number", str, base);
 		return std::nullopt;
 	}
 
