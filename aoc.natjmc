@@ -2,8 +2,10 @@
 <NonUserCode xmlns="http://schemas.microsoft.com/vstudio/debugger/jmc/2015">
 
 	<!-- Files -->
-	<File Name="!vec.ixx"/>
+	<File Name="vec.ixx"/>
 	<File Name="debug.ixx"/>
+	<File Name="!stringhelper.ixx"/>
+
 
 
 	<!-- Functions -->

@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
+
+
 # VCPKG
 if(DEFINED ENV{VCPKG_ROOT})
     set(VCPKG_TARGET_TRIPLET x64-windows-static)
@@ -76,3 +78,5 @@ target_compile_options(aoc PRIVATE
     #/wd5246 # the initialization of a subobject should be wrapped in braces
 
 )
+
+

@@ -25,4 +25,3 @@ export import aoc.day22;
 export import aoc.day23;
 export import aoc.day24;
 export import aoc.day25;
-

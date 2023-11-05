@@ -2,7 +2,6 @@ import std;
 import aoc.debug;
 import aoc.days;
 
-
 #define ALL 0
 namespace fs = std::filesystem;
 
@@ -128,7 +127,6 @@ int main(int argc, char **argv)
 
 		return 0;
 	}
-
 
 	std::println("AOC 2023:\n\n");
 

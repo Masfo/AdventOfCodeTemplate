@@ -1,4 +1,3 @@
-module;
 
 export module aoc.stringhelper;
 
@@ -8,12 +7,12 @@ import aoc.math;
 import aoc.vec;
 import std;
 
-const static std::string digit_string{"0123456789"};
-const static std::string whitespace_string{" \t\f\n\r\v"};
-const static std::string lowercase_string{"abcdefghijklmnopqrstuvwxyz"};
-const static std::string uppercase_string{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-const static std::string alphabet_string{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-const static std::string alphanum_string{"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+const static std::string_view digit_string{"0123456789"};
+const static std::string_view whitespace_string{" \t\f\n\r\v"};
+const static std::string_view lowercase_string{"abcdefghijklmnopqrstuvwxyz"};
+const static std::string_view uppercase_string{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+const static std::string_view alphabet_string{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+const static std::string_view alphanum_string{"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
 
 export
 {
@@ -77,8 +76,9 @@ export
 	template<typename T = i64>
 	inline T constexpr to_number(std::string_view str, int base = 10)
 	{
+
 		T val{};
-		if (str[0] == '+')
+		if (not str.empty() && str[0] == '+')
 			str.remove_prefix(1);
 		auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, base)};
 
@@ -469,12 +469,30 @@ export
 		return newstr;
 	}
 
-	std::string_view trim(const std::string_view s)
+	inline auto is_whitespace = [](char c) { return whitespace_string.contains(c); };
+
+	inline auto trim_front_view = std::views::drop_while(is_whitespace);
+	inline auto trim_back_view  = std::views::reverse | trim_front_view | std::views::reverse;
+	inline auto trim_view       = trim_front_view | trim_back_view;
+	inline auto to_string       = std::ranges::to<std::string>();
+
+	std::string_view trim_front(std::string_view s) noexcept
 	{
-		auto front = std::find_if_not(s.begin(), s.end(), [](int c) { return std::isspace(c); });
-		auto back  = std::find_if_not(s.rbegin(), s.rend(), [](int c) { return std::isspace(c); }).base();
-		return std::string_view(front, back);
+		s.remove_prefix(s.find_first_not_of(whitespace_string));
+		return s;
 	}
+
+	std::string_view trim_back(std::string_view s) noexcept
+	{
+		s.remove_suffix(s.size() - s.find_last_not_of(whitespace_string) - 1);
+		return s;
+	}
+
+	std::string_view trim(std::string_view s) noexcept
+	{
+		s = trim_front(s);
+		return trim_back(s);
+	};
 
 	std::vector<std::string> trim(const std::vector<std::string> &from) noexcept
 	{
@@ -642,4 +660,20 @@ export
 		std::ranges::set_intersection(a, b, std::back_inserter(ret));
 		return ret;
 	}
+
+	std::string string_difference(std::string a, std::string b) noexcept
+	{
+		std::ranges::sort(a);
+		std::ranges::sort(b);
+		std::string ret;
+		std::ranges::set_difference(a, b, std::back_inserter(ret));
+		return ret;
+	}
+
+	// ranges
+
+	inline auto chunk_by_emptyline = std::views::chunk_by([](std::string x, std::string) { return !x.empty(); });
+
+	template<typename T = i64>
+	inline auto transform_to_number = std::views::transform([](std::string x) { return try_to_number<T>(x); });
 }
