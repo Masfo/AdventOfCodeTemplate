@@ -1,4 +1,28 @@
- 
+
+// Define Slice as a range adaptor closure
+struct slice : std::ranges::range_adaptor_closure<slice>
+{
+	std::size_t start = 0;
+	std::size_t end   = std::string_view::npos;
+
+	constexpr slice(size_t s, size_t e)
+		: start(s)
+		, end(e)
+	{
+	}
+
+	constexpr std::string_view operator()(std::string_view sv) const { return sv.substr(start, end - start); }
+};
+
+	constexpr std::string_view str = "01234567";
+
+	//	constexpr slice slicer{.start = 1, .end = 6};
+	constexpr slice slicer(1, 6);
+
+	constexpr auto sv1 = slicer(str);       // use slicer as a normal function object
+	constexpr auto sv2 = str | slice{1, 6}; // use slicer as a range adaptor closure object
+	static_assert(sv1 == "12345");
+	static_assert(sv2 == "12345");
 
 ///////////////////////////////////
 
