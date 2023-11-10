@@ -72,9 +72,158 @@ Monkey 3:
 		int x = 0;
 	}
 
+    //////////////////////////////////////////////////////////
 
 
 
+
+
+
+	template<typename T = i64>
+	using undirected_graph = std::unordered_map<T, std::unordered_set<T>>;
+
+
+	 std::unordered_map<std::string, std::unordered_set<std::string>> edges;
+
+    for (const auto &line : read_lines("input\\day12.txt"))
+    {
+        auto [from, to] = split_two(line, "-");
+        edges[from].insert(to);
+        edges[to].insert(from);
+	}
+
+
+
+	
+i64 visit_cave(const std::string &key, const auto &edges, auto &visited, bool twice, i64 count = 0) noexcept
+{
+    if (key == "end")
+        return 1;
+
+    for (const std::string &next : edges.at(key))
+    {
+        if (!visited.contains(next))
+        {
+            if (std::islower(next[0]))
+                visited.insert(next);
+
+            count += visit_cave(next, edges, visited, twice);
+
+            if (std::islower(next[0]))
+                visited.erase(next);
+        }
+        else if (twice && next != "start")
+            count += visit_cave(next, edges, visited, false);
+    }
+    return count;
+}
+
+i64 visit_cave(const auto &edges, bool twice) noexcept
+{
+    std::unordered_set<std::string> visited{"start"};
+    return visit_cave("start", edges, visited, twice);
+}
+
+
+
+
+// DFS
+
+// DFS algorithm
+void Graph::DFS(int vertex) {
+  visited[vertex] = true;
+  list<int> adjList = adjLists[vertex];
+
+  cout << vertex << " ";
+
+  list<int>::iterator i;
+  for (i = adjList.begin(); i != adjList.end(); ++i)
+    if (!visited[*i])
+      DFS(*i);
+}
+int main() {
+  Graph g(4);
+  g.addEdge(0, 1);
+  g.addEdge(0, 2);
+  g.addEdge(1, 2);
+  g.addEdge(2, 3);
+
+  g.DFS(2);
+
+  return 0;
+}
+
+
+
+
+void Graph::DFS(int s){
+// Initially mark all vertices as not visited
+vector<bool> visited(V, false);
+// Create a stack for DFS
+stack<int> stack;
+// Push the current source node.
+stack.push(s);
+while (!stack.empty()){
+// Pop a vertex from stack and print it
+    int s = stack.top();
+    stack.pop();
+    // Stack may contain same vertex twice. So
+    // we need to print the popped item only
+    // if it is not visited.
+    if (!visited[s]){
+    cout << s << " ";
+    visited[s] = true;
+    }
+    // Get all adjacent vertices of the popped vertex s
+    // If a adjacent has not been visited, then push it
+    // to the stack.
+    for (auto i = adj[s].begin(); i != adj[s].end(); ++i)
+        if (!visited[*i]) 
+            stack.push(*i);
+}
+}
+
+
+// BFS
+
+void Graph::BFS(int s)
+{
+    // Mark all the vertices as not visited
+    bool *visited = new bool[V];
+    for(int i = 0; i < V; i++)
+        visited[i] = false;
+
+    // Create a queue for BFS
+    list<int> queue;
+
+    // Mark the current node as visited and enqueue it
+    visited[s] = true;
+    queue.push_back(s);
+
+    // 'i' will be used to get all adjacent
+    // vertices of a vertex
+    list<int>::iterator i;
+
+    while(!queue.empty())
+    {
+        // Dequeue a vertex from queue and print it
+        s = queue.front();
+        cout << s << " ";
+        queue.pop_front();
+
+        // Get all adjacent vertices of the dequeued
+        // vertex s. If a adjacent has not been visited, 
+        // then mark it visited and enqueue it
+        for (i = adj[s].begin(); i != adj[s].end(); ++i)
+        {
+            if (!visited[*i])
+            {
+                visited[*i] = true;
+                queue.push_back(*i);
+            }
+        }
+    }
+}
 
 ///////////////////////////////////
 
