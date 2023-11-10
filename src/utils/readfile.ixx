@@ -23,7 +23,7 @@ export
 	//{
 	//}
 
-	inline std::string read_file(std::string_view filename)
+	std::string read_file(std::string_view filename)
 	{
 		try
 		{
