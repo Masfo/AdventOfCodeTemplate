@@ -30,6 +30,13 @@ export
 	constexpr i8 MIN_I8 = std::numeric_limits<i8>::min();
 	constexpr i8 MAX_I8 = std::numeric_limits<i8>::max();
 
+	template<typename T = i64>
+	struct answer
+	{
+		T part1{};
+		T part2{};
+	};
+
 	template<typename... Ts>
 	struct overload : Ts...
 	{
@@ -49,7 +56,6 @@ export
 	{
 		return as<i64>(t);
 	}
-
 
 	template<typename T>
 	void hash_combine(std::size_t & seed, const T &val)
@@ -71,6 +77,37 @@ export
 		std::size_t seed = 0;
 		hash_combine(seed, args...);
 		return seed;
+	}
+
+	// vmax
+	template<typename T>
+	const T vmax(const T &a)
+	{
+		return a;
+	}
+
+	template<typename T, typename... Args>
+	const T &vmax(const T &a, const T &b, const Args &...args)
+	{
+		if constexpr (sizeof...(args) == 0)
+			return std::max(a, b);
+		else
+			return std::max(std::min(a, b), args...);
+	}
+
+	// vmin
+	template<typename T>
+	const T &vmin(const T &a)
+	{
+		return a;
+	}
+	template<typename T, typename... Args>
+	const T &vmin(const T &a, const T &b, const Args &...args)
+	{
+		if constexpr (sizeof...(args) == 0)
+			return std::min(a, b);
+		else
+			return std::min(std::min(a, b), args...);
 	}
 
 	/*

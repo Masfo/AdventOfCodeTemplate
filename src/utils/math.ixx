@@ -6,7 +6,6 @@ import std;
 import aoc.types;
 import aoc.vec;
 
-
 #define STD_HASH(T, ...)                                                                                                                   \
 	namespace std                                                                                                                          \
 	{                                                                                                                                      \
@@ -16,7 +15,6 @@ import aoc.vec;
 			size_t operator()(const T &value) const {return hash_val(__VA_ARGS__)); }                                                      \
 		};                                                                                                                                 \
 	}
-
 
 export
 {
@@ -79,46 +77,12 @@ export
 		}
 	}
 
-
 	bool between(i64 value, i64 a, i64 b) noexcept { return value >= a && value <= b; }
-
 
 	template<typename T = i64>
 	T distance(T a, T b) noexcept
 	{
 		return as<T>(std::abs(a) + std::abs(b));
-	}
-
-
-	// vmax
-	template<typename T>
-	const T vmax(const T &a)
-	{
-		return a;
-	}
-
-	template<typename T, typename... Args>
-	const T &vmax(const T &a, const T &b, const Args &...args)
-	{
-		if constexpr (sizeof...(args) == 0)
-			return std::max(a, b);
-		else
-			return std::max(std::min(a, b), args...);
-	}
-
-	// vmin
-	template<typename T>
-	const T &vmin(const T &a)
-	{
-		return a;
-	}
-	template<typename T, typename... Args>
-	const T &vmin(const T &a, const T &b, const Args &...args)
-	{
-		if constexpr (sizeof...(args) == 0)
-			return std::min(a, b);
-		else
-			return std::min(std::min(a, b), args...);
 	}
 
 	// vmod
