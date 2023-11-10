@@ -19,6 +19,12 @@ import aoc.vec;
 export
 {
 
+	template<typename T>
+	bool between(T v, T vmin, T vmax) noexcept
+	{
+		return (v >= vmin) && (v <= vmax);
+	};
+
 	// common
 	i64 mod(i64 x, i64 N) noexcept
 	{
