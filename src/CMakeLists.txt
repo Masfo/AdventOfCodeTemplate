@@ -70,7 +70,10 @@ target_sources(aoc
 	utils/walker.ixx
 	utils/tree.ixx
 	utils/grid.ixx
+
     utils/stringhelper.ixx
+    utils/stringsplit.ixx
+
     utils/readfile.ixx
 
 	#
