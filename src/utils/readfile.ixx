@@ -6,6 +6,7 @@ import std;
 import aoc.debug;
 import aoc.types;
 import aoc.stringhelper;
+import aoc.stringsplit;
 
 namespace fs = std::filesystem;
 

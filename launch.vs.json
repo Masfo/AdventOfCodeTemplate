@@ -6,13 +6,6 @@
             "type": "debug",
             "project": "CMakeLists.txt",
             "currentDir": "${workspaceRoot}\\bin",
-            "name": "help",
-            "args": [ "--help" ]
-        },
-        {
-            "type": "debug",
-            "project": "CMakeLists.txt",
-            "currentDir": "${workspaceRoot}\\bin",
             "name": "Debug w/o arguments",
             "args": []
         },
