@@ -31,6 +31,9 @@ export
 	constexpr i8 MAX_I8 = std::numeric_limits<i8>::max();
 
 	template<typename T = i64>
+	using undirected_graph = std::unordered_map<T, std::unordered_set<T>>;
+
+	template<typename T = i64>
 	struct answer
 	{
 		T part1{};
