@@ -67,8 +67,11 @@ export
 	{
 	public:
 		// [&](ivec2 pos, char c)
-		using GridValue  = std::pair<ivec2, T>;
+		using GridValue    = std::pair<ivec2, T>;
+		using SearchResult = std::pair<i64, std::vector<ivec2>>;
+
 		using FunctionOp = const std::function<void(const ivec2, const T)>;
+		using SearchOp   = const std::function<bool(const ivec2, const ivec2)>;
 
 		void read(std::string_view filename)
 		{
@@ -91,7 +94,7 @@ export
 		{
 			min_grid = MAX_IVEC2;
 			max_grid = MIN_IVEC2;
-			for (const auto &pos : std::views::keys(m_grid))
+			for (const auto &pos : m_grid | std::views::keys)
 			{
 				min_grid = min(min_grid, pos);
 				max_grid = max(max_grid, pos);
@@ -140,9 +143,9 @@ export
 			ivec2 end{start};
 			while (contains(end))
 			{
-				if (!contains(end + dir))
-					break;
 				end += dir;
+				if (!contains(end))
+					break;
 				if (*at(end) == c)
 					break;
 			}
@@ -242,6 +245,65 @@ export
 					op(pos + offset, *v);
 			}
 		}
+
+		// ########################################################################
+		// BFS
+
+		template<typename Directions>
+		i64 BFS_n_way_distance(ivec2 start, ivec2 end, Directions directions, const SearchOp &op)
+		{
+			// TODO: Pathmap
+			std::unordered_set<ivec2>         seen;
+			std::deque<std::pair<ivec2, i64>> to_visit;
+			to_visit.push_back({start, 0});
+
+			while (!to_visit.empty())
+			{
+				auto [pos, dist] = to_visit.front();
+				to_visit.pop_front();
+
+				if (pos == end)
+				{
+					// reconstruct path
+					return dist;
+				}
+
+				if (seen.contains(pos))
+					continue;
+				seen.insert(pos);
+
+				for (const auto &offset : directions)
+				{
+					ivec2 newpos = pos + offset;
+					if (seen.contains(newpos))
+						continue;
+					if (is_valid(newpos))
+					{
+						if (op != nullptr)
+						{
+							if (op(pos, newpos) == true)
+								to_visit.push_back({newpos, dist + 1});
+						}
+						else
+						{
+							to_visit.push_back({newpos, dist + 1});
+						}
+						// add to pathmap
+					}
+				}
+			}
+			return -1;
+		}
+
+		i64 BFS_4way_distance(ivec2 start, ivec2 end, const SearchOp &op = nullptr)
+		{
+			return BFS_n_way_distance(start, end, directions_4_way, op);
+		}
+
+		// DFS
+
+		//
+		// ########################################################################
 
 		bool is_valid(ivec2 pos) const { return contains(pos); }
 

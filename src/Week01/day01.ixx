@@ -27,6 +27,17 @@ export void day01()
 
 	auto w1 = g.getline_until(start[0], west, '$');
 
+	i64 di = g.BFS_4way_distance(g.find('X')[0],
+								 g.find('x')[0],
+								 [&](const ivec2 pos, const ivec2 newpos)
+								 {
+									 //
+									 char c = *g.at(newpos);
+									 if (c == '.' || c == 'x')
+										 return true;
+									 return false;
+								 });
+
 	i64 sum = 0;
 	g.for_each_8way(start[0],
 					[&](const ivec2 pos, char c)
