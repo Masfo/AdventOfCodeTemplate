@@ -18,13 +18,12 @@ export void day01()
 	g.print();
 
 	g.for_each(
-		[](auto &self, const ivec2 pos, char c)
+		[&g](const ivec2 pos, char c)
 		{
 			//
-			self.set(pos, '$');
+			// self.set(pos, '$');
 		});
 
-	g.print();
 	aoc::println("Day 01 :");
 	aoc::println("	- Part 1: {}", a.part1);
 	aoc::println("	- Part 2: {}", a.part2);

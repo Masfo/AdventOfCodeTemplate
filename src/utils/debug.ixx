@@ -107,7 +107,7 @@ export
 	{
 		if constexpr (sizeof...(args) > 0)
 		{
-			trace("PANIC: ", std::vformat(fmt, std::make_format_args(args...)));
+			trace("PANIC: {}", std::vformat(fmt, std::make_format_args(args...)));
 		}
 		else
 		{

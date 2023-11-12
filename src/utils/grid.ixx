@@ -20,8 +20,8 @@ export
 	class grid
 	{
 	public:
-		using FunctionOp     = std::function<void(const ivec2, T)>;
-		using FunctionOpThis = std::function<void(grid<T> &, const ivec2, T)>;
+		// [&](ivec2 pos, char c)
+		using FunctionOp = const std::function<void(const ivec2, const T)>;
 
 		void read(std::string_view filename)
 		{
@@ -37,21 +37,21 @@ export
 				}
 				pos[1]++;
 			}
-			const auto [mmin, mmax] = bounds();
-			min_grid                = mmin;
-			max_grid                = mmax;
+			calc_bounds();
 		}
 
-		auto bounds() -> std::tuple<ivec2, ivec2>
+		void calc_bounds()
 		{
-			ivec2 mmin{MAX_IVEC2}, mmax{MIN_IVEC2};
+			min_grid = MAX_IVEC2;
+			max_grid = MIN_IVEC2;
 			for (const auto &pos : std::views::keys(m_grid))
 			{
-				mmin = min(mmin, pos);
-				mmax = max(mmax, pos);
+				min_grid = min(min_grid, pos);
+				max_grid = max(max_grid, pos);
 			}
-			return {mmin, mmax};
 		}
+
+		auto get_bounds() -> std::tuple<ivec2, ivec2> { return {min_grid, max_grid}; }
 
 		auto getline(ivec2 start, ivec2 end) -> std::vector<GridValue<T>>
 		{
@@ -90,25 +90,19 @@ export
 			}
 		}
 
-		void for_each(const FunctionOpThis &op)
-		{
-			for (auto y = min_grid.y(); y <= max_grid.y(); ++y)
-			{
-				for (auto x = min_grid.x(); x <= max_grid.x(); ++x)
-				{
-					if (auto v = at(ivec2{x, y}); v.has_value())
-					{
-						op(*this, ivec2{x, y}, *v);
-					}
-				}
-			}
-		}
+		bool is_valid(ivec2 pos) const { return (pos >= min_grid) && (pos <= max_grid); }
 
-		bool is_valid(ivec2 pos) const { return (pos <= min_grid) && (pos >= max_grid); }
-
-		auto find(T c) const -> std::vector<ivec2>
+		auto find(T to_find) const -> std::vector<ivec2>
 		{
 			std::vector<ivec2> points;
+
+			for_each(
+				[](ivec2 pos, T c)
+				{
+					//
+					if (c == to_find)
+						points.push_back(pos);
+				});
 
 			return points;
 		}
@@ -122,12 +116,36 @@ export
 			return {};
 		}
 
-		void set(ivec2 pos, T value) { m_grid[pos] = value; }
+		void set(ivec2 pos, T value)
+		{
+			if (is_locked())
+			{
+				if (is_valid(pos))
+					m_grid[pos] = value;
+				else
+				{
+
+					panic("Trying to go out-of-bounds on locked grid. {}x{} = '{}'", pos.x(), pos.y(), value);
+				}
+			}
+			else
+			{
+				m_grid[pos] = value;
+			}
+			calc_bounds();
+		}
+
+		void set_in_bounds(ivec2 pos, T value)
+		{
+			if (is_valid(pos))
+				set(pos, value);
+		}
 
 		void unset(ivec2 pos) { m_grid.erase(pos); }
 
 		void print()
 		{
+			dbgln("Bounds: {} - {}", min_bound(), max_bound());
 			for (auto y = min_grid.y(); y <= max_grid.y(); ++y)
 			{
 				for (auto x = min_grid.x(); x <= max_grid.x(); ++x)
@@ -138,7 +156,7 @@ export
 					}
 					else
 					{
-						dbg(" ");
+						dbg(".");
 					}
 				}
 				dbgln("");
@@ -146,11 +164,20 @@ export
 			dbgln("");
 		}
 
+		void lock(bool to_lock = true) { m_locked = to_lock; };
+
+		bool is_locked() const { return m_locked; }
+
+		ivec2 min_bound() const { return min_grid; }
+
+		ivec2 max_bound() const { return max_grid; }
+
 	private:
 		ivec2 min_grid{MAX_IVEC2};
 		ivec2 max_grid{MIN_IVEC2};
 
 		std::unordered_map<ivec2, T> m_grid;
+		bool                         m_locked{false};
 	};
 
 	// DAY 8, 2022, walk lines all_of iota...
