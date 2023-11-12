@@ -9,13 +9,59 @@ import aoc.debug;
 
 export
 {
-	template<typename T>
-	struct GridValue
-	{
-		T     value{};
-		ivec2 pos;
+
+	const ivec2 north{0, -1};
+	const ivec2 east{1, 0};
+	const ivec2 south{0, 1};
+	const ivec2 west{-1, 0};
+	const ivec2 north_east{north + east};
+	const ivec2 south_east{south + east};
+	const ivec2 south_west{south + west};
+	const ivec2 north_west{north + west};
+
+	const std::vector<ivec2> directions_4_way{
+		north,
+		east,
+		south,
+		west,
 	};
 
+	const std::vector<ivec2> directions_4_diag{
+		south_west,
+		south_east,
+		north_west,
+		north_east,
+	};
+
+	const std::vector<ivec2> directions_8_way{
+		north,
+		north_east,
+		east,
+		south_east,
+		south,
+		south_west,
+		west,
+		north_west,
+	};
+
+	const std::vector<ivec2> hex_coords{
+		north_east,
+		east,
+		south_east,
+		south_west,
+		west,
+		north_west,
+	};
+	const std::unordered_map<std::string, ivec2> axial_coordinates{
+		{"ne", ivec2(1, -1)},
+		{"e", ivec2(1, 0)},
+		{"se", ivec2(0, 1)},
+		{"sw", ivec2(-1, 1)},
+		{"w", ivec2(-1, 0)},
+		{"nw", ivec2(0, -1)},
+	};
+
+	// grid
 	template<typename T = char>
 	class grid
 	{
@@ -53,10 +99,15 @@ export
 
 		auto get_bounds() -> std::tuple<ivec2, ivec2> { return {min_grid, max_grid}; }
 
-		auto getline(ivec2 start, ivec2 end) -> std::vector<GridValue<T>>
+		auto getline(ivec2 start, ivec2 end) -> std::vector<T>
 		{
-			std::vector<GridValue<T>> gv;
+			std::vector<T> gv;
 			return gv;
+		}
+
+		void set_border(T c)
+		{
+			//
 		}
 
 		void setline(ivec2 v1, ivec2 v2, T c)
@@ -90,6 +141,64 @@ export
 			}
 		}
 
+		void for_each_4way(const ivec2 pos, const FunctionOp &op) const
+		{
+			if (not is_valid(pos))
+			{
+				panic("Starting position {} is not valid", pos);
+				return;
+			}
+			for (const ivec2 offset : directions_4_way)
+			{
+				if (auto v = at(pos + offset); v.has_value())
+					op(pos + offset, *v);
+			}
+		}
+
+		//
+		void for_each_4way(const FunctionOp &op) const
+		{
+			for_each(
+				[&](const ivec2 pos, T)
+				{
+					for_each_4way(pos,
+								  [&](const ivec2 pos, T c)
+								  {
+									  if (auto v = at(pos); v.has_value())
+										  op(pos, *v);
+								  });
+				});
+		}
+
+		void for_each_8way(const FunctionOp &op) const
+		{
+			for_each(
+				[&](const ivec2 pos, T)
+				{
+					for_each_8way(pos,
+								  [&](const ivec2 pos, T c)
+								  {
+									  if (auto v = at(pos); v.has_value())
+										  op(pos, *v);
+								  });
+				});
+		}
+
+		void for_each_8way(const ivec2 pos, const FunctionOp &op) const
+		{
+			if (not is_valid(pos))
+			{
+				panic("Starting position {} is not valid", pos);
+				return;
+			}
+
+			for (const ivec2 offset : directions_8_way)
+			{
+				if (auto v = at(pos + offset); v.has_value())
+					op(pos + offset, *v);
+			}
+		}
+
 		bool is_valid(ivec2 pos) const { return (pos >= min_grid) && (pos <= max_grid); }
 
 		auto find(T to_find) const -> std::vector<ivec2>
@@ -97,7 +206,7 @@ export
 			std::vector<ivec2> points;
 
 			for_each(
-				[](ivec2 pos, T c)
+				[&](ivec2 pos, T c)
 				{
 					//
 					if (c == to_find)
@@ -184,58 +293,6 @@ export
 
 	// for_each_4way -> std::generator<Cell> ... co_yield
 	// grid as a unordered_map
-
-	const ivec2 north{0, -1};
-	const ivec2 east{1, 0};
-	const ivec2 south{0, 1};
-	const ivec2 west{-1, 0};
-	const ivec2 north_east{north + east};
-	const ivec2 north_west{north + west};
-	const ivec2 south_east{south + east};
-	const ivec2 south_west{south + west};
-
-	const std::vector<ivec2> directions_4_way{
-		north,
-		east,
-		south,
-		west,
-	};
-
-	const std::vector<ivec2> directions_4_diag{
-		south_west,
-		south_east,
-		north_west,
-		north_east,
-	};
-
-	const std::vector<ivec2> directions_8_way{
-		north,
-		east,
-		south,
-		west,
-
-		north_east,
-		north_west,
-		south_east,
-		south_west,
-	};
-
-	const std::vector<ivec2> hex_coords{
-		north_east,
-		east,
-		south_east,
-		south_west,
-		west,
-		north_west,
-	};
-	const std::unordered_map<std::string, ivec2> axial_coordinates{
-		{"ne", ivec2(1, -1)},
-		{"e", ivec2(1, 0)},
-		{"se", ivec2(0, 1)},
-		{"sw", ivec2(-1, 1)},
-		{"w", ivec2(-1, 0)},
-		{"nw", ivec2(0, -1)},
-	};
 }
 
 #if 0

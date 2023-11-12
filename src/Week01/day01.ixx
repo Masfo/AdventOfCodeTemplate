@@ -15,7 +15,19 @@ export void day01()
 	grid g;
 	g.read("input\\day1test.txt");
 
+	auto start = g.find('@');
+
 	g.print();
+
+	i64 sum = 0;
+	g.for_each_8way(start[0],
+					[&](const ivec2 pos, char c)
+					{
+						//
+						if (c == '#' or c == '.')
+							return;
+						sum += as<i64>(c - '0');
+					});
 
 	g.for_each(
 		[&g](const ivec2 pos, char c)
