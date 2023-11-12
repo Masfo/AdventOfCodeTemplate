@@ -33,6 +33,16 @@ export
 	template<typename T>
 	using undirected_graph = std::unordered_map<T, std::unordered_set<T>>;
 
+	template<typename T>
+	struct Node
+	{
+		T   value{};
+		int weight{};
+	};
+
+	template<typename T>
+	using directed_graph = std::unordered_map<Node<T>, std::unordered_set<Node<T>>>;
+
 	template<typename T = i64>
 	struct answer
 	{
