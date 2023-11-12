@@ -233,6 +233,9 @@ export
 	using uvec3 = vec<u64, 3>;
 	using uvec4 = vec<u64, 4>;
 
+	ivec2 MAX_IVEC2{MAX_I64, MAX_I64};
+	ivec2 MIN_IVEC2{MIN_I64, MIN_I64};
+
 	template<typename T, size_t len>
 	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
 	{
@@ -313,7 +316,7 @@ export
 }
 
 // STD specials
-namespace std
+export namespace std
 {
 
 	template<>

@@ -188,6 +188,8 @@ Monkey 3:
         auto [from, to] = split_two(line, "-");
         edges[from].insert(to);
         edges[to].insert(from);
+
+        // Directed: from->to
 	}
 
 

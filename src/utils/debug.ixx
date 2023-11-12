@@ -9,7 +9,7 @@ namespace fs = std::filesystem;
 void output_message(const std::string_view message) noexcept
 {
 	OutputDebugStringA(message.data());
-	std::println("{}", message);
+	std::print("{}", message);
 }
 
 template<typename... Args>
