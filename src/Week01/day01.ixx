@@ -19,7 +19,13 @@ export void day01()
 
 	g.print();
 
+	// Get line from -> to
 	auto l1 = g.getline(start[0], start[0] + ivec2{0, -3});
+
+	auto n1 = g.getline_direction(start[0], north);
+	auto e1 = g.getline_direction(start[0], south, 3);
+
+	auto w1 = g.getline_until(start[0], west, '$');
 
 	i64 sum = 0;
 	g.for_each_8way(start[0],

@@ -67,6 +67,7 @@ export
 	{
 	public:
 		// [&](ivec2 pos, char c)
+		using GridValue  = std::pair<ivec2, T>;
 		using FunctionOp = const std::function<void(const ivec2, const T)>;
 
 		void read(std::string_view filename)
@@ -99,9 +100,9 @@ export
 
 		auto get_bounds() -> std::tuple<ivec2, ivec2> { return {min_grid, max_grid}; }
 
-		auto getline(ivec2 v1, ivec2 v2) -> std::vector<std::pair<ivec2, T>>
+		auto getline(ivec2 v1, ivec2 v2) const -> std::vector<GridValue>
 		{
-			std::vector<std::pair<ivec2, T>> gv;
+			std::vector<GridValue> gv;
 
 			ivec2 delta;
 			if (v2[0] - v1[0] != 0)
@@ -117,6 +118,35 @@ export
 				gv.push_back({v1, *at(v1)});
 			}
 			return gv;
+		}
+
+		auto getline_direction(ivec2 start, ivec2 dir, int count = MAX_I32) const -> std::vector<GridValue>
+		{
+			// walk until not valid
+			ivec2 end{start};
+			while (contains(end))
+			{
+				end += dir;
+				if (count <= 0)
+					break;
+				count--;
+			}
+
+			return getline(start, end - dir);
+		}
+
+		auto getline_until(ivec2 start, ivec2 dir, const T c) const -> std::vector<GridValue>
+		{
+			ivec2 end{start};
+			while (contains(end))
+			{
+				if (!contains(end + dir))
+					break;
+				end += dir;
+				if (*at(end) == c)
+					break;
+			}
+			return getline(start, end - dir);
 		}
 
 		void set_border(T c)
@@ -213,7 +243,7 @@ export
 			}
 		}
 
-		bool is_valid(ivec2 pos) const { return (pos >= min_grid) && (pos <= max_grid); }
+		bool is_valid(ivec2 pos) const { return contains(pos); }
 
 		auto find(T to_find) const -> std::vector<ivec2>
 		{
