@@ -99,9 +99,23 @@ export
 
 		auto get_bounds() -> std::tuple<ivec2, ivec2> { return {min_grid, max_grid}; }
 
-		auto getline(ivec2 start, ivec2 end) -> std::vector<T>
+		auto getline(ivec2 v1, ivec2 v2) -> std::vector<std::pair<ivec2, T>>
 		{
-			std::vector<T> gv;
+			std::vector<std::pair<ivec2, T>> gv;
+
+			ivec2 delta;
+			if (v2[0] - v1[0] != 0)
+				delta[0] = v2[0] - v1[0] > 0 ? 1 : -1;
+			if (v2[1] - v1[1] != 0)
+				delta[1] = v2[1] - v1[1] > 0 ? 1 : -1;
+
+			gv.push_back({v1, *at(v1)});
+
+			while (v1.x() != v2.x() || v1.y() != v2.y())
+			{
+				v1 += delta;
+				gv.push_back({v1, *at(v1)});
+			}
 			return gv;
 		}
 

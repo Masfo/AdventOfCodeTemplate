@@ -19,6 +19,8 @@ export void day01()
 
 	g.print();
 
+	auto l1 = g.getline(start[0], start[0] + ivec2{0, -3});
+
 	i64 sum = 0;
 	g.for_each_8way(start[0],
 					[&](const ivec2 pos, char c)
