@@ -91,6 +91,11 @@ export
 		{
 		}
 
+		grid(ivec2 resolution)
+			: grid(resolution.x(), resolution.y(), '.', ivec2{0, 0})
+		{
+		}
+
 		void read(std::string_view filename)
 		{
 			auto lines = read_lines(filename);
@@ -118,6 +123,8 @@ export
 				min_grid = min(min_grid, pos);
 				max_grid = max(max_grid, pos);
 			}
+
+			resolution = ivec2{min_grid.x() + max_grid.x(), min_grid.y() + max_grid.y()};
 		}
 
 		auto get_bounds() -> std::tuple<ivec2, ivec2> { return {min_grid, max_grid}; }
@@ -357,6 +364,23 @@ export
 
 		//
 		// ########################################################################
+		void rotate_90()
+		{
+			ivec2   nr;
+			grid<T> newgrid(nr);
+
+			for (const auto [pos, v] : std::views::zip(std::views::keys(m_grid), std::views::values(m_grid)))
+			{
+				const ivec2 np = ivec2{pos[1], -pos[0]};
+				newgrid.set(np, v);
+			}
+			this->reset();
+			*this = newgrid;
+			calc_bounds();
+		}
+
+		// ########################################################################
+		//
 
 		bool is_valid(ivec2 pos) const { return contains(pos); }
 
@@ -371,6 +395,12 @@ export
 					if (c == to_find)
 						points.push_back(pos);
 				});
+
+			if (points.empty())
+			{
+				dbgln("find: no points '{}' found. Defaulting to 0,0", to_find);
+				points.push_back({});
+			}
 
 			return points;
 		}
@@ -450,6 +480,7 @@ export
 		ivec2 max_bound() const { return max_grid; }
 
 	private:
+		ivec2 resolution{};
 		ivec2 min_grid{MAX_IVEC2};
 		ivec2 max_grid{MIN_IVEC2};
 
