@@ -67,8 +67,7 @@ export
 	{
 	public:
 		// [&](ivec2 pos, char c)
-		using GridValue    = std::pair<ivec2, T>;
-		using SearchResult = std::pair<i64, std::vector<ivec2>>;
+		using GridValue = std::pair<ivec2, T>;
 
 		using FunctionOp = const std::function<void(const ivec2, const T)>;
 		using SearchOp   = const std::function<bool(const ivec2, const ivec2)>;
@@ -133,8 +132,15 @@ export
 		{
 			std::vector<GridValue> gv;
 
-			dbgln_if(not contains(v1), "Starting point {} is not valid", v1);
-			dbgln_if(not contains(v2), "Ending point {} is not valid", v2);
+			if (not contains(v1))
+			{
+				dbgln("Starting point {} is not valid", v1);
+				return gv;
+			}
+			if (not contains(v2))
+			{
+				dbgln("Ending point {} is not valid", v2);
+			}
 
 			ivec2 delta;
 			if (v2[0] - v1[0] != 0)
@@ -156,7 +162,7 @@ export
 
 		auto getline_direction(ivec2 start, ivec2 dir, int count = MAX_I32) const -> std::vector<GridValue>
 		{
-			// walk until not valid
+			// walk until not valid or count
 			ivec2 end{start};
 			while (contains(end))
 			{
@@ -366,8 +372,7 @@ export
 		// ########################################################################
 		void rotate_90()
 		{
-			ivec2   nr;
-			grid<T> newgrid(nr);
+			grid<T> newgrid;
 
 			for (const auto [pos, v] : std::views::zip(std::views::keys(m_grid), std::views::values(m_grid)))
 			{
@@ -398,8 +403,8 @@ export
 
 			if (points.empty())
 			{
-				dbgln("find: no points '{}' found. Defaulting to 0,0", to_find);
-				points.push_back({});
+				dbgln("find: no points '{}' found. Defaulting to [0,0]", to_find);
+				points.push_back(ZERO_IVEC2);
 			}
 
 			return points;
