@@ -483,6 +483,7 @@ export
 		{
 			min_grid.set_max();
 			max_grid.set_min();
+			resolution.set_zero();
 			m_grid.clear();
 			m_locked = false;
 		}

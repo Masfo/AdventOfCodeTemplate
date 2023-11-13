@@ -65,6 +65,8 @@ struct vec
 
 	constexpr void set_max() noexcept { m_data.fill(std::numeric_limits<T>::max()); }
 
+	constexpr void set_zero() noexcept { m_data.fill(T{0}); };
+
 	constexpr T& at(size_t index) noexcept { return m_data[index]; }
 
 	constexpr const T& at(size_t index) const noexcept { return m_data[index]; }
