@@ -73,10 +73,28 @@ export
 		using FunctionOp = const std::function<void(const ivec2, const T)>;
 		using SearchOp   = const std::function<bool(const ivec2, const ivec2)>;
 
+		grid() = default;
+
+		grid(int width, int height, T value, ivec2 start)
+		{
+			fill_rect(start, ivec2{start.x() + width - 1, start.y() + height - 1}, value);
+			calc_bounds();
+		}
+
+		grid(int width, int height, T value)
+			: grid(width, height, value, ivec2{0, 0})
+		{
+		}
+
+		grid(int width, int height)
+			: grid(width, height, '.', ivec2{0, 0})
+		{
+		}
+
 		void read(std::string_view filename)
 		{
 			auto lines = read_lines(filename);
-			dbgln("Reading '{}' as {}x{} grid.", filename, lines[0].size() - 1, lines.size() - 1);
+			// dbgln("Reading '{}' as {}x{} grid.", filename, lines[0].size() - 1, lines.size() - 1);
 			ivec2 pos;
 			for (const auto &row : lines)
 			{
@@ -158,9 +176,33 @@ export
 			return getline(start, end - dir);
 		}
 
-		void fill_rect(ivec2 a, ivec2 b)
+		// NESW
+		auto neighbours4(ivec2 pos) const { return make_array(at(pos + north), at(pos + east), at(pos + south), at(pos + west)); }
+
+		// N,NE,E,SE,S,SW,W,NW
+		auto neighbours8(ivec2 pos) const
 		{
-			//
+			return make_array(at(pos + north),
+							  at(pos + north_east),
+							  at(pos + east),
+							  at(pos + south_east),
+							  at(pos + south),
+							  at(pos + south_west),
+							  at(pos + west),
+							  at(pos + north_west));
+		}
+
+		void fill_rect(ivec2 a, ivec2 b, T value)
+		{
+
+			for (auto y = a.y(); y <= b.y(); ++y)
+			{
+				for (auto x = a.x(); x <= b.x(); ++x)
+				{
+					set(ivec2{x, y}, value);
+				}
+			}
+			calc_bounds();
 		}
 
 		void set_border(T c)
