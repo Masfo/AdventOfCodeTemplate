@@ -36,22 +36,79 @@ public:
 	void flip_horizontal()
 	{
 		//
+		for (auto i = 0; i < height; ++i)
+		{
+			for (auto j = 0; j < width / 2; ++j)
+			{
+				std::swap((*this)(j, i), (*this)(width - 1 - j, i));
+			}
+		}
 	}
 
 	void flip_vertical()
 	{
-		//
+		for (auto i = 0; i < height / 2; ++i)
+		{
+			for (auto j = 0; j < width; ++j)
+			{
+				std::swap((*this)(j, i), (*this)(j, height - 1 - i));
+			}
+		}
 	}
 
 	void transpose()
 	{
-		//
+		std::vector<Type> result(m_data.size());
+
+		// Copy elements from the original vector to the transposed vector
+		for (auto i = 0; i < height; ++i)
+		{
+			for (auto j = 0; j < width; ++j)
+			{
+				result[j * height + i] = m_data[i * width + j];
+			}
+		}
+		m_data = result;
+		std::swap(width, height);
+	}
+
+	void rotate_cw()
+	{
+		std::vector<Type> result(m_data.size());
+
+		for (size_t i = 0; i < height; ++i)
+		{
+			for (size_t j = 0; j < width; ++j)
+			{
+				result[j * height + (height - i - 1)] = m_data[i * width + j];
+			}
+		}
+
+		m_data = result;
+		std::swap(width, height);
+	}
+
+	void rotate_ccw()
+	{
+		std::vector<Type> result(m_data.size());
+
+		for (size_t i = 0; i < height; ++i)
+		{
+			for (size_t j = 0; j < width; ++j)
+			{
+				result[(width - j - 1) * height + i] = m_data[i * width + j];
+			}
+		}
+
+		m_data = result;
+		std::swap(width, height);
 	}
 
 	size_t index(ivec2 pos) const { return pos.y() * width + pos.x(); }
 
-	Type &operator()(ivec2 pos)
+	Type &operator()(i64 x, i64 y)
 	{
+		const ivec2 pos(x, y);
 		if (is_valid(pos))
 			return m_data[index(pos)];
 
@@ -61,8 +118,11 @@ public:
 		return placeholder;
 	}
 
-	const Type &operator()(ivec2 pos) const
+	Type &operator()(ivec2 pos) { return (*this)(pos.x(), pos.y()); }
+
+	const Type &operator()(i64 x, i64 y) const
 	{
+		ivec2 pos(x, y);
 		if (is_valid(pos))
 			return m_data[index(pos)];
 
@@ -70,6 +130,8 @@ public:
 		static const char placeholder = '\0';
 		return placeholder;
 	}
+
+	const Type &operator()(ivec2 pos) const { return (*this)(pos.x(), pos.y()); }
 
 	void set(ivec2 pos, Type value)
 	{
@@ -89,6 +151,7 @@ public:
 			}
 			dbg("\n");
 		}
+		dbgln();
 	}
 
 private:
