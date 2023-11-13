@@ -97,6 +97,8 @@ export
 
 		void read(std::string_view filename)
 		{
+			reset();
+
 			auto lines = read_lines(filename);
 			// dbgln("Reading '{}' as {}x{} grid.", filename, lines[0].size() - 1, lines.size() - 1);
 			ivec2 pos;
@@ -112,6 +114,16 @@ export
 			}
 			calc_bounds();
 		}
+
+		void read_from_vector(const std::vector<ivec2> &points, T value)
+		{
+			reset();
+			for (const auto &p : points)
+				set(p, value);
+			calc_bounds();
+		}
+
+		void read_from_vector(const std::vector<ivec2> &points) { read_from_vector(points, '.'); }
 
 		void calc_bounds()
 		{
@@ -207,7 +219,6 @@ export
 
 		void fill_rect(ivec2 a, ivec2 b, T value)
 		{
-
 			for (auto y = a.y(); y <= b.y(); ++y)
 			{
 				for (auto x = a.x(); x <= b.x(); ++x)
