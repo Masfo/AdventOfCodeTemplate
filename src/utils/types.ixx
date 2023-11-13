@@ -58,6 +58,13 @@ export
 	template<class... Ts>
 	overload(Ts...) -> overload<Ts...>;
 
+	// make_array
+	template<class... Ts>
+	constexpr std::array<typename std::decay<typename std::common_type<Ts...>::type>::type, sizeof...(Ts)> make_array(Ts && ...ts)
+	{
+		return std::array<typename std::decay<typename std::common_type<Ts...>::type>::type, sizeof...(Ts)>{std::forward<Ts>(ts)...};
+	}
+
 	template<typename T, typename U>
 	T as(U u)
 	{
