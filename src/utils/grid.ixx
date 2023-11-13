@@ -75,7 +75,8 @@ export
 
 		void read(std::string_view filename)
 		{
-			auto  lines = read_lines(filename);
+			auto lines = read_lines(filename);
+			dbgln("Reading '{}' as {}x{} grid.", filename, lines[0].size() - 1, lines.size() - 1);
 			ivec2 pos;
 			for (const auto &row : lines)
 			{
@@ -377,6 +378,14 @@ export
 				dbgln("");
 			}
 			dbgln("");
+		}
+
+		void reset()
+		{
+			min_grid.set_max();
+			max_grid.set_min();
+			m_grid.clear();
+			m_locked = false;
 		}
 
 		void lock(bool to_lock = true) { m_locked = to_lock; };
