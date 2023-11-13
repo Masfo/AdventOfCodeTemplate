@@ -108,18 +108,23 @@ export
 		{
 			std::vector<GridValue> gv;
 
+			dbgln_if(not contains(v1), "Starting point {} is not valid", v1);
+			dbgln_if(not contains(v2), "Ending point {} is not valid", v2);
+
 			ivec2 delta;
 			if (v2[0] - v1[0] != 0)
 				delta[0] = v2[0] - v1[0] > 0 ? 1 : -1;
 			if (v2[1] - v1[1] != 0)
 				delta[1] = v2[1] - v1[1] > 0 ? 1 : -1;
 
-			gv.push_back({v1, *at(v1)});
+			auto v = at(v1);
+			gv.push_back({v1, v ? *v : '\0'});
 
 			while (v1.x() != v2.x() || v1.y() != v2.y())
 			{
 				v1 += delta;
-				gv.push_back({v1, *at(v1)});
+				v = at(v1);
+				gv.push_back({v1, v ? *v : '\0'});
 			}
 			return gv;
 		}
@@ -151,6 +156,11 @@ export
 					break;
 			}
 			return getline(start, end - dir);
+		}
+
+		void fill_rect(ivec2 a, ivec2 b)
+		{
+			//
 		}
 
 		void set_border(T c)
@@ -329,6 +339,7 @@ export
 		{
 			if (contains(pos))
 				return m_grid.at(pos);
+			dbgln("at: no point at {}", pos);
 			return {};
 		}
 
