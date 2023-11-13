@@ -3,11 +3,17 @@
 
 	<!-- Files -->
 	<File Name="readfile.ixx"/>
-	
+
 	<File Name="vec.ixx"/>
 	<File Name="debug.ixx"/>
 	<File Name="stringhelper.ixx"/>
+
 	<File Name="!grid.ixx"/>
+	<File Name="!sprite.ixx"/>
+
+	<File Name="!tree.ixx"/>
+	<File Name="!walker.ixx"/>
+
 
 
 	<File Name="types.ixx"/>
