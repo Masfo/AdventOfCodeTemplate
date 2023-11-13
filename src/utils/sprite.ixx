@@ -47,20 +47,23 @@ public:
 
 	void flip_vertical()
 	{
-		for (auto i = 0; i < height / 2; ++i)
+		std::vector<Type> result(m_data.size());
+
+		for (size_t i = 0; i < height; ++i)
 		{
-			for (auto j = 0; j < width; ++j)
+			for (size_t j = 0; j < width; ++j)
 			{
-				std::swap((*this)(j, i), (*this)(j, height - 1 - i));
+				result[i * width + j] = m_data[(height - i - 1) * width + j];
 			}
 		}
+
+		m_data = result;
 	}
 
 	void transpose()
 	{
 		std::vector<Type> result(m_data.size());
 
-		// Copy elements from the original vector to the transposed vector
 		for (auto i = 0; i < height; ++i)
 		{
 			for (auto j = 0; j < width; ++j)
