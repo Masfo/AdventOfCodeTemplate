@@ -73,6 +73,11 @@ struct vec
 
 	constexpr const T& operator[](size_t index) const noexcept { return m_data[index]; }
 
+	// assign
+	// constexpr vec_type& operator=(const vec_type& other) = default;
+	//
+	// constexpr vec_type operator=(const vec_type other) = default;
+
 	// add
 	constexpr vec_type& operator+=(const vec_type& other) noexcept
 	{
@@ -142,11 +147,9 @@ struct vec
 	}
 
 	// unary
-	constexpr vec_type& operator-() { return *this * vec_type(-1); }
+	constexpr vec_type& operator-() const noexcept { return *this * vec_type(-1); }
 
-	constexpr vec_type& operator+() { return *this; }
-
-	//
+	constexpr vec_type& operator+() const noexcept { return *this; }
 
 	// compare
 	constexpr bool operator==(const vec_type& other) const noexcept

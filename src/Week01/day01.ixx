@@ -14,10 +14,13 @@ export void day01()
 
 	grid g;
 	g.read("input\\day1test.txt");
-
-	auto start = g.find('@');
+	g.print();
+	g.rotate_90();
+	g.rotate_90();
 
 	g.print();
+
+	auto start = g.find('@');
 
 	// Get line from -> to
 	auto l1 = g.getline(start[0], start[0] + ivec2{0, -3});
@@ -26,6 +29,8 @@ export void day01()
 	auto e1 = g.getline_direction(start[0], south, 3);
 
 	auto w1 = g.getline_until(start[0], west, '$');
+
+	auto g2 = g.neighbours4(start[0]);
 
 	i64 di = g.BFS_4way_distance(g.find('X')[0],
 								 g.find('x')[0],
