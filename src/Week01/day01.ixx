@@ -12,6 +12,24 @@ export void day01()
 	auto lines = read_lines("input\\day1test.txt");
 #endif
 
+	sprite s("input\\day1test.txt");
+	s.print();
+	// s.flip_horizontal();
+	// s.print();
+	s.flip_vertical();
+	s.print();
+	s.transpose();
+	s.print();
+	// s.rotate_cw();
+	// s.print();
+	s.flip_horizontal();
+	s.print();
+	s.rotate_ccw();
+	s.print();
+	s.rotate_cw();
+	s.print();
+
+#if 0
 	grid g;
 	g.read("input\\day1test.txt");
 	g.print();
@@ -59,7 +77,7 @@ export void day01()
 			//
 			// self.set(pos, '$');
 		});
-
+#endif
 	aoc::println("Day 01 :");
 	aoc::println("	- Part 1: {}", a.part1);
 	aoc::println("	- Part 2: {}", a.part2);

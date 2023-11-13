@@ -8,7 +8,7 @@ concept HasEnoughData = requires(Data data) { data.size() >= size; };
 
 export template<typename T, std::size_t length>
 requires(std::integral<T> or std::floating_point<T>) and (length > 1)
-struct vec
+struct vec final
 {
 	std::array<T, length> m_data{{0}};
 

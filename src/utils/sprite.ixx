@@ -5,12 +5,19 @@ import aoc.debug;
 import aoc.readfile;
 import aoc.vec;
 
-export class sprite
+export class sprite final
 {
 public:
 	using Type = char;
 
 	sprite() = default;
+
+	sprite(int w, int h)
+	{
+		width  = w;
+		height = h;
+		m_data.resize(width * height);
+	}
 
 	sprite(std::string_view filename) { read(filename); }
 
@@ -19,6 +26,7 @@ public:
 		auto lines = read_lines(filename);
 		width      = lines[0].size();
 		height     = lines.size();
+		m_data.clear();
 		m_data.resize(width * height);
 		ivec2 pos;
 		for (const auto &row : lines)
