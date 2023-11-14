@@ -150,6 +150,17 @@ public:
 			m_data[index(pos)] = value;
 	}
 
+	void fill(Type value)
+	{
+		for (size_t y = 0; y < height; ++y)
+		{
+			for (size_t x = 0; x < width; ++x)
+			{
+				set(ivec2(x, y), value);
+			}
+		}
+	}
+
 	bool is_valid(ivec2 pos) const { return pos >= ivec2(0, 0) && pos <= ivec2(width, height); }
 
 	void print() const

@@ -27,8 +27,7 @@
                     "intelliSenseMode": "windows-msvc-x64",
                     "enableMicrosoftCodeAnalysis": true
                 }
-            },
-            "cmakeExecutable": "cmake.exe"
+            }
         },
         {
             "name": "x64-debug",
