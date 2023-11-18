@@ -78,8 +78,6 @@ export
 	template<typename T = i64>
 	inline T constexpr to_number(std::string_view str, int base = 10)
 	{
-		if (str.empty())
-			return {};
 
 		T val{};
 		if (not str.empty() && str[0] == '+')
@@ -106,6 +104,9 @@ export
 	template<typename T = i64>
 	inline std::optional<T> try_to_number(std::string_view str, int base = 10)
 	{
+		if (str.empty())
+			return {};
+
 		T val{};
 		if (!str.empty() && (str[0] == '+'))
 			str.remove_prefix(1);
@@ -115,7 +116,7 @@ export
 			return val;
 
 		trace("try_to_number(\"{}\", base({})). Is not a number", str, base);
-		return std::nullopt;
+		return {};
 	}
 
 	template<typename T>
