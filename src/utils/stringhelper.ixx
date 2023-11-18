@@ -386,3 +386,9 @@ export
 			return v ? *v : DefaultValue;
 		});
 }
+
+// STD specials
+export namespace std
+{
+
+} // namespace std
