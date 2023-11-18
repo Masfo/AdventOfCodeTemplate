@@ -75,6 +75,12 @@ struct vec final
 
 	constexpr const T& operator[](size_t index) const noexcept { return m_data[index]; }
 
+	constexpr vec_type& rotate_cw() noexcept
+	{
+		*this = vec_type{-m_data[1], m_data[0]};
+		return *this;
+	}
+
 	// assign
 	// constexpr vec_type& operator=(const vec_type& other) = default;
 	//
@@ -245,6 +251,11 @@ export
 	const ivec2 MAX_IVEC2{MAX_I64, MAX_I64};
 	const ivec2 MIN_IVEC2{MIN_I64, MIN_I64};
 	const ivec2 ZERO_IVEC2{0, 0};
+
+	struct ivec2_hash
+	{
+		size_t operator()(const ivec2& k) const { return hash_val(k[0], k[1]); }
+	};
 
 	template<typename T, size_t len>
 	[[nodiscard("Use the minimum value")]] constexpr vec<T, len> min(const vec<T, len>& lhs, const vec<T, len>& rhs)
