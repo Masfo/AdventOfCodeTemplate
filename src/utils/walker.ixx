@@ -1,11 +1,91 @@
 export module aoc.walker;
 import aoc.vec;
-
+import aoc.grid;
 export
 {
+	// Direction
+	struct direction4
+	{
+		ivec2 dir{north};
+
+		void rotate_cw(int count = 1)
+		{
+			while (count--)
+				dir.rotate_cw();
+		}
+
+		void turn_left(int count = 1)
+		{
+			while (count--)
+			{
+				dir.rotate_cw();
+				dir.rotate_cw();
+				dir.rotate_cw();
+			}
+		}
+
+		void turn_right(int count = 1)
+		{
+			while (count--)
+			{
+				dir.rotate_cw();
+			}
+		}
+
+		operator ivec2() const { return dir; };
+
+		std::string to_string() const { return dir_to_string.at(dir); }
+	};
+
 	struct walker2d
 	{
-		ivec2 position;
+		ivec2      position;
+		direction4 dir;
+
+		void face_north() { dir.dir = north; }
+
+		void face_south() { dir.dir = south; }
+
+		void face_east() { dir.dir = east; }
+
+		void face_west() { dir.dir = west; }
+
+		void turn_left(int times = 1) { dir.turn_left(times); }
+
+		void turn_right(int times = 1) { dir.turn_right(times); }
+
+		void forward(int steps = 1)
+		{
+			while (steps--)
+				position += dir;
+		}
+
+		void backward(int steps = 1)
+		{
+			while (steps--)
+				position -= dir;
+		}
+
+		/*
+		*   CW rotate by 90 degress around 0,0:
+
+				x' = -y
+				y' = x
+
+			Rotate by 90 degress around px,py:
+
+				x' = -(y - py) + px
+				y' = (x - px) + py
+
+
+
+			 0, -1 =  1, 0
+				   = -0, 1
+				   = -1, -0
+				   =  0, -1
+		*/
+
+		u64 distance(ivec2 from = ZERO_IVEC2) const noexcept { return position.distance(from); };
 	};
 }
 
