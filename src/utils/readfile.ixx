@@ -17,6 +17,22 @@ export enum class include_emptys {
 
 export
 {
+	std::string              read_file(std::string_view filename);
+	std::vector<std::string> read_csv(std::string_view filename, std::string_view);
+	std::vector<std::string> read_lines_exact(std::string_view filename, std::string_view delims, include_emptys);
+	std::vector<std::string> read_lines_delimiter(std::string_view filename, std::string_view delim, include_emptys);
+
+	std::vector<std::string> read_lines(std::string_view filename, std::string_view, include_emptys);
+
+	template<typename T>
+	std::vector<T> read_lines_as(std::string_view filename, std::string_view, include_emptys ie);
+
+	template<typename T>
+	std::vector<std::optional<T>> read_all_lines_as(std::string_view filename, std::string_view d);
+
+	template<typename T>
+	std::vector<T> read_lines_integers(std::string_view);
+
 	std::vector<i64> read_lines_integers_delimiter(std::string_view, std::string_view);
 
 	//
