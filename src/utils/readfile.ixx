@@ -116,12 +116,7 @@ export
 			ret.reserve(lines.size());
 
 			for (const auto &v : lines)
-			{
-				if (v.empty())
-					ret.emplace_back(std::nullopt);
-				else
-					ret.emplace_back(std::optional(to_number<T>(v)));
-			}
+				ret.emplace_back(try_to_number<T>(v));
 
 			return ret;
 		}
