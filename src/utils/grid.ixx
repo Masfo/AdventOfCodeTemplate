@@ -19,21 +19,21 @@ export
 	const ivec2 south_west{south + west};
 	const ivec2 north_west{north + west};
 
-	const std::vector<ivec2> directions_4_way{
+	const std::array<ivec2, 4> directions_4_way{
 		north,
 		east,
 		south,
 		west,
 	};
 
-	const std::vector<ivec2> directions_4_diag{
+	const std::array<ivec2, 4> directions_4_diag{
 		south_west,
 		south_east,
 		north_west,
 		north_east,
 	};
 
-	const std::vector<ivec2> directions_8_way{
+	const std::array<ivec2, 8> directions_8_way{
 		north,
 		north_east,
 		east,
@@ -43,8 +43,20 @@ export
 		west,
 		north_west,
 	};
+	const std::unordered_map<ivec2, std::string> dir_to_string{
+		{north, "north"},
+		{east, "east"},
+		{south, "south"},
+		{west, "west"},
 
-	const std::vector<ivec2> hex_coords{
+		{north_east, "north-east"},
+		{south_east, "south-east"},
+		{north_west, "north-west"},
+		{south_west, "south-west"},
+
+	};
+
+	const std::array<ivec2, 6> hex_coords{
 		north_east,
 		east,
 		south_east,
