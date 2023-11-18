@@ -17,6 +17,7 @@ export enum class include_emptys {
 
 export
 {
+	std::vector<i64> read_lines_integers_delimiter(std::string_view, std::string_view);
 
 	//
 	// std::generator<std::string_view> read_lines(
@@ -86,10 +87,51 @@ export
 	{
 		return read_lines_delimiter(filename, delims, ie);
 	}
-
 	std::vector<std::string> read_all_lines(std::string_view filename, std::string_view delims = "\n")
 	{
 		return read_lines_delimiter(filename, delims, include_emptys::yes);
+	}
+
+	template<typename T>
+	std::vector<T> read_lines_as(std::string_view filename, std::string_view delims = "\n", include_emptys ie = include_emptys::no)
+	{
+		if constexpr (std::is_convertible_v<T, std::string>)
+			return read_lines_delimiter(filename, delims, ie);
+		else if constexpr (std::is_integral_v<T> || std::is_floating_point_v<T>)
+			return read_lines_integers_delimiter(filename, delims);
+		else
+		{
+			static_assert(true, "Not implemented");
+		}
+	}
+
+	template<typename T>
+	std::vector<std::optional<T>> read_all_lines_as(std::string_view filename, std::string_view delims = "\n")
+	{
+		auto lines = read_all_lines(filename, delims);
+
+		if constexpr (std::is_integral_v<T> || std::is_floating_point_v<T>)
+		{
+			std::vector<std::optional<T>> ret;
+			ret.reserve(lines.size());
+
+			for (const auto &v : lines)
+			{
+				if (v.empty())
+					ret.emplace_back(std::nullopt);
+				else
+					ret.emplace_back(std::optional(to_number<T>(v)));
+			}
+
+			return ret;
+		}
+		else
+		{
+
+			static_assert(true, "Not implemented");
+		}
+
+		return {};
 	}
 
 	template<typename T = i64>

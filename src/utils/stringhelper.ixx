@@ -78,6 +78,8 @@ export
 	template<typename T = i64>
 	inline T constexpr to_number(std::string_view str, int base = 10)
 	{
+		if (str.empty())
+			return {};
 
 		T val{};
 		if (not str.empty() && str[0] == '+')
