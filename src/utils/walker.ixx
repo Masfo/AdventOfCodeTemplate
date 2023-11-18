@@ -77,12 +77,6 @@ export
 				x' = -(y - py) + px
 				y' = (x - px) + py
 
-
-
-			 0, -1 =  1, 0
-				   = -0, 1
-				   = -1, -0
-				   =  0, -1
 		*/
 
 		u64 distance(ivec2 from = ZERO_IVEC2) const noexcept { return position.distance(from); };
