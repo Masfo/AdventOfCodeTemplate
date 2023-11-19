@@ -2,7 +2,7 @@
 <NonUserCode xmlns="http://schemas.microsoft.com/vstudio/debugger/jmc/2015">
 
 	<!-- Files -->
-	<File Name="readfile.ixx"/>
+	<File Name="!readfile.ixx"/>
 
 	<File Name="vec.ixx"/>
 	<File Name="debug.ixx"/>

@@ -9,74 +9,11 @@ export void day01()
 #if 0
 	auto lines = read_lines("input\\day1.txt");
 #else
-	auto lines = read_lines("input\\day1test.txt");
-#endif
+	//auto lines = read_lines("input\\day1test.txt");
+	//auto lines = read_all_lines("input\\day1test.txt");
+	//auto lines = read_lines_as<i64>("input\\day1test.txt");
+	auto lines = read_all_lines_as<i64>("input\\day1test.txt");
 
-	sprite s("input\\day1test.txt");
-	s.print();
-	// s.flip_horizontal();
-	// s.print();
-	s.flip_vertical();
-	s.print();
-	s.transpose();
-	s.print();
-	// s.rotate_cw();
-	// s.print();
-	s.flip_horizontal();
-	s.print();
-	s.rotate_ccw();
-	s.print();
-	s.rotate_cw();
-	s.print();
-
-#if 0
-	grid g;
-	g.read("input\\day1test.txt");
-	g.print();
-	g.rotate_90();
-	g.rotate_90();
-
-	g.print();
-
-	auto start = g.find('@');
-
-	// Get line from -> to
-	auto l1 = g.getline(start[0], start[0] + ivec2{0, -3});
-
-	auto n1 = g.getline_direction(start[0], north);
-	auto e1 = g.getline_direction(start[0], south, 3);
-
-	auto w1 = g.getline_until(start[0], west, '$');
-
-	auto g2 = g.neighbours4(start[0]);
-
-	i64 di = g.BFS_4way_distance(g.find('X')[0],
-								 g.find('x')[0],
-								 [&](const ivec2 pos, const ivec2 newpos)
-								 {
-									 //
-									 char c = *g.at(newpos);
-									 if (c == '.' || c == 'x')
-										 return true;
-									 return false;
-								 });
-
-	i64 sum = 0;
-	g.for_each_8way(start[0],
-					[&](const ivec2 pos, char c)
-					{
-						//
-						if (c == '#' or c == '.')
-							return;
-						sum += as<i64>(c - '0');
-					});
-
-	g.for_each(
-		[&g](const ivec2 pos, char c)
-		{
-			//
-			// self.set(pos, '$');
-		});
 #endif
 
 	// auto v    = std::vector{1, 2, 3, 1, 2, 3, 3, 3, 1, 2, 3};
