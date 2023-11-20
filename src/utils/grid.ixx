@@ -14,6 +14,12 @@ export
 	const ivec2 east{1, 0};
 	const ivec2 south{0, 1};
 	const ivec2 west{-1, 0};
+
+	const ivec2 up{north};
+	const ivec2 left{west};
+	const ivec2 down{south};
+	const ivec2 right{east};
+
 	const ivec2 north_east{north + east};
 	const ivec2 south_east{south + east};
 	const ivec2 south_west{south + west};
