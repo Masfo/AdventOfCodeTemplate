@@ -23,7 +23,39 @@ export
 	bool between(T v, T vmin, T vmax) noexcept
 	{
 		return (v >= vmin) && (v <= vmax);
+	}
+
+	template<typename T = i64>
+	struct range
+	{
+		range(T s, T e)
+			: start(s)
+			, end(e)
+		{
+		}
+
+		bool contains(const range<T> &other) const noexcept
+		{
+			return (start >= other.start && end <= other.end) || (other.start >= start && other.end <= end);
+		}
+
+		bool overlaps(const range<T> &other) const noexcept { return !(end < other.start || start > other.end); }
+
+		T start{};
+		T end{};
 	};
+
+	template<typename T = i64>
+	bool contains(range<T> r1, range<T> r2)
+	{
+		return r1.contains(r2);
+	}
+
+	template<typename T = i64>
+	bool overlaps(range<T> r1, range<T> r2)
+	{
+		return r1.overlaps(r2);
+	}
 
 	// common
 	i64 mod(i64 x, i64 N) noexcept
