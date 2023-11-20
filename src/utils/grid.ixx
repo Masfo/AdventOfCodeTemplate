@@ -418,6 +418,25 @@ export
 
 		bool is_valid(ivec2 pos) const { return contains(pos); }
 
+		// replace
+		template<typename T>
+		void replace(T what, T with)
+		{
+			u32 count{};
+			for_each(
+				[&](ivec2 pos, T c)
+				{
+					if (c == what)
+					{
+						count++;
+						set(pos, with);
+					}
+				});
+
+			dbgln("Replaced '{}' with '{}' {} times", what, with, count);
+		}
+
+		// find
 		auto find(T to_find) const -> std::vector<ivec2>
 		{
 			std::vector<ivec2> points;
