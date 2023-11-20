@@ -420,20 +420,21 @@ export
 
 		// replace
 		template<typename T>
-		void replace(T what, T with)
+		auto replace(T what, T with) -> std::vector<ivec2>
 		{
-			u32 count{};
+			std::vector<ivec2> points;
 			for_each(
 				[&](ivec2 pos, T c)
 				{
 					if (c == what)
 					{
-						count++;
+						points.push_back(pos);
 						set(pos, with);
 					}
 				});
 
-			dbgln("Replaced '{}' with '{}' {} times", what, with, count);
+			dbgln("replace: '{}' with '{}' {} times", what, with, points.size());
+			return points;
 		}
 
 		// find
