@@ -254,7 +254,6 @@ export
 	const ivec2 ZERO_IVEC2{0, 0};
 
 	// std::ranges::sort(points, grid_order());
-	// sort
 	struct grid_order
 	{
 		inline bool operator()(const ivec2& v1, const ivec2& v2) const
