@@ -9,9 +9,9 @@ export void day01()
 #if 0
 	auto lines = read_lines("input\\day1.txt");
 #else
-	//auto lines = read_lines("input\\day1test.txt");
-	//auto lines = read_all_lines("input\\day1test.txt");
-	//auto lines = read_lines_as<i64>("input\\day1test.txt");
+	// auto lines = read_lines("input\\day1test.txt");
+	// auto lines = read_all_lines("input\\day1test.txt");
+	// auto lines = read_lines_as<i64>("input\\day1test.txt");
 	auto lines = read_all_lines_as<i64>("input\\day1test.txt");
 
 #endif
