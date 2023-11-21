@@ -420,7 +420,7 @@ export
 
 		// replace
 		template<typename T>
-		auto replace(T what, T with) -> std::vector<ivec2>
+		auto replace_all(T what, T with) -> std::vector<ivec2>
 		{
 			std::vector<ivec2> points;
 			for_each(
@@ -438,7 +438,7 @@ export
 		}
 
 		// find
-		auto find(T to_find) const -> std::vector<ivec2>
+		auto find_all(T to_find) const -> std::vector<ivec2>
 		{
 			std::vector<ivec2> points;
 
