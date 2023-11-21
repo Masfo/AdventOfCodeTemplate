@@ -418,7 +418,7 @@ export
 
 		bool is_valid(ivec2 pos) const { return contains(pos); }
 
-		// replace
+		// replace_all: returns points in grid order
 		template<typename T>
 		auto replace_all(T what, T with) -> std::vector<ivec2>
 		{
@@ -434,10 +434,11 @@ export
 				});
 
 			dbgln("replace: '{}' with '{}' {} times", what, with, points.size());
+			std::ranges::sort(points, grid_order());
 			return points;
 		}
 
-		// find
+		// find_all, returns points in grid order
 		auto find_all(T to_find) const -> std::vector<ivec2>
 		{
 			std::vector<ivec2> points;
@@ -455,6 +456,8 @@ export
 				dbgln("find: no points '{}' found. Defaulting to [0,0]", to_find);
 				points.push_back(ZERO_IVEC2);
 			}
+
+			std::ranges::sort(points, grid_order());
 
 			return points;
 		}

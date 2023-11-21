@@ -16,16 +16,16 @@ struct vec final
 
 	vec() = default;
 
-	explicit vec(T v) noexcept { m_data.fill(v); }
+	vec(T v) noexcept { m_data.fill(v); }
 
-	explicit vec(T x, T y) noexcept
+	vec(T x, T y) noexcept
 	requires(length >= 2)
 	{
 		m_data[0] = x;
 		m_data[1] = y;
 	}
 
-	explicit vec(T x, T y, T z) noexcept
+	vec(T x, T y, T z) noexcept
 	requires(length >= 3)
 	{
 		m_data[0] = x;
@@ -33,7 +33,7 @@ struct vec final
 		m_data[2] = z;
 	}
 
-	explicit vec(T x, T y, T z, T w) noexcept
+	vec(T x, T y, T z, T w) noexcept
 	requires(length >= 4)
 	{
 		m_data[0] = x;
@@ -42,7 +42,7 @@ struct vec final
 		m_data[3] = w;
 	}
 
-	explicit vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current()) noexcept
+	vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current()) noexcept
 	{
 		dbgln_if(list.size() > length,
 				 "{}({}): Warning: initializer list (length: {}) is longer than the container (length: {}).",
@@ -170,6 +170,7 @@ struct vec final
 		return true;
 	}
 
+	// compare
 	auto operator<=>(const vec_type&) const = default;
 
 	// methods
@@ -251,6 +252,17 @@ export
 	const ivec2 MAX_IVEC2{MAX_I64, MAX_I64};
 	const ivec2 MIN_IVEC2{MIN_I64, MIN_I64};
 	const ivec2 ZERO_IVEC2{0, 0};
+
+	// std::ranges::sort(points, grid_order());
+	// sort
+	struct grid_order
+	{
+		inline bool operator()(const ivec2& v1, const ivec2& v2) const
+		{
+			//
+			return (v1[1] < v2[1]) || (v1[1] == v2[1] && v1[0] < v2[0]);
+		}
+	};
 
 	struct ivec2_hash
 	{
