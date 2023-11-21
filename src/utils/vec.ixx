@@ -96,7 +96,7 @@ struct vec final
 		return *this;
 	}
 
-	constexpr vec_type& operator+(const vec_type& other) const noexcept
+	constexpr vec_type operator+(const vec_type& other) const noexcept
 	{
 		vec_type result = *this;
 		result += other;
@@ -113,7 +113,7 @@ struct vec final
 		return *this;
 	}
 
-	constexpr vec_type& operator-(const vec_type& other) const noexcept
+	constexpr vec_type operator-(const vec_type& other) const noexcept
 	{
 		vec_type result = *this;
 		result -= other;
@@ -130,7 +130,7 @@ struct vec final
 		return *this;
 	}
 
-	constexpr vec_type& operator*(const vec_type& other) const noexcept
+	constexpr vec_type operator*(const vec_type& other) const noexcept
 	{
 		vec_type result = *this;
 		result *= other;
@@ -147,7 +147,7 @@ struct vec final
 		return *this;
 	}
 
-	constexpr vec_type& operator/(const vec_type& other) const noexcept
+	constexpr vec_type operator/(const vec_type& other) const noexcept
 	{
 		vec_type result = *this;
 		result /= other;
@@ -210,7 +210,18 @@ struct vec final
 		return as<U>(result);
 	}
 
+	[[nodiscard("Use the clamped value")]] constexpr vec_type clamp(const vec_type& cmin, const vec_type& cmax) const noexcept
+	{
+
+		vec_type result{0};
+		for (size_t i = 0; i < length; ++i)
+			result[i] = std::clamp(m_data[i], cmin[i], cmax[i]);
+
+		return result;
+	}
+
 	[[nodiscard("Use the coordinate")]] T x() const noexcept
+
 	{
 		static_assert(length >= 1, "Cant view x-axis. No data");
 		return m_data[0];
@@ -252,6 +263,17 @@ export
 	const ivec2 MAX_IVEC2{MAX_I64, MAX_I64};
 	const ivec2 MIN_IVEC2{MIN_I64, MIN_I64};
 	const ivec2 ZERO_IVEC2{0, 0};
+
+	// index2d
+	template<size_t WIDTH, size_t HEIGHT, std::integral T = i64>
+	std::optional<T> index2D(const Indexable auto& container, const ivec2& v)
+	{
+		auto index = index2D<T, WIDTH, HEIGHT>(v[0], v[1]);
+		if (not index)
+			return {};
+
+		return container[*index];
+	}
 
 	// std::ranges::sort(points, grid_order());
 	struct grid_order
@@ -299,6 +321,13 @@ export
 	[[nodiscard("Use the distance value")]] constexpr vec<T, len> distance(const vec<T, len>& lhs, const vec<T, len>& rhs)
 	{
 		return lhs.distance(rhs);
+	}
+
+	template<typename T, size_t len>
+	[[nodiscard("Use the clamped value")]] constexpr vec<T, len> clamp(
+		const vec<T, len>& v, const vec<T, len>& cmin, const vec<T, len>& cmax)
+	{
+		return v.clamp(cmin, cmax);
 	}
 
 #if 0
