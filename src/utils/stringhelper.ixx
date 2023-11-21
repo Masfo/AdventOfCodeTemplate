@@ -311,14 +311,6 @@ export
 		return ret;
 	}
 
-	std::string input(std::string_view ask)
-	{
-		std::string ret;
-		std::print("{}", ask);
-		std::getline(std::cin, ret);
-		return ret;
-	}
-
 	std::vector<std::string> pass(const std::vector<std::string> &vec) noexcept { return vec; }
 
 	std::vector<std::string_view> pass(const std::vector<std::string_view> vec) noexcept { return vec; }
