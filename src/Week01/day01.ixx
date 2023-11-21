@@ -16,17 +16,6 @@ export void day01()
 
 #endif
 
-	std::array<int, 9> keypad{1, 2, 3, 4, 5, 6, 7, 8, 9};
-	std::vector<int>   keypad2{1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-	for (int y = -1; y < 4; ++y)
-	{
-		for (int x = -1; x < 4; ++x)
-		{
-			auto v = index2d<int, 3, 3>(keypad, x, y);
-			dbgln("{}x{}. {}", x, y, v ? *v : '\0');
-		}
-	}
 	// auto v    = std::vector{1, 2, 3, 1, 2, 3, 3, 3, 1, 2, 3};
 	// auto fun  = std::ranges::less{};
 	// auto view = v | std::views::chunk_by(fun);
