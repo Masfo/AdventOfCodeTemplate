@@ -263,6 +263,15 @@ export
 		}
 	};
 
+	struct grid_order_reverse
+	{
+		inline bool operator()(const ivec2& v1, const ivec2& v2) const
+		{
+			//
+			return (v1[1] > v2[1]) || (v1[1] == v2[1] && v1[0] > v2[0]);
+		}
+	};
+
 	struct ivec2_hash
 	{
 		size_t operator()(const ivec2& k) const { return hash_val(k[0], k[1]); }
