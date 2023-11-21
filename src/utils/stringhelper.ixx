@@ -111,6 +111,37 @@ export
 	}
 
 	template<typename T = i64>
+	inline std::string constexpr to_string(T value, int base = 10)
+	{
+		std::string str;
+		str.resize(20);
+
+		auto [ptr, ec]{std::to_chars(str.data(), str.data() + str.size(), value, base)};
+
+		if (ec == std::errc())
+		{
+			return str;
+		}
+		else if (ec == std::errc::invalid_argument)
+		{
+			dbgln("to_ascii: Invalid argument '{}'", str);
+			throw std::invalid_argument(std::format("Invalid argument: '{}'", str));
+		}
+		else if (ec == std::errc::result_out_of_range)
+		{
+			dbgln("to_ascii: out of range '{}'", str);
+			throw std::out_of_range(std::format("Out of range: '{}'", str));
+		}
+		return {0};
+	}
+
+	template<typename T = i64>
+	inline char constexpr to_char(T value, int base = 10)
+	{
+		return to_string(value, base)[0];
+	}
+
+	template<typename T = i64>
 	inline std::optional<T> try_to_number(std::string_view str, int base = 10)
 	{
 		if (str.empty())
@@ -364,7 +395,7 @@ export
 	inline auto trim_front_view = std::views::drop_while(is_whitespace);
 	inline auto trim_back_view  = std::views::reverse | trim_front_view | std::views::reverse;
 	inline auto trim_view       = trim_front_view | trim_back_view;
-	inline auto to_string       = std::ranges::to<std::string>();
+	inline auto view_to_string  = std::ranges::to<std::string>();
 
 	template<typename T>
 	inline auto to_vector = std::ranges::to<std::vector<T>>();
