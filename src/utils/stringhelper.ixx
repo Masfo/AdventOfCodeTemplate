@@ -72,6 +72,15 @@ export
 		a = a ^ b;
 		return a;
 	}
+
+	std::string input(std::string_view ask)
+	{
+		std::string ret;
+		std::print("{}", ask);
+		std::getline(std::cin, ret);
+		return ret;
+	}
+
 	std::string strip(std::string_view str, std::string_view strip_chars) noexcept;
 	std::string strip(std::string_view str, ignore option) noexcept;
 
