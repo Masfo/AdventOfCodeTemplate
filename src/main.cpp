@@ -136,6 +136,8 @@ int main(int argc, char **argv)
 
 	try
 	{
+		auto start = std::chrono::system_clock::now();
+
 		if constexpr (ALL == 1)
 		{
 			//
@@ -173,6 +175,9 @@ int main(int argc, char **argv)
 			day24(); //
 			day25(); //
 		}
+
+		auto end = std::chrono::system_clock::now();
+		std::println("{}", std::chrono::duration<float>(end - start));
 	}
 	catch (const std::exception &e)
 	{
