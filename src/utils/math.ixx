@@ -19,24 +19,6 @@ import aoc.vec;
 export
 {
 
-	template<class T>
-	concept Indexable = requires(T container) {
-		container[0];
-		container.size();
-	};
-
-	template<typename Type, int WIDTH, int HEIGHT>
-	std::optional<Type> index2d(const Indexable auto &container, Type x, Type y)
-	{
-		static_assert(WIDTH > 0, "Width must be positive");
-		static_assert(HEIGHT > 0, "Height must be positive");
-
-		if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
-			return {};
-
-		return container[y * WIDTH + x];
-	}
-
 	template<typename T>
 	bool between(T v, T vmin, T vmax) noexcept
 	{

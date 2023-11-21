@@ -130,6 +130,37 @@ export
 			return std::min(std::min(a, b), args...);
 	}
 
+	template<class T>
+	concept Indexable = requires(T container) {
+		container[0];
+		container.size();
+	};
+
+	template<std::integral T, size_t WIDTH, size_t HEIGHT>
+	std::optional<T> index2D(T x, T y)
+	{
+		static_assert(WIDTH > 0, "Width must be positive");
+		static_assert(HEIGHT > 0, "Height must be positive");
+
+		if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+			return {};
+
+		return y * WIDTH + x;
+	}
+
+	template<std::integral T, size_t WIDTH, size_t HEIGHT, size_t DEPTH>
+	std::optional<T> index3D(T x, T y, T z)
+	{
+		static_assert(WIDTH > 0, "Width must be positive");
+		static_assert(HEIGHT > 0, "Height must be positive");
+		static_assert(DEPTH > 0, "DEPTH must be positive");
+
+		if (x < 0 || y < 0 || z < 0 || x >= WIDTH || y >= HEIGHT || z >= DEPTH)
+			return {};
+
+		return (z * WIDTH * HEIGHT) + (y * HEIGHT) + x;
+	}
+
 	/*
 	struct S
 	{
