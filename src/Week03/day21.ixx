@@ -4,7 +4,15 @@ import aoc;
 
 export void day21()
 {
+#if 0
     auto lines = read_lines("input\\day21.txt");
+#else
+    auto lines = read_lines("input\\day21test.txt");
+    // auto lines = read_lines_exact("input\\day21test.txt");
+    // auto lines = read_all_lines("input\\day21test.txt");
+    // auto lines = read_lines_as<i64>("input\\day21test.txt");
+    // auto lines = read_all_lines_as<i64>("input\\day21test.txt");
+#endif
 
 
     aoc::println("Day 21 :");
