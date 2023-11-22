@@ -55,7 +55,16 @@ void generate_days()
 		temp.append("\n");
 		temp.append(std::format("export void day{:02d}()\n", day));
 		temp.append("{\n");
+		temp.append("#if 0\n");
 		temp.append(std::format("    auto lines = read_lines(\"input\\\\day{}.txt\");\n", day));
+		temp.append("#else\n");
+		temp.append(std::format("    auto lines = read_lines(\"input\\\\day{}test.txt\");\n", day));
+		temp.append(std::format("    // auto lines = read_lines_exact(\"input\\\\day{}test.txt\");\n", day));
+		temp.append(std::format("    // auto lines = read_all_lines(\"input\\\\day{}test.txt\");\n", day));
+		temp.append(std::format("    // auto lines = read_lines_as<i64>(\"input\\\\day{}test.txt\");\n", day));
+		temp.append(std::format("    // auto lines = read_all_lines_as<i64>(\"input\\\\day{}test.txt\");\n", day));
+		temp.append("#endif\n");
+
 		temp.append("\n");
 		temp.append("\n");
 		temp.append(std::format("    aoc::println(\"Day {:02d} :\");\n", day));
