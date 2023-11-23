@@ -19,7 +19,7 @@ export void day01()
 	// auto view = v | std::views::chunk_by(fun);
 
 	aoc::println("Day 01 :");
-	aoc::println("	- Part 1: {}", part1);
-	aoc::println("	- Part 2: {}", part2);
+	aoc::println("	- Part 1: {}", 0);
+	aoc::println("	- Part 2: {}", 0);
 	aoc::println("");
 }
