@@ -71,6 +71,7 @@ target_sources(aoc
 	utils/tree.ixx
 	utils/grid.ixx
 	utils/graph.ixx
+	utils/helpers.ixx
 
 	utils/sprite.ixx
 
