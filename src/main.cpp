@@ -1,3 +1,5 @@
+#include <windows.h>
+
 import std;
 import aoc.debug;
 import aoc.days;
@@ -113,6 +115,13 @@ void clear_days()
 
 int main(int argc, char **argv)
 {
+#ifdef _WIN32
+	HANDLE handleOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	DWORD  consoleMode;
+	GetConsoleMode(handleOut, &consoleMode);
+	consoleMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(handleOut, consoleMode);
+#endif
 	std::vector<std::string> params(argv + 1, argv + argc);
 
 	if (params.size() == 1 && params[0] == "--gen")
@@ -137,7 +146,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	std::println("AOC 2023:\n\n");
+	std::println("\x1b[92mTEST\x1b[0m AOC 2023:\n\n");
 
 	// pass command line option for test/real input
 	// if not set use ifdef the usual day02.txt
