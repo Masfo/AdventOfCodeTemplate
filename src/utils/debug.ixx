@@ -199,6 +199,8 @@ export namespace aoc
 {
 	// print, println
 
+	// prinlnt("{}Hello {}World {}", red("Hello"), green("World"));
+
 	template<typename... Args>
 	void println(std::string_view fmts, Args... args) noexcept
 	{

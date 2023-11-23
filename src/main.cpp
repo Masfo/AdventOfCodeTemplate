@@ -146,7 +146,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	std::println("\x1b[92mTEST\x1b[0m AOC 2023:\n\n");
+	std::println("AOC 2023:\n\n");
 
 	// pass command line option for test/real input
 	// if not set use ifdef the usual day02.txt

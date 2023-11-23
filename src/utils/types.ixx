@@ -161,6 +161,9 @@ export
 		return (z * WIDTH * HEIGHT) + (y * HEIGHT) + x;
 	}
 
+	// from index: x: index % width
+	//             y: index / width
+
 	/*
 	struct S
 	{
