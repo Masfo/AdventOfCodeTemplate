@@ -204,17 +204,18 @@ export namespace aoc
 	template<typename... Args>
 	void println(std::string_view fmts, Args... args) noexcept
 	{
-		std::string tmp = std::vformat(fmts, std::make_format_args(args...));
-		tmp.append("\n");
-		auto str = print_util(tmp);
-		OutputDebugStringA(str.data());
+		auto out            = std::vformat(fmts, std::make_format_args(args...));
+		out[out.size() - 1] = '\n';
+
+		auto str = print_util(out);
+		OutputDebugStringA(out.data());
 	}
 
 	void println(std::string_view fmt) noexcept
 	{
 		auto tmp = std::format("{}\n", fmt);
 		auto str = print_util(tmp);
-		OutputDebugStringA(str.data());
+		OutputDebugStringA(tmp.data());
 	}
 
 	void println() noexcept
