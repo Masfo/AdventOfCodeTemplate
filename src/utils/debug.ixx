@@ -6,22 +6,16 @@ import std;
 
 namespace fs = std::filesystem;
 
+template<typename... Args>
+inline void write_to_console(const std::string &str) noexcept
+{
+	std::print("{}", str);
+}
+
 void output_message(const std::string_view message) noexcept
 {
 	OutputDebugStringA(message.data());
 	std::print("{}", message);
-}
-
-template<typename... Args>
-inline auto print_util(const std::string &str) noexcept
-{
-
-	HANDLE const output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	const DWORD char_count = static_cast<DWORD>(str.length());
-	WriteConsoleA(output_handle, str.data(), char_count, nullptr, nullptr);
-
-	return str;
 }
 
 struct alignas(64) FormatLocation
@@ -204,23 +198,23 @@ export namespace aoc
 	template<typename... Args>
 	void println(std::string_view fmts, Args... args) noexcept
 	{
-		auto out            = std::vformat(fmts, std::make_format_args(args...));
-		out[out.size() - 1] = '\n';
+		auto out = std::vformat(fmts, std::make_format_args(args...));
+		out.append("\n");
 
-		auto str = print_util(out);
+		write_to_console(out);
 		OutputDebugStringA(out.data());
 	}
 
 	void println(std::string_view fmt) noexcept
 	{
 		auto tmp = std::format("{}\n", fmt);
-		auto str = print_util(tmp);
+		write_to_console(tmp);
 		OutputDebugStringA(tmp.data());
 	}
 
 	void println() noexcept
 	{
-		print_util("\n");
+		write_to_console("\n");
 		OutputDebugStringA("\n");
 	}
 } // namespace aoc
