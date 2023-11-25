@@ -5,3 +5,4 @@
 * CMake
 
 Just my personal AOC Template to use. Bunch of helpers and stuff. **No solutions here**
+
