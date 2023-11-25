@@ -3,6 +3,7 @@ import std;
 import aoc;
 
 export void day01()
+
 {
 #if 0
     auto lines = read_lines("input\\day1.txt");
@@ -13,10 +14,6 @@ export void day01()
 	auto lines = read_lines_as<i64>("input\\day1test.txt");
 	// auto lines = read_all_lines_as<i64>("input\\day1test.txt");
 #endif
-
-	// auto v    = std::vector{1, 2, 3, 1, 2, 3, 3, 3, 1, 2, 3};
-	// auto fun  = std::ranges::less{};
-	// auto view = v | std::views::chunk_by(fun);
 
 	aoc::println("Day 01 :");
 	aoc::println("	- Part 1: {}", 0);
