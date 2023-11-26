@@ -42,33 +42,31 @@ export
 	using namespace std::string_view_literals;
 #ifdef _DEBUG
 	// debug
-	template<typename... Args>
-	void dbg(std::string_view fmt, Args && ...args) noexcept
-	{
-		auto out = std::vformat(fmt, std::make_format_args(args...));
-		output_message(out);
-	}
 
-	void dbg([[maybe_unused]] std::string_view fmt) noexcept { output_message(std::format("{}"sv, fmt)); }
+	template<typename... Args>
+	void dbg(const std::format_string<Args...> fmt, Args &&...args)
+	{
+		output_message(std::vformat(fmt.get(), std::make_format_args(args...)));
+	}
 
 	// debugln
 	template<typename... Args>
-	void dbgln(std::string_view fmt, Args && ...args) noexcept
+	void dbgln(const std::format_string<Args...> fmt, Args &&...args)
 	{
-		auto out = std::vformat(fmt, std::make_format_args(args...));
-		out.append("\n");
-		output_message(out);
+		output_message(std::vformat(fmt.get(), std::make_format_args(args...)));
+		output_message("\n");
 	}
 
-	void dbgln(std::string_view fmt) noexcept { output_message(std::format("{}\n"sv, fmt)); }
-
-	void dbgln() noexcept { output_message("\n"); }
+	void dbgln() { output_message("\n"); }
 
 	template<typename... Args>
-	void dbgln_if(bool cond, std::string_view fmt, Args &&...args) noexcept
+	void dbgln_if(bool cond, const std::format_string<Args...> fmt, Args &&...args) noexcept
 	{
 		if (cond)
-			dbgln(fmt, args...);
+		{
+			output_message(std::vformat(fmt.get(), std::make_format_args(args...)));
+			output_message("\n");
+		}
 	}
 
 	// trace
@@ -149,19 +147,17 @@ export
 #else
 
 	template<typename... Args>
-	void dbg(std::string_view, Args && ...) noexcept
+	void dbg(const std::format_string<Args...>, Args &&...)
 	{
 	}
 
-	void dbg(std::string_view) noexcept { }
-
+	// debugln
 	template<typename... Args>
-	void dbgln(std::string_view, Args && ...) noexcept
+	void dbgln(const std::format_string<Args...>, Args &&...)
 	{
 	}
 
-	void dbgln(std::string_view) noexcept { }
-	void dbgln() noexcept { }
+	void dbgln() { }
 
 	template<typename... Args>
 	void dbgln_if(bool, std::string_view, Args &&...) noexcept
@@ -202,19 +198,25 @@ export namespace aoc
 		out.append("\n");
 
 		write_to_console(out);
+#ifdef _DEBUG
 		OutputDebugStringA(out.data());
+#endif
 	}
 
 	void println(std::string_view fmt) noexcept
 	{
 		auto tmp = std::format("{}\n", fmt);
 		write_to_console(tmp);
+#ifdef _DEBUG
 		OutputDebugStringA(tmp.data());
+#endif
 	}
 
 	void println() noexcept
 	{
 		write_to_console("\n");
+#ifdef _DEBUG
 		OutputDebugStringA("\n");
+#endif
 	}
 } // namespace aoc
