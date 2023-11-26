@@ -17,6 +17,8 @@
 
 
 	<File Name="types.ixx"/>
+	<File Name="helpers.ixx"/>
+
 
 
 	<!-- Functions -->
