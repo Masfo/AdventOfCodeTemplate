@@ -117,7 +117,7 @@ export
 
 	bool between(i64 value, i64 a, i64 b) noexcept { return value >= a && value <= b; }
 
-	template<typename T = i64>
+	template<std::integral T = i64>
 	T distance(T a, T b) noexcept
 	{
 		return as<T>(std::abs(a) + std::abs(b));

@@ -226,12 +226,12 @@ struct vec final
 	}
 
 	template<typename U = T>
-	constexpr U distance(const vec_type& other) const noexcept
+	[[nodiscard("Use the distance value")]] constexpr U distance(const vec_type& other) const noexcept
 	{
-		T result{};
+		U result{};
 		for (size_t i = 0; i < length; ++i)
-			result += std::abs(m_data[i] - other[i]);
-		return as<U>(result);
+			result += as<U>(std::abs(m_data[i] - other[i]));
+		return result;
 	}
 
 	[[nodiscard("Use the clamped value")]] constexpr vec_type clamp(const vec_type& cmin, const vec_type& cmax) const noexcept
@@ -341,10 +341,10 @@ export
 		return lhs.abs();
 	}
 
-	template<typename T, size_t len>
-	[[nodiscard("Use the distance value")]] constexpr vec<T, len> distance(const vec<T, len>& lhs, const vec<T, len>& rhs)
+	template<typename T = i64, typename U = T, size_t len>
+	[[nodiscard("Use the distance value")]] constexpr T distance(const vec<U, len>& lhs, const vec<U, len>& rhs)
 	{
-		return lhs.distance(rhs);
+		return lhs.distance<T>(rhs);
 	}
 
 	template<typename T, size_t len>
