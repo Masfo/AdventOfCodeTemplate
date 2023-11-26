@@ -155,7 +155,7 @@ export
 		return std::make_tuple(t1, t2, t3, t4);
 	}
 
-	// ## With index
+	// ## With index 2
 	template<typename T>
 	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
 	{
@@ -175,6 +175,57 @@ export
 		T t2 = convert_to_type<T>(s[I2]);
 
 		return std::make_tuple(t1, t2);
+	}
+
+	// ## With index 3
+	template<typename T>
+	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, size_t I3, ignore option = ignore::none)
+	{
+		const auto s = split(str, delims, option);
+
+		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size())
+			throw std::range_error(std::format(
+				"split<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				str,
+				delims,
+				I1,
+				I2,
+				I3,
+				vmax(I1, I2, I3),
+				s.size() - 1));
+
+		T t1 = convert_to_type<T>(s[I1]);
+		T t2 = convert_to_type<T>(s[I2]);
+		T t3 = convert_to_type<T>(s[I3]);
+
+		return std::make_tuple(t1, t2, t3);
+	}
+
+	// ## With index 4
+	template<typename T>
+	auto split(
+		const std::string_view str, const std::string_view delims, size_t I1, size_t I2, size_t I3, size_t I4, ignore option = ignore::none)
+	{
+		const auto s = split(str, delims, option);
+
+		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size() || I4 >= s.size())
+			throw std::range_error(std::format(
+				"split<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				str,
+				delims,
+				I1,
+				I2,
+				I3,
+				I4,
+				vmax(I1, I2, I3, I4),
+				s.size() - 1));
+
+		T1 t1 = convert_to_type<T1>(s[I1]);
+		T2 t2 = convert_to_type<T2>(s[I2]);
+		T3 t3 = convert_to_type<T3>(s[I3]);
+		T4 t4 = convert_to_type<T4>(s[I4]);
+
+		return std::make_tuple(t1, t2, t3, t4);
 	}
 
 	// ## With index
