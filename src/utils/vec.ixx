@@ -42,7 +42,7 @@ struct vec final
 		m_data[3] = w;
 	}
 
-	vec(std::initializer_list<T> list, const std::source_location& loc = std::source_location::current()) noexcept
+	vec(const std::initializer_list<T> list, const std::source_location& loc = std::source_location::current()) noexcept
 	{
 		dbgln_if(list.size() > length,
 				 "{}({}): Warning: initializer list (length: {}) is longer than the container (length: {}).",
