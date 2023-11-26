@@ -4,6 +4,8 @@
 	<!-- Files -->
 	<File Name="readfile.ixx"/>
 	<File Name="stringhelper.ixx"/>
+	<File Name="stringsplit.ixx"/>
+
 
 	<File Name="vec.ixx"/>
 	<File Name="debug.ixx"/>
@@ -13,8 +15,6 @@
 
 	<File Name="tree.ixx"/>
 	<File Name="walker.ixx"/>
-
-
 
 	<File Name="types.ixx"/>
 	<File Name="helpers.ixx"/>
