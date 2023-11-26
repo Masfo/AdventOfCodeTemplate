@@ -220,10 +220,10 @@ export
 				vmax(I1, I2, I3, I4),
 				s.size() - 1));
 
-		T1 t1 = convert_to_type<T1>(s[I1]);
-		T2 t2 = convert_to_type<T2>(s[I2]);
-		T3 t3 = convert_to_type<T3>(s[I3]);
-		T4 t4 = convert_to_type<T4>(s[I4]);
+		T t1 = convert_to_type<T>(s[I1]);
+		T t2 = convert_to_type<T>(s[I2]);
+		T t3 = convert_to_type<T>(s[I3]);
+		T t4 = convert_to_type<T>(s[I4]);
 
 		return std::make_tuple(t1, t2, t3, t4);
 	}
