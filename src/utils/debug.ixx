@@ -14,7 +14,9 @@ inline void write_to_console(const std::string &str) noexcept
 
 void output_message(const std::string_view message) noexcept
 {
+#ifdef _DEBUG
 	OutputDebugStringA(message.data());
+#endif
 	std::print("{}", message);
 }
 
@@ -192,31 +194,11 @@ export namespace aoc
 	// prinlnt("{}Hello {}World {}", red("Hello"), green("World"));
 
 	template<typename... Args>
-	void println(std::string_view fmts, Args... args) noexcept
+	void println(const std::format_string<Args...> fmt, Args &&...args)
 	{
-		auto out = std::vformat(fmts, std::make_format_args(args...));
-		out.append("\n");
-
-		write_to_console(out);
-#ifdef _DEBUG
-		OutputDebugStringA(out.data());
-#endif
+		output_message(std::vformat(fmt.get(), std::make_format_args(args...)));
+		output_message("\n");
 	}
 
-	void println(std::string_view fmt) noexcept
-	{
-		auto tmp = std::format("{}\n", fmt);
-		write_to_console(tmp);
-#ifdef _DEBUG
-		OutputDebugStringA(tmp.data());
-#endif
-	}
-
-	void println() noexcept
-	{
-		write_to_console("\n");
-#ifdef _DEBUG
-		OutputDebugStringA("\n");
-#endif
-	}
+	void println() noexcept { output_message("\n"); }
 } // namespace aoc
