@@ -71,12 +71,12 @@ export
 		north_west,
 	};
 	const std::unordered_map<std::string, ivec2> axial_coordinates{
-		{"ne", ivec2(1, -1)},
-		{"e", ivec2(1, 0)},
-		{"se", ivec2(0, 1)},
-		{"sw", ivec2(-1, 1)},
-		{"w", ivec2(-1, 0)},
-		{"nw", ivec2(0, -1)},
+		{"ne", north_east},
+		{"e", east},
+		{"se", south_east},
+		{"sw", south_west},
+		{"w", west},
+		{"nw", north_west},
 	};
 
 	// grid
