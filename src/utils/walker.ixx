@@ -14,6 +14,12 @@ export
 				dir.rotate_cw();
 		}
 
+		void rotate_cw(ivec2 point, int count = 1)
+		{
+			while (count--)
+				dir.rotate_cw(point);
+		}
+
 		void turn_left(int count = 1)
 		{
 			while (count--)
@@ -65,19 +71,6 @@ export
 			while (steps--)
 				position -= dir;
 		}
-
-		/*
-		*   CW rotate by 90 degress around 0,0:
-
-				x' = -y
-				y' = x
-
-			Rotate by 90 degress around px,py:
-
-				x' = -(y - py) + px
-				y' = (x - px) + py
-
-		*/
 
 		u64 distance(ivec2 from = ZERO_IVEC2) const noexcept { return position.distance(from); };
 	};

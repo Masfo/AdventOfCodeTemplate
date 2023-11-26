@@ -76,10 +76,34 @@ struct vec final
 	constexpr const T& operator[](size_t index) const noexcept { return m_data[index]; }
 
 	constexpr vec_type& rotate_cw() noexcept
+	requires(length == 2)
 	{
 		*this = vec_type{-m_data[1], m_data[0]};
 		return *this;
 	}
+
+	constexpr vec_type& rotate_cw(const vec_type& origin) noexcept
+	requires(length == 2)
+	{
+		*this = vec_type{
+			-(m_data[1] - origin[1]) + origin[0], //
+			(m_data[0] - origin[0]) + origin[1]   //
+		};
+		return *this;
+	}
+
+	/*
+*   CW rotate by 90 degress around 0,0:
+
+		x' = -y
+		y' = x
+
+	Rotate by 90 degress around px,py:
+
+		x' = -(y - py) + px
+		y' = (x - px) + py
+
+*/
 
 	// assign
 	// constexpr vec_type& operator=(const vec_type& other) = default;
