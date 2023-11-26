@@ -156,6 +156,28 @@ export
 	}
 
 	// ## With index
+	template<typename T>
+	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
+	{
+		const auto s = split(str, delims, option);
+
+		if (I1 >= s.size() || I2 >= s.size())
+			throw std::range_error(std::format(
+				"split<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				str,
+				delims,
+				I1,
+				I2,
+				std::max(I1, I2),
+				s.size() - 1));
+
+		T t1 = convert_to_type<T>(s[I1]);
+		T t2 = convert_to_type<T>(s[I2]);
+
+		return std::make_tuple(t1, t2);
+	}
+
+	// ## With index
 	template<typename T1, typename T2>
 	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
 	{
