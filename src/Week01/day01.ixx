@@ -3,7 +3,6 @@ import std;
 import aoc;
 
 export void day01()
-
 {
 #if 0
     auto lines = read_lines("input\\day1.txt");
