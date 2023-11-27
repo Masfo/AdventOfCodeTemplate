@@ -2,6 +2,19 @@ export module aoc.helpers;
 import std;
 export
 {
+	// sort
+	template<typename T>
+	void sort(std::vector<T> & v)
+	{
+		std::ranges::sort(v);
+	};
+
+	template<typename T>
+	void sort_greater(std::vector<T> & v)
+	{
+		std::ranges::sort(v, std::greater{});
+	}
+
 	// compare keys
 	// example: const auto [min, max] = std::ranges::minmax_element(e, compare_keys);
 	auto compare_keys         = [](const auto &e1, const auto &e2) { return e1.first < e2.first; };
