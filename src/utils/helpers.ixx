@@ -1,4 +1,5 @@
 export module aoc.helpers;
+import aoc.debug;
 import std;
 export
 {
@@ -13,6 +14,30 @@ export
 	void sort_greater(std::vector<T> & v)
 	{
 		std::ranges::sort(v, std::greater{});
+	}
+
+	// first n elements
+	template<typename T>
+	auto first(const T &container, size_t count)
+	{
+		assert_msg(count <= container.size(), "Count is larger than the container");
+
+		T result{};
+		result.resize(count);
+		std::ranges::copy_n(container.begin(), count, result.begin());
+		return result;
+	}
+
+	// last n elements
+	template<typename T>
+	auto last(const T &container, size_t count)
+	{
+		assert_msg(count <= container.size(), "Count is larger than the container");
+
+		T result{};
+		result.resize(count);
+		std::ranges::copy_n(container.rbegin(), count, result.rbegin());
+		return result;
 	}
 
 	// compare keys
@@ -30,10 +55,7 @@ export
 	{
 		auto c = container;
 		std::ranges::sort(c);
-		decltype(c) result{};
-		result.resize(count);
-		std::ranges::copy_n(c.begin(), count, result.begin());
-		return result;
+		return first(c, count);
 	}
 
 	// bottom
@@ -41,9 +63,6 @@ export
 	{
 		auto c = container;
 		std::ranges::sort(c, std::greater{});
-		decltype(c) result{};
-		result.resize(count);
-		std::ranges::copy_n(c.begin(), count, result.begin());
-		return result;
+		return first(c, count);
 	}
 }
