@@ -1,14 +1,18 @@
-   █ print("\u2588");
-   ▒ print("\u2592");
-   ░ print("\u2591");
+█ print("\u2588");
+▒ print("\u2592");
+░ print("\u2591");
 
-   ✓
-   🚫
-   ❌    Red cross
-   ✅    Green checkmark
-   🟢     Green
-   🟡    Yellow
-   🔴    Red
+✓
+🚫
+❌   Red cross
+✅   Green checkmark
+🟢     Green
+🟡     Yellow
+🔴    Red
+⚠️    \u26A0
+⛔   \u26D4
+☠    \u2620
+☻     \u263B
 
  
  32 0x20     64 0x40 @    96 0x60 `  
