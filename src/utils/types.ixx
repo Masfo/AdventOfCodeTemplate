@@ -100,35 +100,34 @@ export
 	}
 
 	// vmax
-	template<typename T>
-	const T vmax(const T &a)
+	template<typename A, typename B, typename... Rest>
+	constexpr auto vmax(const A &a, const B &b, const Rest &...rest)
 	{
-		return a;
-	}
-
-	template<typename T, typename... Args>
-	const T &vmax(const T &a, const T &b, const Args &...args)
-	{
-		if constexpr (sizeof...(args) == 0)
+		if constexpr (sizeof...(rest) == 0)
+		{
 			return std::max(a, b);
+		}
 		else
-			return std::max(std::min(a, b), args...);
+		{
+			return vmax(vmax(a, b), rest...);
+		}
 	}
 
 	// vmin
-	template<typename T>
-	const T &vmin(const T &a)
+	template<typename A, typename B, typename... Rest>
+	constexpr auto vmin(const A &a, const B &b, const Rest &...rest)
 	{
-		return a;
-	}
-	template<typename T, typename... Args>
-	const T &vmin(const T &a, const T &b, const Args &...args)
-	{
-		if constexpr (sizeof...(args) == 0)
+		if constexpr (sizeof...(rest) == 0)
+		{
 			return std::min(a, b);
+		}
 		else
-			return std::min(std::min(a, b), args...);
+		{
+			return vmin(vmin(a, b), rest...);
+		}
 	}
+
+	// vmod
 
 	template<class T>
 	concept Indexable = requires(T container) {
