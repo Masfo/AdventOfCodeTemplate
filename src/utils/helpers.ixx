@@ -34,6 +34,9 @@ export
 	{
 		assert_msg(count <= container.size(), "Count is larger than the container");
 
+		if (count == container.size())
+			return container;
+
 		T result{};
 		result.resize(count);
 		std::ranges::copy_n(container.begin(), count, result.begin());
@@ -45,6 +48,9 @@ export
 	auto last(const T &container, size_t count)
 	{
 		assert_msg(count <= container.size(), "Count is larger than the container");
+
+		if (count == container.size())
+			return container;
 
 		T result{};
 		result.resize(count);
