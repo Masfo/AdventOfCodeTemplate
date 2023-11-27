@@ -1,5 +1,14 @@
-   print("\u2588");
+   █ print("\u2588");
+   ▒ print("\u2592");
+   ░ print("\u2591");
 
+   ✓
+   🚫
+   ❌    Red cross
+   ✅    Green checkmark
+   🟢     Green
+   🟡    Yellow
+   🔴    Red
 
  
  32 0x20     64 0x40 @    96 0x60 `  
