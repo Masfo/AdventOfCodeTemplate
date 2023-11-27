@@ -12,6 +12,7 @@ export void day20()
     // auto lines = read_all_lines("input\\day20test.txt");
     // auto lines = read_lines_as<i64>("input\\day20test.txt");
     // auto lines = read_all_lines_as<i64>("input\\day20test.txt");
+    // auto lines = read_csv("input\\day20test.txt");
 #endif
 
 

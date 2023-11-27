@@ -65,6 +65,8 @@ void generate_days()
 		temp.append(std::format("    // auto lines = read_all_lines(\"input\\\\day{}test.txt\");\n", day));
 		temp.append(std::format("    // auto lines = read_lines_as<i64>(\"input\\\\day{}test.txt\");\n", day));
 		temp.append(std::format("    // auto lines = read_all_lines_as<i64>(\"input\\\\day{}test.txt\");\n", day));
+		temp.append(std::format("    // auto lines = read_csv(\"input\\\\day{}test.txt\");\n", day));
+
 		temp.append("#endif\n");
 
 		temp.append("\n");
