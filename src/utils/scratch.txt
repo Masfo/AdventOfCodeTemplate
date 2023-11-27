@@ -1,4 +1,4 @@
-
+   print("\u2588");
 
 
  
@@ -70,6 +70,23 @@
 		return fib(n - 1) + fib(n - 2);
 	};
 
+
+    auto line = [](auto &grid, i32 x1, i32 y1, i32 x2, i32 y2)
+    {
+        i32 dx{0}, dy{0};
+        if (x2 - x1 != 0)
+            dx = x2 - x1 > 0 ? 1 : -1;
+        if (y2 - y1 != 0)
+            dy = y2 - y1 > 0 ? 1 : -1;
+
+        grid[{x1, y1}]++;
+        while (x1 != x2 || y1 != y2)
+        {
+            x1 += dx;
+            y1 += dy;
+            grid[{x1, y1}]++;
+        }
+    };
 
 //
 
