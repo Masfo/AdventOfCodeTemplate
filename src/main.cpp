@@ -223,7 +223,7 @@ int main(int argc, char **argv)
 		}
 
 		auto end = std::chrono::system_clock::now();
-		std::println("{}", std::chrono::duration<float>(end - start));
+		std::println("{}", green(std::chrono::duration<float>(end - start)));
 	}
 	catch (const std::exception &e)
 	{
