@@ -9,16 +9,16 @@ export namespace aoc
 	constexpr uint32_t minor = 0;
 
 	 // Do not modify these
-	constexpr uint32_t build = 1442;
+	constexpr uint32_t build = 1454;
 	
 	constexpr uint32_t version = major * 100000 + minor * 10000 + build;
-	constexpr uint64_t random_seed = 0xdf58cbb404b8ccd3;
+	constexpr uint64_t random_seed = 0x2aa0eec77c3a7c9a;
 	
-	constexpr char version_string[] = "v0.0.1442";
-	constexpr char build_time_string[] = "2023-11-28 09:55:32";
-	constexpr char phrase[] = "groovy-prowess-pecan";
-	constexpr char calver[] = "2023.48.1442";
-	constexpr char uuid[] = "11419EFA-7B4B-40BB-A8CF-F3725501DA97";
+	constexpr char version_string[] = "v0.0.1454";
+	constexpr char build_time_string[] = "2023-11-28 11:23:17";
+	constexpr char phrase[] = "catacomb-recopy-amperage";
+	constexpr char calver[] = "2023.48.1454";
+	constexpr char uuid[] = "CE1E03E1-EA2F-4757-88F8-1A392E9E11CF";
 
 	// Copy paste to import to your project
 	/*

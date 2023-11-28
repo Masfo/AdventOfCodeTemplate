@@ -188,7 +188,13 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+	std::vector<f32> v{1.0f, 2.0f, 3.0f};
 
+	// (((5.0 / 1.0) / 2.0) / 3.0)
+	float sum = std::ranges::fold_left(v, 5.0f, std::divides{});
+
+	// ((3.0 / 2.0) / 1.0) / 5.0
+	float sum2 = std::ranges::fold_right(v, 5.0f, std::divides{});
 
 
 
