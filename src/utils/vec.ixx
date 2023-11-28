@@ -13,6 +13,7 @@ struct vec final
 	std::array<T, length> m_data{{0}};
 
 	using vec_type = vec<T, length>;
+	using type=T;
 
 	vec() = default;
 
