@@ -5,15 +5,16 @@ import aoc;
 export void day15()
 {
 #if 0
-    auto lines = read_lines("input\\day15.txt");
+    auto filename = "input\\day15.txt";
 #else
-    auto lines = read_lines("input\\day15test.txt");
-    // auto lines = read_lines_exact("input\\day15test.txt");
-    // auto lines = read_all_lines("input\\day15test.txt");
-    // auto lines = read_lines_as<i64>("input\\day15test.txt");
-    // auto lines = read_all_lines_as<i64>("input\\day15test.txt");
-    // auto lines = read_csv("input\\day15test.txt");
+    auto filename = "input\\day15test.txt";
 #endif
+    auto lines = read_lines(filename);
+    // auto lines = read_lines_exact(filename);
+    // auto lines = read_all_lines(filename);
+    // auto lines = read_lines_as<i64>(filename);
+    // auto lines = read_all_lines_as<i64>(filename);
+    // auto lines = read_csv(filename);
 
 
     aoc::println("Day 15 :");

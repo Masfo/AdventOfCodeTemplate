@@ -58,17 +58,16 @@ void generate_days()
 		temp.append(std::format("export void day{:02d}()\n", day));
 		temp.append("{\n");
 		temp.append("#if 0\n");
-		temp.append(std::format("    auto lines = read_lines(\"input\\\\day{}.txt\");\n", day));
+		temp.append(std::format("    auto filename = \"input\\\\day{}.txt\";\n", day));
 		temp.append("#else\n");
-		temp.append(std::format("    auto lines = read_lines(\"input\\\\day{}test.txt\");\n", day));
-		temp.append(std::format("    // auto lines = read_lines_exact(\"input\\\\day{}test.txt\");\n", day));
-		temp.append(std::format("    // auto lines = read_all_lines(\"input\\\\day{}test.txt\");\n", day));
-		temp.append(std::format("    // auto lines = read_lines_as<i64>(\"input\\\\day{}test.txt\");\n", day));
-		temp.append(std::format("    // auto lines = read_all_lines_as<i64>(\"input\\\\day{}test.txt\");\n", day));
-		temp.append(std::format("    // auto lines = read_csv(\"input\\\\day{}test.txt\");\n", day));
-
+		temp.append(std::format("    auto filename = \"input\\\\day{}test.txt\";\n", day));
 		temp.append("#endif\n");
-
+		temp.append("    auto lines = read_lines(filename);\n");
+		temp.append("    // auto lines = read_lines_exact(filename);\n");
+		temp.append("    // auto lines = read_all_lines(filename);\n");
+		temp.append("    // auto lines = read_lines_as<i64>(filename);\n");
+		temp.append("    // auto lines = read_all_lines_as<i64>(filename);\n");
+		temp.append("    // auto lines = read_csv(filename);\n");
 		temp.append("\n");
 		temp.append("\n");
 		temp.append(std::format("    aoc::println(\"Day {:02d} :\");\n", day));
