@@ -22,7 +22,7 @@ curl --silent --cookie "session=%SESSION%" -A "github.com/Masfo/AdventOfCodeTemp
 dir /C /N input\day%1.txt | find "day%1.txt"
 
 @echo. 2> input\day%1test.txt
-explorer input\day%1test.txt
+rem explorer input\day%1test.txt
 
 rem explorer input\day%1.txt
 
