@@ -28,9 +28,9 @@ export
 
 	// ###########################
 
-	// first n elements
+	// take n elements
 	template<typename T>
-	auto first(const T &container, size_t count)
+	auto take(const T &container, size_t count)
 	{
 		assert_msg(count <= container.size(), "Count is larger than the container");
 
@@ -62,7 +62,7 @@ export
 	{
 		auto c = container;
 		std::ranges::sort(c);
-		return first(c, count);
+		return take(c, count);
 	}
 
 	// bottom
