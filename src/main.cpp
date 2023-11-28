@@ -104,9 +104,30 @@ void generate_days()
 	}
 }
 
+void generate_inputs()
+{
+	if (not fs::exists("input"))
+		fs::create_directory("input");
+
+	auto create_empty_file = [](const std::string_view p)
+	{
+		fs::path      filepath = fs::current_path() / "input" / p;
+		std::ofstream output;
+		output.open(filepath.string());
+		output.close();
+	};
+
+	for (int i = 1; i <= 25; ++i)
+	{
+		create_empty_file(std::format("day{}test.txt", i));
+		create_empty_file(std::format("day{}.txt", i));
+	}
+}
+
 void clear_days()
 {
 	auto home = fs::current_path();
+	fs::remove_all(home / "input");
 	fs::remove_all(home / "Week01");
 	fs::remove_all(home / "Week02");
 	fs::remove_all(home / "Week03");
@@ -129,6 +150,12 @@ int main(int argc, char **argv)
 	{
 		std::println("Generate advent days...");
 		generate_days();
+		return 0;
+	}
+	else if (params.size() == 1 && params[0] == "--geninput")
+	{
+		std::println("Generate advent inputs...");
+		generate_inputs();
 		return 0;
 	}
 	else if (params.size() == 1 && params[0] == "--clear")
