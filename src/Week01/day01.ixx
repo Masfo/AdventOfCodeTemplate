@@ -15,8 +15,6 @@ export void day01()
 	// auto lines = read_csv("input\\day1test.txt");
 #endif
 
-
-
 	aoc::println("Day 01 :");
 	aoc::println("	- Part 1: {}", 0);
 	aoc::println("	- Part 2: {}", 0);
