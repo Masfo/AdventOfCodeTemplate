@@ -176,6 +176,10 @@ export
 			return str[0];
 		else if constexpr (std::is_integral_v<Type> || std::is_floating_point_v<Type>)
 			return to_number<Type>(str);
+		else if constexpr (std::is_same_v<Type, ivec4>)
+		{
+			static_assert(true, "Not implemented");
+		}
 		else if constexpr (is_optional<Type>)
 		{
 			using T = Type::value_type;
