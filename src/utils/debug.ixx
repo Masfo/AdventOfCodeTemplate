@@ -187,6 +187,74 @@ export
 #endif
 }
 
+constexpr std::string_view Black   = "\u001b[30;1m";
+constexpr std::string_view Red     = "\u001b[31;1m";
+constexpr std::string_view Green   = "\u001b[32;1m";
+constexpr std::string_view Yellow  = "\u001b[33;1m";
+constexpr std::string_view Blue    = "\u001b[34;1m";
+constexpr std::string_view Magenta = "\u001b[35;1m";
+constexpr std::string_view Cyan    = "\u001b[36;1m";
+constexpr std::string_view White   = "\u001b[37;1m";
+constexpr std::string_view Reset   = "\u001b[0m";
+
+export
+{
+
+	template<typename T>
+	std::string color(std::string_view color, T value)
+	{
+		return std::format("{}{}{}", color, value, Reset);
+	}
+
+	template<typename T>
+	std::string red(T value)
+	{
+		return color(Red, value);
+	}
+
+	template<typename T>
+	std::string green(T value)
+	{
+		return color(Green, value);
+	}
+
+	template<typename T>
+	std::string yellow(T value)
+	{
+		return color(Yellow, value);
+	}
+
+	template<typename T>
+	std::string white(T value)
+	{
+		return color(White, value);
+	}
+
+	template<typename T>
+	std::string blue(T value)
+	{
+		return color(Blue, value);
+	}
+
+	template<typename T>
+	std::string magenta(T value)
+	{
+		return color(Magenta, value);
+	}
+
+	template<typename T>
+	std::string cyan(T value)
+	{
+		return color(Cyan, value);
+	}
+
+	template<typename T>
+	std::string black(T value)
+	{
+		return color(Black, value);
+	}
+}
+
 export namespace aoc
 {
 	// print, println
