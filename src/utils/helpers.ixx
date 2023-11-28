@@ -28,8 +28,16 @@ export
 
 	// ###########################
 
-	// take n elements
 	template<typename T>
+	concept ContainerResize = requires(T a) {
+		a.size();
+		a.resize(0);
+		a.begin();
+		a.rbegin();
+	};
+
+	// take n elements
+	template<ContainerResize T>
 	auto take(const T &container, size_t count)
 	{
 		assert_msg(count <= container.size(), "Count is larger than the container");
@@ -44,7 +52,7 @@ export
 	}
 
 	// last n elements
-	template<typename T>
+	template<ContainerResize T>
 	auto last(const T &container, size_t count)
 	{
 		assert_msg(count <= container.size(), "Count is larger than the container");
