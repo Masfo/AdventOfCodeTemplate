@@ -150,6 +150,8 @@ public:
 			m_data[index(pos)] = value;
 	}
 
+	void add(ivec2 pos, Type value) { m_data[index(pos)] += value; }
+
 	void fill(Type value)
 	{
 		for (size_t y = 0; y < height; ++y)
