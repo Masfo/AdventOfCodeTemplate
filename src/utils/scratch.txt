@@ -199,6 +199,12 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+	std::unordered_map<char, ivec2> movement{
+		{'R', right},
+		{'U', up},
+		{'D', down},
+		{'L', left},
+	};
 
 
 
