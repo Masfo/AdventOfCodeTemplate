@@ -13,7 +13,7 @@ struct vec final
 	std::array<T, length> m_data{{0}};
 
 	using vec_type = vec<T, length>;
-	using type=T;
+	using type     = T;
 
 	vec() = default;
 
@@ -92,19 +92,6 @@ struct vec final
 		};
 		return *this;
 	}
-
-	/*
-*   CW rotate by 90 degress around 0,0:
-
-		x' = -y
-		y' = x
-
-	Rotate by 90 degress around px,py:
-
-		x' = -(y - py) + px
-		y' = (x - px) + py
-
-*/
 
 	// assign
 	// constexpr vec_type& operator=(const vec_type& other) = default;

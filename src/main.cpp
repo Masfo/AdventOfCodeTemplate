@@ -222,8 +222,9 @@ int main(int argc, char **argv)
 			day25(); //
 		}
 
-		auto end = std::chrono::system_clock::now();
-		std::println("{}", green(std::chrono::duration<float>(end - start)));
+		auto end  = std::chrono::system_clock::now();
+		auto took = std::chrono::duration<float>(end - start);
+		std::println("{}", green(took));
 	}
 	catch (const std::exception &e)
 	{
