@@ -16,6 +16,11 @@ export void day01()
 	// auto lines = read_all_lines_as<i64>(filename);
 	// auto lines = read_csv(filename);
 
+	for (const auto &i : lines)
+	{
+		//
+	}
+
 	aoc::println("Day 01 :");
 	aoc::println("	- Part 1: {}", 0);
 	aoc::println("	- Part 2: {}", 0);
