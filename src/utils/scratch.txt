@@ -103,7 +103,20 @@
 
 //
 
+	std::string_view a = "(((()))())(";
 
+	auto count = std::ranges::fold_left(a, 0, [](i64 acc, char c)
+										{
+											if (c == '(')
+												return ++acc;
+											if (c == ')')
+												return --acc;
+											return acc;
+										});
+
+
+
+// 
 Black: \u001b[30m
 Red: \u001b[31m
 Green: \u001b[32m

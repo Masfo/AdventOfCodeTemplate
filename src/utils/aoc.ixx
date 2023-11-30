@@ -17,3 +17,4 @@ export import aoc.grid;
 export import aoc.walker;
 
 export import aoc.sprite;
+export import aoc.ppm;

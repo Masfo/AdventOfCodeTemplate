@@ -44,6 +44,7 @@ target_sources(aoc
 	utils/helpers.ixx
 
 	utils/sprite.ixx
+	utils/ppm.ixx
 
     utils/stringhelper.ixx
     utils/stringsplit.ixx

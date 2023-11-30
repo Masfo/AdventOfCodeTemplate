@@ -272,6 +272,8 @@ export
 	using uvec3 = vec<u64, 3>;
 	using uvec4 = vec<u64, 4>;
 
+	using rgb = vec<u8, 3>;
+
 	const ivec2 MAX_IVEC2{MAX_I64, MAX_I64};
 	const ivec2 MIN_IVEC2{MIN_I64, MIN_I64};
 	const ivec2 ZERO_IVEC2{0, 0};
