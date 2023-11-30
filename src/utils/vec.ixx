@@ -290,6 +290,7 @@ export
 	}
 
 	// std::ranges::sort(points, grid_order());
+	// aka reading order
 	struct grid_order
 	{
 		inline bool operator()(const ivec2& v1, const ivec2& v2) const
