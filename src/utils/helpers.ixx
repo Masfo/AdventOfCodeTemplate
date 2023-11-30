@@ -65,18 +65,26 @@ export
 		std::ranges::copy_n(container.rbegin(), count, result.rbegin());
 		return result;
 	}
+
 	// top
-	auto top(const auto &container, size_t count = 1)
+	auto top(const auto &container, size_t count)
 	{
+		assert_msg(container.size() <= count, "Container not big enough");
 		auto c = container;
 		std::ranges::sort(c);
 		return take(c, count);
 	}
 
+	auto top(const auto &container) { return top(container, 1)[0]; }
+
 	// bottom
-	auto bottom(const auto &container, size_t count = 1)
+	auto bottom(const auto &container, size_t count)
 	{
+		assert_msg(container.size() <= count, "Container not big enough");
+
 		auto c = top(container, count);
 		return last(c, count);
 	}
+
+	auto bottom(const auto &container) { return bottom(container, 1)[0]; }
 }
