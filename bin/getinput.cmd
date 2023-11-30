@@ -12,6 +12,10 @@ echo Session key is not set.
 exit /b
 )
 
+if [%1] == [] (
+echo Day not set. example: getinput 1
+exit /b
+)
 
 
 Title AOC %YEAR% Day %1 Input
