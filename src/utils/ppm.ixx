@@ -30,10 +30,12 @@ public:
 		, height(h)
 	{
 		image.resize(width * height);
-		// std::ranges::fill(image, {0, 0, 0});
+		fill({0, 0, 0});
 	}
 
-	void put(u32 x, u32 y, rgb color)
+	void fill(rgb color) { std::ranges::fill(image, color); }
+
+	void put(i64 x, i64 y, rgb color)
 	{
 		//
 		if (x <= width && y <= height)
