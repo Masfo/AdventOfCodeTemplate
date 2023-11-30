@@ -35,6 +35,8 @@ public:
 
 	void fill(rgb color) { std::ranges::fill(image, color); }
 
+	void put(ivec2 coord, rgb color) { put(coord[0], coord[1], color); }
+
 	void put(i64 x, i64 y, rgb color)
 	{
 		//
@@ -52,12 +54,12 @@ public:
 		if (v2[1] - v1[1] != 0)
 			delta[1] = v2[1] - v1[1] > 0 ? 1 : -1;
 
-		put(v1[0], v1[1], color);
+		put(v1, color);
 
 		while (v1.x() != v2.x() || v1.y() != v2.y())
 		{
 			v1 += delta;
-			put(v1[0], v1[1], color);
+			put(v1, color);
 		}
 	}
 
