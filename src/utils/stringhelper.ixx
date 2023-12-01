@@ -84,6 +84,8 @@ export
 	std::string strip(std::string_view str, std::string_view strip_chars) noexcept;
 	std::string strip(std::string_view str, ignore option) noexcept;
 
+	bool isdigit(char c) noexcept { return (c >= '0') && (c <= '9'); }
+
 	template<typename T = i64>
 	inline T constexpr to_number(std::string_view str, int base = 10)
 	{
@@ -111,28 +113,9 @@ export
 	}
 
 	template<typename T = i64>
-	inline std::string constexpr to_string(T value, int base = 10)
+	inline T constexpr to_number(char c, int [[maybe_unused]] base = 10)
 	{
-		std::string str;
-		str.resize(20);
-
-		auto [ptr, ec]{std::to_chars(str.data(), str.data() + str.size(), value, base)};
-
-		if (ec == std::errc())
-		{
-			return str;
-		}
-		else if (ec == std::errc::invalid_argument)
-		{
-			dbgln("to_ascii: Invalid argument '{}'", str);
-			throw std::invalid_argument(std::format("Invalid argument: '{}'", str));
-		}
-		else if (ec == std::errc::result_out_of_range)
-		{
-			dbgln("to_ascii: out of range '{}'", str);
-			throw std::out_of_range(std::format("Out of range: '{}'", str));
-		}
-		return {0};
+		return as<T>(c - '0');
 	}
 
 	template<typename T = i64>
