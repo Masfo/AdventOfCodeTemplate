@@ -113,7 +113,7 @@ export
 	}
 
 	template<typename T = i64>
-	inline T constexpr to_number(char c, int [[maybe_unused]] base = 10)
+	inline T constexpr to_number(char c, [[maybe_unused]] int base = 10)
 	{
 		return as<T>(c - '0');
 	}

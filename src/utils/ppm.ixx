@@ -62,7 +62,7 @@ public:
 			if (x1 == x2 && y1 == y2)
 				break;
 
-			int e2 = 2 * err;
+			i64 e2 = 2 * err;
 
 			if (e2 > -dy)
 			{
