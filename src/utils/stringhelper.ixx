@@ -115,7 +115,7 @@ export
 	template<typename T = i64>
 	inline T constexpr to_number(char c, [[maybe_unused]] int base = 10)
 	{
-		return as<T>(c - '0');
+		return to_number(std::string_view{&c}, base);
 	}
 
 	template<typename T = i64>
