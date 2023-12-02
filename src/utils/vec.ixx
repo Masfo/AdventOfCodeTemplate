@@ -10,6 +10,7 @@ export template<typename T, std::size_t length>
 requires(std::integral<T> or std::floating_point<T>) and (length > 1)
 struct vec final
 {
+
 	std::array<T, length> m_data{{0}};
 
 	using vec_type = vec<T, length>;
@@ -250,6 +251,7 @@ struct vec final
 		return result;
 	}
 
+	// xyzw
 	[[nodiscard("Use the x-coordinate")]] T x() const noexcept
 
 	{
@@ -277,6 +279,31 @@ struct vec final
 
 		return m_data[3];
 	};
+
+	// rgba
+	[[nodiscard("Use the red-channel")]] T r() const noexcept
+	{
+		static_assert(length >= 1, "Cant view red-channel. No such data.");
+		return x();
+	}
+
+	[[nodiscard("Use the green-channel")]] T g() const noexcept
+	{
+		static_assert(length >= 2, "Cant view green-channel. No such data.");
+		return y();
+	}
+
+	[[nodiscard("Use the blue-channel")]] T b() const noexcept
+	{
+		static_assert(length >= 3, "Cant view blue-channel. No such data.");
+		return z();
+	}
+
+	[[nodiscard("Use the alpha-channel")]] T a() const noexcept
+	{
+		static_assert(length >= 4, "Cant view alpha-channel. No such data.");
+		return w();
+	}
 };
 
 export
