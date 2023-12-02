@@ -13,8 +13,7 @@ struct vec final
 	std::array<T, length> m_data{{0}};
 
 	using vec_type = vec<T, length>;
-
-	using type = T;
+	using type     = T;
 
 	vec() = default;
 
@@ -251,28 +250,28 @@ struct vec final
 		return result;
 	}
 
-	[[nodiscard("Use the coordinate")]] T x() const noexcept
+	[[nodiscard("Use the x-coordinate")]] T x() const noexcept
 
 	{
 		static_assert(length >= 1, "Cant view x-axis. No data");
 		return m_data[0];
 	};
 
-	[[nodiscard("Use the coordinate")]] T y() const noexcept
+	[[nodiscard("Use the y-coordinate")]] T y() const noexcept
 	{
 		static_assert(length >= 2, "Cant view y-axis. No such data.");
 
 		return m_data[1];
 	};
 
-	[[nodiscard("Use the coordinate")]] T z() const noexcept
+	[[nodiscard("Use the z-coordinate")]] T z() const noexcept
 	{
 		static_assert(length >= 3, "Cant view z-axis. No such data.");
 
 		return m_data[2];
 	};
 
-	[[nodiscard("Use the coordinate")]] T w() const noexcept
+	[[nodiscard("Use the w-coordinate")]] T w() const noexcept
 	{
 		static_assert(length >= 4, "Cant view w-axis. No such data.");
 
