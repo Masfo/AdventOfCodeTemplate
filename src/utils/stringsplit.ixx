@@ -6,6 +6,7 @@ import aoc.vec;
 import aoc.debug;
 import aoc.stringhelper;
 
+using namespace std::string_literals;
 export
 {
 
@@ -26,6 +27,21 @@ export
 			stop  = new_str.find_first_of(delims, start);
 		}
 		return tokens;
+	}
+
+	auto split_once(std::string_view str, std::string_view delims, ignore option = ignore::none)
+	{
+		std::string new_str{strip(str, option)};
+
+		size_t pos = new_str.find(delims);
+		if (pos != std::string::npos)
+		{
+			return make_array(new_str.substr(0, pos), new_str.substr(pos + 1));
+		}
+		else
+		{
+			return make_array(new_str, ""s);
+		}
 	}
 
 	template<typename T>
@@ -67,7 +83,6 @@ export
 	template<typename T>
 	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none)
 	{
-
 		if constexpr (std::is_same_v<T, char>)
 		{
 			auto              s = split(str, delims, option);
@@ -356,7 +371,6 @@ export
 	template<typename T>
 	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept
 	{
-
 		std::string new_str{strip(str, option)};
 
 		std::vector<T>           ret;
