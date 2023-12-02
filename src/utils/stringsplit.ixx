@@ -188,6 +188,26 @@ export
 		return std::make_tuple(t1, t2, t3, t4);
 	}
 
+	// ## With index 1
+	template<typename T>
+	auto split(const std::string_view str, const std::string_view delims, size_t I1, ignore option = ignore::none)
+	{
+		const auto s = split(str, delims, option);
+
+		if (I1 >= s.size())
+			throw std::range_error(std::format(
+				"split<T1,T2>(\"{}\", \"{}\", {}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				str,
+				delims,
+				I1,
+				I1,
+				s.size() - 1));
+
+		T t1 = convert_to_type<T>(s[I1]);
+
+		return t1;
+	}
+
 	// ## With index 2
 	template<typename T>
 	auto split(const std::string_view str, const std::string_view delims, size_t I1, size_t I2, ignore option = ignore::none)
