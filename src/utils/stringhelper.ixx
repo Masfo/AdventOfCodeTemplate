@@ -7,15 +7,14 @@ import aoc.math;
 import aoc.vec;
 import std;
 
-const static std::string_view digit_string{"0123456789"};
-const static std::string_view whitespace_string{" \t\f\n\r\v"};
-const static std::string_view lowercase_string{"abcdefghijklmnopqrstuvwxyz"};
-const static std::string_view uppercase_string{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-const static std::string_view alphabet_string{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-const static std::string_view alphanum_string{"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-
 export
 {
+	constexpr std::string_view digit_string{"0123456789"};
+	constexpr std::string_view whitespace_string{" \t\f\n\r\v"};
+	constexpr std::string_view lowercase_string{"abcdefghijklmnopqrstuvwxyz"};
+	constexpr std::string_view uppercase_string{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+	constexpr std::string_view alphabet_string{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+	constexpr std::string_view alphanum_string{"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
 
 	enum class ignore : u32
 	{

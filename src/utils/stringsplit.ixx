@@ -44,6 +44,8 @@ export
 		}
 	}
 
+	auto split_whitespace(std::string_view str) { return split(str, whitespace_string, ignore::none); }
+
 	template<typename T>
 	std::vector<T> split_to_integer(std::string_view str, std::string_view delims, ignore option) noexcept;
 
