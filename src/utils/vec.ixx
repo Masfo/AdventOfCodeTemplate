@@ -232,6 +232,24 @@ struct vec final
 		return result;
 	}
 
+	template<typename U = T>
+	[[nodiscard("Use the sum value")]] constexpr U sum() const noexcept
+	{
+		U result{};
+		for (size_t i = 0; i < length; ++i)
+			result += as<U>(m_data[i]);
+		return result;
+	}
+
+	template<typename U = T>
+	[[nodiscard("Use the product value")]] constexpr U product() const noexcept
+	{
+		U result{m_data[0]};
+		for (size_t i = 1; i < length; ++i)
+			result *= as<U>(m_data[i]);
+		return result;
+	}
+
 	[[nodiscard("Use the coordinate")]] T x() const noexcept
 
 	{
@@ -343,6 +361,18 @@ export
 		const vec<T, len>& v, const vec<T, len>& cmin, const vec<T, len>& cmax)
 	{
 		return v.clamp(cmin, cmax);
+	}
+
+	template<typename T = i64, typename U = T, size_t len>
+	[[nodiscard("Use the sum value")]] constexpr T sum(const vec<T, len>& v)
+	{
+		return v.sum<T>();
+	}
+
+	template<typename T = i64, typename U = T, size_t len>
+	[[nodiscard("Use the product value")]] constexpr T product(const vec<T, len>& v)
+	{
+		return v.product<T>();
 	}
 
 #if 0
