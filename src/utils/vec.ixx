@@ -13,7 +13,8 @@ struct vec final
 	std::array<T, length> m_data{{0}};
 
 	using vec_type = vec<T, length>;
-	using type     = T;
+
+	using type = T;
 
 	vec() = default;
 
@@ -292,9 +293,13 @@ export
 
 	using rgb = vec<u8, 3>;
 
-	const ivec2 MAX_IVEC2{MAX_I64, MAX_I64};
-	const ivec2 MIN_IVEC2{MIN_I64, MIN_I64};
-	const ivec2 ZERO_IVEC2{0, 0};
+	const ivec2 MAX_IVEC2(MAX_I64);
+	const ivec2 MIN_IVEC2(MIN_I64);
+	const ivec2 ZERO_IVEC2(0);
+
+	const ivec3 MAX_IVEC3(MAX_I64);
+	const ivec3 MIN_IVEC3(MIN_I64);
+	const ivec3 ZERO_IVEC3(0);
 
 	// index2d
 	template<size_t WIDTH, size_t HEIGHT, std::integral T = i64>
