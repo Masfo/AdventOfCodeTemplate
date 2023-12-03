@@ -711,17 +711,17 @@ export
 		bool                         m_locked{false};
 	};
 
-	// simple_grid
+	// binary_grid
 
 	using SimpleGrid = std::unordered_set<ivec2>;
 
-	// auto g = simple_grid_read("input\\day3test.txt",
+	// auto g = binary_grid_read("input\\day3test.txt",
 	//                            [](char c)
 	//							  {
 	//								return isdigit(c) || "*#+$"sv.contains(c);
 	//							  });
 	//
-	auto simple_grid_read(std::string_view filename, std::string_view interesting) noexcept
+	auto binary_grid_read(std::string_view filename, std::string_view interesting) noexcept
 	{
 		auto lines = read_all_lines(filename);
 
@@ -743,7 +743,7 @@ export
 
 	using FindOp = const std::function<bool(const char)>;
 
-	auto simple_grid_read(std::string_view filename, const FindOp &op) noexcept
+	auto binary_grid_read(std::string_view filename, const FindOp &op) noexcept
 	{
 		auto lines = read_all_lines(filename);
 
@@ -764,7 +764,7 @@ export
 		return simple;
 	}
 
-	auto simple_grid_bounds(const SimpleGrid &grid)->std::tuple<i64, i64, i64, i64>
+	auto binary_grid_bounds(const SimpleGrid &grid)->std::tuple<i64, i64, i64, i64>
 	{
 		i64 minx{MAX_I64}, miny{MAX_I64}, maxx{0}, maxy{0};
 		for (const auto &g : grid)
@@ -778,18 +778,18 @@ export
 		return {minx, miny, maxx + 1, maxy + 1};
 	}
 
-	auto simple_grid_area(const SimpleGrid &grid)->std::tuple<i64, i64, i64>
+	auto binary_grid_area(const SimpleGrid &grid)->std::tuple<i64, i64, i64>
 	{
-		const auto [minx, miny, maxx, maxy] = simple_grid_bounds(grid);
+		const auto [minx, miny, maxx, maxy] = binary_grid_bounds(grid);
 		const i64 width                     = std::abs(minx - maxx);
 		const i64 height                    = std::abs(miny - maxy);
 
 		return {width * height, width, height};
 	}
 
-	void simple_grid_print(const std::unordered_set<ivec2> &grid)
+	void binary_grid_print(const std::unordered_set<ivec2> &grid)
 	{
-		const auto [minx, miny, maxx, maxy] = simple_grid_bounds(grid);
+		const auto [minx, miny, maxx, maxy] = binary_grid_bounds(grid);
 		for (ivec2::type y = miny; y < maxy; ++y)
 		{
 			for (ivec2::type x = minx; x < maxx; ++x)
