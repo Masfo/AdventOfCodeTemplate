@@ -20,6 +20,6 @@
 	<File Name="helpers.ixx"/>
 
 	<!-- Functions -->
-	<Function Name="" />
+	<Function Name="std::*" />
 
 </NonUserCode>
