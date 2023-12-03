@@ -14,9 +14,7 @@ inline void write_to_console(const std::string &str) noexcept
 
 void output_message(const std::string_view message) noexcept
 {
-#ifdef _DEBUG
 	OutputDebugStringA(message.data());
-#endif
 	std::print("{}", message);
 }
 

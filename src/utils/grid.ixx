@@ -79,6 +79,17 @@ export
 		{"nw", north_west},
 	};
 
+	/*
+		for (auto y = g.min_y(); y < g.max_y(); ++y)
+		{
+			for (auto x = g.min_x(); x < g.max_x(); ++x)
+			{
+
+			}
+		}
+
+	*/
+
 	// grid
 	template<typename T = char>
 	class grid
@@ -89,8 +100,11 @@ export
 
 		using FunctionOp = const std::function<void(const ivec2, const T)>;
 		using SearchOp   = const std::function<bool(const ivec2, const ivec2)>;
+		using FindOp     = const std::function<bool(const ivec2, const T)>;
 
 		grid() = default;
+
+		grid(std::string_view filename) { read(filename); }
 
 		grid(int width, int height, T value, ivec2 start)
 		{
@@ -190,6 +204,8 @@ export
 			return gv;
 		}
 
+		auto getline_y(ivec2 pos) const { return getline(ivec2{min_grid[0], pos[1]}, ivec2{max_grid[0], pos[1]}); }
+
 		auto getline_direction(ivec2 start, ivec2 dir, int count = MAX_I32) const -> std::vector<GridValue>
 		{
 			// walk until not valid or count
@@ -233,6 +249,19 @@ export
 							  at(pos + south_west),
 							  at(pos + west),
 							  at(pos + north_west));
+		}
+
+		// N,NE,E,SE,S,SW,W,NW
+		auto neighbours8pos(ivec2 pos) const
+		{
+			return make_array((pos + north),
+							  (pos + north_east),
+							  (pos + east),
+							  (pos + south_east),
+							  (pos + south),
+							  (pos + south_west),
+							  (pos + west),
+							  (pos + north_west));
 		}
 
 		void fill_rect(ivec2 a, ivec2 b, T value)
@@ -453,11 +482,34 @@ export
 
 			if (points.empty())
 			{
-				dbgln("find: no points '{}' found. Defaulting to [0,0]", to_find);
+				dbgln("find_all: no points '{}' found. Defaulting to [0,0]", to_find);
 				points.push_back(ZERO_IVEC2);
 			}
 
 			std::ranges::sort(points, grid_order());
+
+			return points;
+		}
+
+		// Find all with predicate
+		auto find_all(const FindOp &op) const
+		{
+			std::vector<std::pair<ivec2, T>> points;
+
+			for_each(
+				[&](ivec2 pos, T c)
+				{
+					//
+					if (op(pos, c))
+						points.push_back(std::make_pair(pos, c));
+				});
+
+			if (points.empty())
+			{
+				dbgln("find_all(pred): no points found.");
+			}
+
+			// std::ranges::sort(points, grid_order());
 
 			return points;
 		}
@@ -471,6 +523,8 @@ export
 			dbgln("at: no point at {}", pos);
 			return {};
 		}
+
+		std::optional<T> at(ivec2::type x, ivec2::type y) const { return at({x, y}); }
 
 		void set(ivec2 pos, T value)
 		{
@@ -536,6 +590,14 @@ export
 		ivec2 min_bound() const { return min_grid; }
 
 		ivec2 max_bound() const { return max_grid; }
+
+		ivec2::type min_y() const { return min_grid[1]; };
+
+		ivec2::type max_y() const { return max_grid[1]; };
+
+		ivec2::type min_x() const { return min_grid[0]; };
+
+		ivec2::type max_x() const { return max_grid[0]; };
 
 	private:
 		ivec2 resolution{};
