@@ -6,6 +6,7 @@ import std;
 import aoc.readfile;
 import aoc.vec;
 import aoc.debug;
+import aoc.stringhelper;
 
 export
 {
@@ -89,6 +90,13 @@ export
 		}
 
 	*/
+
+	// [](ivec2, char c) { return true; };
+	// grid_is_
+	auto grid_is_digit = [](ivec2, char c) { return isdigit(c); };
+	auto grid_is_ascii = [](ivec2, char c) { return isascii(c); };
+
+	//
 
 	// grid
 	template<typename T = char>
@@ -262,6 +270,52 @@ export
 							  (pos + south_west),
 							  (pos + west),
 							  (pos + north_west));
+		}
+
+		// neighbours valid
+		auto neighbours4_valid(ivec2 pos, const FindOp &op = nullptr) const
+		{
+			std::vector<std::pair<ivec2, T>> ret;
+
+			for (const auto &c : directions_4_way)
+			{
+				const auto v = at(pos + c);
+				if (op)
+				{
+
+					if (v && op(pos + c, *v))
+						ret.emplace_back(std::make_pair(pos + c, *v));
+				}
+				else
+				{
+					if (v)
+						ret.emplace_back(std::make_pair(pos + c, *v));
+				}
+			}
+
+			return ret;
+		}
+
+		auto neighbours8_valid(ivec2 pos, const FindOp &op = nullptr) const
+		{
+			std::vector<std::pair<ivec2, T>> ret;
+
+			for (const auto &c : directions_8_way)
+			{
+				const auto v = at(pos + c);
+				if (op)
+				{
+					if (v && op(pos + c, *v))
+						ret.emplace_back(std::make_pair(pos + c, *v));
+				}
+				else
+				{
+					if (v)
+						ret.emplace_back(std::make_pair(pos + c, *v));
+				}
+			}
+
+			return ret;
 		}
 
 		void fill_rect(ivec2 a, ivec2 b, T value)
@@ -559,8 +613,10 @@ export
 			return points;
 		}
 
+		// contains
 		bool contains(ivec2 pos) const { return m_grid.contains(pos); }
 
+		// at
 		std::optional<T> at(ivec2 pos) const
 		{
 			if (contains(pos))
@@ -568,8 +624,10 @@ export
 			return {};
 		}
 
+		// at
 		std::optional<T> at(ivec2::type x, ivec2::type y) const { return at({x, y}); }
 
+		// set
 		void set(ivec2 pos, T value)
 		{
 			if (is_locked())
@@ -597,6 +655,7 @@ export
 
 		void unset(ivec2 pos) { m_grid.erase(pos); }
 
+		// print
 		void print()
 		{
 			dbgln("Bounds: {} - {}", min_bound(), max_bound());
