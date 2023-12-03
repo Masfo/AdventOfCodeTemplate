@@ -711,10 +711,98 @@ export
 		bool                         m_locked{false};
 	};
 
-	// DAY 8, 2022, walk lines all_of iota...
+	// simple_grid
 
-	// for_each_4way -> std::generator<Cell> ... co_yield
-	// grid as a unordered_map
+	using SimpleGrid = std::unordered_set<ivec2>;
+
+	// auto g = simple_grid_read("input\\day3test.txt",
+	//                            [](char c)
+	//							  {
+	//								return isdigit(c) || "*#+$"sv.contains(c);
+	//							  });
+	//
+	auto simple_grid_read(std::string_view filename, std::string_view interesting) noexcept
+	{
+		auto lines = read_all_lines(filename);
+
+		SimpleGrid simple;
+		ivec2      pos;
+		for (const auto &line : lines)
+		{
+			pos[0] = 0;
+			for (const auto &c : line)
+			{
+				if (interesting.contains(c))
+					simple.insert(pos);
+				pos[0]++;
+			}
+			pos[1]++;
+		}
+		return simple;
+	}
+
+	using FindOp = const std::function<bool(const char)>;
+
+	auto simple_grid_read(std::string_view filename, const FindOp &op) noexcept
+	{
+		auto lines = read_all_lines(filename);
+
+		SimpleGrid simple;
+
+		ivec2 pos;
+		for (const auto &line : lines)
+		{
+			pos[0] = 0;
+			for (const auto &c : line)
+			{
+				if (op(c))
+					simple.insert(pos);
+				pos[0]++;
+			}
+			pos[1]++;
+		}
+		return simple;
+	}
+
+	auto simple_grid_bounds(const SimpleGrid &grid)->std::tuple<i64, i64, i64, i64>
+	{
+		i64 minx{MAX_I64}, miny{MAX_I64}, maxx{0}, maxy{0};
+		for (const auto &g : grid)
+		{
+			minx = std::min(minx, g[0]);
+			maxx = std::max(maxx, g[0]);
+
+			miny = std::min(miny, g[1]);
+			maxy = std::max(maxy, g[1]);
+		}
+		return {minx, miny, maxx + 1, maxy + 1};
+	}
+
+	auto simple_grid_area(const SimpleGrid &grid)->std::tuple<i64, i64, i64>
+	{
+		const auto [minx, miny, maxx, maxy] = simple_grid_bounds(grid);
+		const i64 width                     = std::abs(minx - maxx);
+		const i64 height                    = std::abs(miny - maxy);
+
+		return {width * height, width, height};
+	}
+
+	void simple_grid_print(const std::unordered_set<ivec2> &grid)
+	{
+		const auto [minx, miny, maxx, maxy] = simple_grid_bounds(grid);
+		for (ivec2::type y = miny; y < maxy; ++y)
+		{
+			for (ivec2::type x = minx; x < maxx; ++x)
+			{
+				if (grid.contains({x, y}))
+					dbg("#");
+				else
+					dbg(".");
+			}
+			dbgln();
+		}
+		dbgln();
+	}
 }
 
 #if 0
