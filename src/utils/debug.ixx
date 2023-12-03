@@ -251,6 +251,24 @@ export
 	{
 		return color(Black, value);
 	}
+
+	class RunTimer final
+	{
+	public:
+		RunTimer() { start(); }
+
+		void start() { m_start = std::chrono::system_clock::now(); }
+
+		void stop(std::string_view msg = "") const
+		{
+			auto end  = std::chrono::system_clock::now();
+			auto took = std::chrono::duration<float, std::milli>(end - m_start);
+			std::println("{}{}{}", msg.empty() ? "" : msg, msg.empty() ? "" : " ", green(took));
+		}
+
+	private:
+		std::chrono::time_point<std::chrono::system_clock> m_start;
+	};
 }
 
 export namespace aoc
