@@ -300,9 +300,9 @@ export
 
 		void for_each(const FunctionOp &op) const
 		{
-			for (auto y = min_grid.y(); y <= max_grid.y(); ++y)
+			for (auto y = min_grid.y(); y < max_grid.y(); ++y)
 			{
-				for (auto x = min_grid.x(); x <= max_grid.x(); ++x)
+				for (auto x = min_grid.x(); x < max_grid.x(); ++x)
 				{
 					if (auto v = at(ivec2{x, y}); v.has_value())
 					{
@@ -514,13 +514,57 @@ export
 			return points;
 		}
 
+		// collect all adjacent with predicate
+		// return vector of vector of pair of coord and value
+		/*
+		* auto adj = g.find_all_adjacent([](ivec2, char c) { return isdigit(c); });
+		*      467..114..
+			   ...*......
+			   ..35..633.
+			   ......#...
+			   617*......
+			   .....+.58.
+			   ..592.....
+			   ......755.
+			   ...$.*....
+			   .664.598..
+
+		*  467, 114, 35, 633.... 598
+		*/
+		auto find_all_adjacent(const FindOp &op) const
+		{
+			using CoordPair = std::pair<ivec2, T>;
+			std::vector<std::vector<CoordPair>> points;
+
+			for (auto y = min_y(); y < max_y(); ++y)
+			{
+				for (auto x = min_x(); x < max_x(); ++x)
+				{
+					std::vector<CoordPair> inner;
+					auto                   ch = at(x, y);
+					if (ch && !op({x, y}, *ch))
+						continue;
+
+					ch = at(x, y);
+					for (; ch and op({x, y}, *ch);)
+					{
+						inner.push_back(std::make_pair(ivec2{x, y}, *ch));
+						ch = at(++x, y);
+					}
+					if (!inner.empty())
+						points.push_back(inner);
+				}
+			}
+
+			return points;
+		}
+
 		bool contains(ivec2 pos) const { return m_grid.contains(pos); }
 
 		std::optional<T> at(ivec2 pos) const
 		{
 			if (contains(pos))
 				return m_grid.at(pos);
-			dbgln("at: no point at {}", pos);
 			return {};
 		}
 
@@ -593,11 +637,11 @@ export
 
 		ivec2::type min_y() const { return min_grid[1]; };
 
-		ivec2::type max_y() const { return max_grid[1]; };
+		ivec2::type max_y() const { return max_grid[1] + 1; };
 
 		ivec2::type min_x() const { return min_grid[0]; };
 
-		ivec2::type max_x() const { return max_grid[0]; };
+		ivec2::type max_x() const { return max_grid[0] + 1; };
 
 	private:
 		ivec2 resolution{};
