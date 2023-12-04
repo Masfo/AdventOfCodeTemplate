@@ -159,6 +159,24 @@ export
 		}
 	}
 
+	// convert to set
+	template<typename T>
+	auto convert_to_set(std::string_view str)
+	{
+		if constexpr (std::is_integral_v<T>)
+		{
+			std::set<T> ret;
+			const auto  s = split<T>(str, " ");
+			for (const auto &i : s)
+				ret.insert(i);
+			return ret;
+		}
+		else
+		{
+			static_assert(true, "Not implemented");
+		}
+	}
+
 	template<typename T>
 	constexpr bool is_optional = false;
 
@@ -183,6 +201,10 @@ export
 		else if constexpr (std::is_same_v<Type, std::vector<i64>>)
 		{
 			return convert_to_vector<i64>(str);
+		}
+		else if constexpr (std::is_same_v<Type, std::set<i64>>)
+		{
+			return convert_to_set<i64>(str);
 		}
 		else if constexpr (is_optional<Type>)
 		{
