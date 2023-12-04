@@ -80,8 +80,9 @@ export
 		return ret;
 	}
 
-	std::string strip(std::string_view str, std::string_view strip_chars) noexcept;
-	std::string strip(std::string_view str, ignore option) noexcept;
+	std::string      strip(std::string_view str, std::string_view strip_chars) noexcept;
+	std::string      strip(std::string_view str, ignore option) noexcept;
+	std::string_view trim(std::string_view s) noexcept;
 
 	bool isrange(char c, char a, char b) noexcept { return (c >= a) && (c <= b); }
 
@@ -144,6 +145,20 @@ export
 		return {};
 	}
 
+	// convert_to_vector
+	template<typename T>
+	auto convert_to_vector(std::string_view str)
+	{
+		if constexpr (std::is_integral_v<T>)
+		{
+			return split<T>(str, " ");
+		}
+		else
+		{
+			static_assert(true, "Not implemented");
+		}
+	}
+
 	template<typename T>
 	constexpr bool is_optional = false;
 
@@ -160,10 +175,14 @@ export
 		else if constexpr (std::is_same_v<Type, char>)
 			return str[0];
 		else if constexpr (std::is_integral_v<Type> || std::is_floating_point_v<Type>)
-			return to_number<Type>(str);
+			return to_number<Type>(trim(str));
 		else if constexpr (std::is_same_v<Type, ivec4>)
 		{
 			static_assert(true, "Not implemented");
+		}
+		else if constexpr (std::is_same_v<Type, std::vector<i64>>)
+		{
+			return convert_to_vector<i64>(str);
 		}
 		else if constexpr (is_optional<Type>)
 		{

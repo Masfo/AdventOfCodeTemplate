@@ -10,6 +10,15 @@ using namespace std::string_literals;
 export
 {
 
+	template<typename T, typename... Rest>
+	auto split_to(std::string_view str, std::string_view delims = "\n", ignore option = ignore::none) noexcept
+	{
+		//
+		std::string new_str{strip(str, option)};
+
+		return 0;
+	}
+
 	// Split
 	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
 	{

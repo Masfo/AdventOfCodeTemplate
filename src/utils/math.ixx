@@ -58,6 +58,17 @@ export
 	}
 
 	// common
+	i64 pow(i64 base, i64 exponent) noexcept
+	{
+		if (exponent < 0)
+			return 0;
+
+		if (exponent == 0)
+			return 1;
+		else
+			return base * pow(base, exponent - 1);
+	}
+
 	i64 mod(i64 x, i64 N) noexcept
 	{
 		if (N == 0)
