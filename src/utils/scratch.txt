@@ -201,6 +201,22 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+        struct ConvertRange
+        {
+        	i64 dst;
+        	i64 src;
+        	i64 len;
+        };
+        
+        Sort by variable
+
+        std::ranges::sort(m, {}, &ConvertRange::src);
+
+
+
+
+
+
 	std::vector<f32> v{1.0f, 2.0f, 3.0f};
 
 	// (((5.0 / 1.0) / 2.0) / 3.0)

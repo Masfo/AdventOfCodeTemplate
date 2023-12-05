@@ -30,19 +30,19 @@ export
 	{
 		range(T s, T e)
 			: start(s)
-			, end(e)
+			, length(e)
 		{
 		}
 
 		bool contains(const range<T> &other) const noexcept
 		{
-			return (start >= other.start && end <= other.end) || (other.start >= start && other.end <= end);
+			return (start >= other.start && length <= other.end) || (other.start >= start && other.end <= length);
 		}
 
-		bool overlaps(const range<T> &other) const noexcept { return !(end < other.start || start > other.end); }
+		bool overlaps(const range<T> &other) const noexcept { return !(length < other.start || start > other.end); }
 
 		T start{};
-		T end{};
+		T length{};
 	};
 
 	template<typename T = i64>

@@ -18,3 +18,17 @@ export import aoc.walker;
 
 export import aoc.sprite;
 export import aoc.ppm;
+
+import aoc.debug;
+
+export namespace aoc
+{
+
+	void print_answer(int day, auto part1, auto part2)
+	{
+		aoc::println("Day {:02}:", day);
+		aoc::println("	- Part 1: {}", part1);
+		aoc::println("	- Part 2: {}", part2);
+		aoc::println("");
+	}
+} // namespace aoc

@@ -285,4 +285,5 @@ export namespace aoc
 	}
 
 	void println() noexcept { output_message("\n"); }
+
 } // namespace aoc
