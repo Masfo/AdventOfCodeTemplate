@@ -10,15 +10,6 @@ using namespace std::string_literals;
 export
 {
 
-	template<typename T, typename... Rest>
-	auto split_to(std::string_view str, std::string_view delims = "\n", ignore option = ignore::none) noexcept
-	{
-		//
-		std::string new_str{strip(str, option)};
-
-		return 0;
-	}
-
 	// Split
 	std::vector<std::string> split(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none) noexcept
 	{
@@ -72,7 +63,7 @@ export
 	}
 
 	template<typename T, size_t N>
-	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none)
+	auto split(const std::string_view str, const std::string_view delims = " ", ignore option = ignore::none)
 	{
 		const auto s = split(str, delims, option);
 		if (s.size() < N)
@@ -680,5 +671,65 @@ export
 			v.emplace_back(str.substr(i, stride));
 
 		return v;
+	}
+
+	// *********************************
+	// //
+	// split_to
+	// void split_to_helper(const std::vector<std::string> &, int) { }
+
+	template<typename T>
+	std::tuple<T> split_to_helper(const std::vector<std::string> &splits, int index)
+	{
+		const T first = convert_to_type<T>(splits[index]);
+		auto    ret   = std::make_tuple(first);
+		return ret;
+	}
+
+	// auto [f1, f2] = split_to<i64, i64>("123 | 456", "|");
+	// 	auto k = split_to<i64, std::string, i64>("123 | hello | 987", "|");
+
+	template<typename T, typename... Rest>
+	std::tuple<T, Rest...> split_to_helper(const std::vector<std::string> &splits, int index = 0)
+	{
+		auto first = std::make_tuple<T>(convert_to_type<T>(splits[index]));
+
+		auto ret = std::tuple_cat(first, split_to_helper<Rest...>(splits, index + 1));
+
+		// auto ret   = std::tuple_cat<T, Rest...>(first, std::tuple_cat(split_to_helper<Rest...>(splits, index + 1)));
+
+		// split_to_helper<Rest...>(splits, index+1)
+		//
+		// auto ret = std::tuple_cat(std::make_tuple(T{}), split_to_helper<Rest...>(splits));
+		return ret;
+	}
+
+	template<typename T, typename... Rest>
+	auto split_to(std::string_view str, std::string_view delims = "\n", ignore option = ignore::none)
+	{
+		int pack_size = 1 + sizeof...(Rest);
+
+		std::string new_str{strip(str, option)};
+
+		const auto s = split(new_str, delims, option);
+
+		if (pack_size != s.size())
+		{
+			dbgln("Delimiter \"{}\" split input \"{}\" to {} parts. You gave {} types. Must be same size.\nSplit parts:\n",
+				  delims,
+				  str,
+				  s.size(),
+				  pack_size);
+			for (const auto &[idx, l] : s | std::views::enumerate)
+				dbgln("{}. \"{}\"", idx, l);
+			dbgln("");
+
+			throw std::range_error(std::format(
+				"Delimiter '{}' split input to {} parts. You wanted {} types to split to. Must be same size", delims, s.size(), pack_size));
+		}
+		if constexpr (sizeof...(Rest) > 0)
+			return split_to_helper<T, Rest...>(s);
+		else
+			return split_to_helper<T>(s);
 	}
 }
