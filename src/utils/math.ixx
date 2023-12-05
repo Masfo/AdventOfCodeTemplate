@@ -148,6 +148,39 @@ export
 		return abs(a * (b / gcd(a, b)));
 	}
 
+	// https://en.wikipedia.org/wiki/Category:Figurate_numbers
+
+	template<typename T = i64>
+	T triangular_number(T n)
+	{
+		return (n * (n + 1)) / 2;
+	}
+
+	template<typename T = i64>
+	T square_number(T n)
+	{
+		return n * n;
+	}
+
+	template<typename T = i64>
+	inline constexpr T hexagonal_number(T n) noexcept
+	{
+		// H(n) = 3n^2 - 3n + 1
+		return (3 * n * n) - (3 * n) + 1;
+	}
+
+	template<typename T = i64>
+	T heptagonal_number(T n)
+	{
+		return (n * (5 * n - 3)) / 2;
+	}
+
+	template<typename T = i64>
+	T octagonal_number(T n)
+	{
+		return n * (3 * n - 2);
+	}
+
 	// line
 	struct line
 	{

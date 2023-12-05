@@ -187,7 +187,7 @@ struct vec final
 	auto operator<=>(const vec_type&) const = default;
 
 	// methods
-	[[nodiscard("Use the minimum value")]] constexpr vec_type& min(const vec_type& other) const noexcept
+	[[nodiscard("Use the minimum value")]] constexpr vec_type min(const vec_type& other) const noexcept
 	{
 		vec_type result{0};
 		for (size_t i = 0; i < length; ++i)
@@ -196,7 +196,7 @@ struct vec final
 		return result;
 	}
 
-	[[nodiscard("Use the maximum value")]] constexpr vec_type& max(const vec_type& other) const noexcept
+	[[nodiscard("Use the maximum value")]] constexpr vec_type max(const vec_type& other) const noexcept
 	{
 		vec_type result{0};
 		for (size_t i = 0; i < length; ++i)
@@ -205,7 +205,7 @@ struct vec final
 		return result;
 	}
 
-	[[nodiscard("Use the absolute value")]] constexpr vec_type& abs() const noexcept
+	[[nodiscard("Use the absolute value")]] constexpr vec_type abs() const noexcept
 	{
 		vec_type result{0};
 		for (size_t i = 0; i < length; ++i)
