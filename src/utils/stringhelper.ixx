@@ -389,7 +389,7 @@ export
 		if constexpr (sizeof...(args) > 0 && std::is_same_v<T, std::string>)
 		{
 			std::vector<U> a{first, args...};
-			return std::accumulate(a.begin(), a.end(), std::string(""));
+			return std::ranges::fold_left(a, std::string(""), std::plus{});
 		}
 		else if constexpr (std::is_integral_v<T> && std::is_convertible_v<U, std::string>)
 		{
