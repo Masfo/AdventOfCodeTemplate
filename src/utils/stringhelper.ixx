@@ -379,6 +379,96 @@ export
 	// ################################
 	// to
 
+	template<typename T, typename... Ts>
+	using AllSame = std::enable_if_t<std::conjunction_v<std::is_same<T, Ts>...>>;
+
+	template<typename T, typename U, typename... Us>
+	auto concat(const U first, const Us... args)->T
+	{
+
+		if constexpr (sizeof...(args) > 0 && std::is_same_v<T, std::string>)
+		{
+			std::vector<U> a{first, args...};
+			return std::accumulate(a.begin(), a.end(), std::string(""));
+		}
+		else if constexpr (std::is_integral_v<T> && std::is_convertible_v<U, std::string>)
+		{
+			std::vector<U> a{first, args...};
+
+			return to_number<T>(std::ranges::fold_left(a, std::string(""), std::plus{}));
+		}
+		else if constexpr (std::is_integral_v<T> && std::is_integral_v<U>)
+		{
+			std::vector<U>           a{first, args...};
+			std::vector<std::string> b;
+
+			for (const auto &i : a)
+				b.emplace_back(std::to_string(i));
+
+			auto cc = std::ranges::fold_left(b, std::string(""), std::plus{});
+
+			return to_number<T>(cc);
+		}
+		else if constexpr (sizeof...(args) == 0 && std::is_integral_v<T> && std::is_same_v<U, std::vector<std::string>>)
+		{
+			static_assert(sizeof...(args) == 0, "Only one parameter please");
+
+			std::vector<std::string> ret;
+			for (const auto &i : first)
+				ret.emplace_back(i);
+			std::string cc = std::ranges::fold_left(ret, std::string(""), std::plus{});
+
+			return to_number<T>(cc);
+		}
+		else if constexpr (sizeof...(args) == 0 && std::is_same_v<T, i64> && std::is_same_v<U, std::vector<i64>>)
+		{
+
+			std::vector<std::string> ret;
+			for (const auto &i : first)
+				ret.emplace_back(std::to_string(i));
+			auto cc = std::ranges::fold_left(ret, std::string(""), std::plus{});
+			return to_number<T>(cc);
+		}
+		else if constexpr (sizeof...(args) == 0, std::is_same_v<T, std::string> && std::is_same_v<U, std::vector<std::string>>)
+		{
+			return std::ranges::fold_left(first, std::string(""), std::plus{});
+		}
+		else if constexpr (sizeof...(args) == 0, std::is_same_v<T, std::string> && std::is_same_v<U, std::vector<i64>>)
+		{
+			std::vector<std::string> ret;
+			for (const auto &i : first)
+				ret.emplace_back(std::to_string(i));
+			return std::ranges::fold_left(ret, std::string(""), std::plus{});
+		}
+		else if constexpr (sizeof...(args) == 0, std::is_same_v<T, std::vector<i64>> && std::is_same_v<U, std::vector<i64>>)
+		{
+			std::vector<i64>         ret;
+			std::vector<std::string> a;
+
+			for (const auto &i : first)
+				a.emplace_back(std::to_string(i));
+
+			std::string cc = std::ranges::fold_left(a, std::string(""), std::plus{});
+
+			ret.emplace_back(to_number(cc));
+
+			return ret;
+		}
+		else
+		{
+			static_assert(true, "Not implemented");
+			std::unreachable();
+		}
+	}
+
+	template<typename T = i64, typename... Args>
+	auto to_vec(const Args... args)
+	{
+		std::vector<T> ret{args...};
+
+		return ret;
+	}
+
 	std::set<char> to_set(std::string_view str) noexcept { return {str.begin(), str.end()}; }
 
 	std::unordered_set<char> to_unordered_set(std::string_view str) noexcept { return {str.begin(), str.end()}; }
