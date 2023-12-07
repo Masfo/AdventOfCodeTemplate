@@ -90,7 +90,7 @@ export
 
 	// move index
 	template<typename T>
-	void move_index(T & v, int oldIndex, int newIndex)
+	void move_index(T & v, size_t oldIndex, size_t newIndex)
 	{
 		if (oldIndex > v.size() || newIndex > v.size() || oldIndex == newIndex)
 			return;
