@@ -93,12 +93,7 @@ export
 
 	// [](ivec2, char c) { return true; };
 	// grid_is_
-	template<typename T = char>
-
-	bool grid_is_ascii(const ivec2, const T c)
-	{
-		return isrange<char>(c, 'a', 'z') && isrange<char>(c, 'A', 'Z');
-	};
+	bool grid_is_ascii(const ivec2, const char c) { return isascii<char>(c); };
 
 	bool grid_is_digit(const ivec2, char c) { return isrange<char>(c, '0', '9'); };
 
