@@ -93,13 +93,19 @@ export
 
 	// [](ivec2, char c) { return true; };
 	// grid_is_
-	auto grid_is_digit = [](ivec2, char c) { return isdigit(c); };
-	auto grid_is_ascii = [](ivec2, char c) { return isascii(c); };
+	template<typename T = char>
+
+	bool grid_is_ascii(const ivec2, const T c)
+	{
+		return isrange<char>(c, 'a', 'z') && isrange<char>(c, 'A', 'Z');
+	};
+
+	bool grid_is_digit(const ivec2, char c) { return isrange<char>(c, '0', '9'); };
 
 	//
 
 	// grid
-	template<typename T = char>
+	template<typename T>
 	class grid
 	{
 	public:
@@ -109,6 +115,8 @@ export
 		using FunctionOp = const std::function<void(const ivec2, const T)>;
 		using SearchOp   = const std::function<bool(const ivec2, const ivec2)>;
 		using FindOp     = const std::function<bool(const ivec2, const T)>;
+
+		using type = T;
 
 		grid() = default;
 
@@ -665,7 +673,7 @@ export
 				{
 					if (auto v = at(ivec2{x, y}); v.has_value())
 					{
-						dbg("{}", *v);
+						dbg("{}", as<char>(*v));
 					}
 					else
 					{

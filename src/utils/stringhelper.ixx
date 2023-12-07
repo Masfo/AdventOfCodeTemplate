@@ -84,10 +84,23 @@ export
 	std::string      strip(std::string_view str, ignore option) noexcept;
 	std::string_view trim(std::string_view s) noexcept;
 
-	bool isrange(char c, char a, char b) noexcept { return (c >= a) && (c <= b); }
+	template<typename T = char>
+	bool isrange(T c, T a, T b) noexcept
+	{
+		return (c >= a) && (c <= b);
+	}
 
-	bool isdigit(char c) noexcept { return isrange(c, '0', '9'); }
-	bool isascii(char c) noexcept { return isrange(c, 'a', 'z') or isrange(c, 'A', 'Z'); }
+	template<typename T = char>
+	bool isdigit(T c) noexcept
+	{
+		return isrange(c, '0', '9');
+	}
+
+	template<typename T = char>
+	bool isascii(T c) noexcept
+	{
+		return isrange(c, 'a', 'z') or isrange(c, 'A', 'Z');
+	}
 
 	template<typename T = i64>
 	inline T constexpr to_number(std::string_view str, int base = 10)
