@@ -1,8 +1,9 @@
 @echo off
 
 rem Change the year
-set YEAR=2023
-set URL="https://adventofcode.com/%YEAR%/day"
+set YEAR=%1
+set DAY=%2
+
 
 rem Session cookie
 set SESSION=
@@ -12,22 +13,27 @@ echo Session key is not set.
 exit /b
 )
 
-if [%1] == [] (
-echo Day not set. example: getinput 1
+if [%YEAR%] == [] (
+echo YEar not set. example: getinput 2023 1
 exit /b
 )
 
+if [%DAY%] == [] (
+echo Day not set. example: getinput 2023 1
+exit /b
+)
 
-Title AOC %YEAR% Day %1 Input
-echo Get AOC %YEAR% Day %1 input...
+set URL="https://adventofcode.com/%YEAR%/day/%DAY%"
+
+Title AOC %YEAR% Day %DAY% Input
+echo Get AOC %YEAR% Day %DAY% input...
 
 @if not exist "input" mkdir "input"
-curl --silent --cookie "session=%SESSION%" -A "github.com/Masfo/AdventOfCodeTemplate/" %URL%/%1/input -o input\day%1.txt
-dir /C /N input\day%1.txt | find "day%1.txt"
+curl --silent --cookie "session=%SESSION%" -A "github.com/Masfo/AdventOfCodeTemplate/" %URL%/input -o input\day%day%.txt
+dir /C /N input\day%DAY%.txt | find "day%DAY%.txt"
 
 @echo. 2> input\day%1test.txt
 rem explorer input\day%1test.txt
 
 rem explorer input\day%1.txt
-
 
