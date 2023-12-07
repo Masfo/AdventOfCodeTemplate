@@ -90,8 +90,11 @@ export
 
 	// move index
 	template<typename T>
-	void move_index(T & v, size_t oldIndex, size_t newIndex)
+	void move_index(T & v, int oldIndex, int newIndex)
 	{
+		if (oldIndex > v.size() || newIndex > v.size() || oldIndex == newIndex)
+			return;
+
 		if (oldIndex > newIndex)
 			std::rotate(v.rend() - oldIndex - 1, v.rend() - oldIndex, v.rend() - newIndex);
 		else
@@ -99,8 +102,15 @@ export
 	}
 
 	template<typename T, typename U>
-	size_t index_of(T & v, U find)
+	int index_of(T & v, U find)
 	{
-		return std::ranges::distance(v.begin(), std::ranges::find(v, find));
+		auto result = std::ranges::find(v, find);
+		if (result == v.end())
+		{
+			dbgln("index_of: could not find '{}' from container", find);
+			return std::numeric_limits<int>::max();
+		}
+
+		return std::ranges::distance(v.begin(), result);
 	}
 }
