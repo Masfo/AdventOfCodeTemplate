@@ -90,7 +90,7 @@ export
 
 	// move index
 	template<typename T>
-	void move_index(std::vector<T> & v, size_t oldIndex, size_t newIndex)
+	void move_index(T & v, size_t oldIndex, size_t newIndex)
 	{
 		if (oldIndex > newIndex)
 			std::rotate(v.rend() - oldIndex - 1, v.rend() - oldIndex, v.rend() - newIndex);
@@ -98,8 +98,8 @@ export
 			std::rotate(v.begin() + oldIndex, v.begin() + oldIndex + 1, v.begin() + newIndex + 1);
 	}
 
-	template<typename T>
-	size_t index_of(std::vector<T> & v, T find)
+	template<typename T, typename U>
+	size_t index_of(T & v, U find)
 	{
 		return std::ranges::distance(v.begin(), std::ranges::find(v, find));
 	}
