@@ -1,8 +1,9 @@
 module;
 
 export module aoc.types;
-import std;
 
+import std;
+import aoc.debug;
 export
 {
 	using i64 = std::int64_t;
@@ -68,9 +69,29 @@ export
 	}
 
 	template<typename T, typename U>
-	T as(U u)
+	T as(U value)
 	{
-		return static_cast<T>(u);
+		if constexpr (std::is_same_v<T, U>)
+			return value;
+		else
+		{
+			if ((static_cast<T>(value) <= static_cast<U>(std::numeric_limits<T>::max())) &&
+				(static_cast<T>(value) > static_cast<U>(std::numeric_limits<T>::min())))
+			{
+				return static_cast<T>(value);
+			}
+			else
+			{
+				assert_msg(false,
+						   std::format("Could not convert value '{}' safely. Target can only hold {}...{}. Trying to fit {}",
+									   value,
+									   std::numeric_limits<T>::min(),
+									   std::numeric_limits<T>::max(),
+									   value));
+
+				return std::numeric_limits<T>::max();
+			}
+		}
 	}
 
 	template<typename T>
@@ -213,18 +234,18 @@ export
 
 
 
-#define STD_HASH(T, ...)                                                                                                                   \
-	namespace std                                                                                                                          \
-	{                                                                                                                                      \
-		template <> struct hash<T>                                                                                                         \
-		{                                                                                                                                  \
-			size_t operator()(const T &value) const                                                                                        \
-			{                                                                                                                              \
-				i64 result = 0;                                                                                                            \
-				hash_combine(result, __VA_ARGS__);                                                                                         \
-				return result;                                                                                                             \
-			}                                                                                                                              \
-		};                                                                                                                                 \
+#define STD_HASH(T, ...) \
+	namespace std \
+	{ \
+		template <> struct hash<T> \
+		{ \
+			size_t operator()(const T &value) const \
+			{ \
+				i64 result = 0; \
+				hash_combine(result, __VA_ARGS__); \
+				return result; \
+			} \
+		}; \
 	}
 
 

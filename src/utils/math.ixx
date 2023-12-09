@@ -141,6 +141,13 @@ export
 		return std::modulus(std::modulus(a, b), args...);
 	}
 
+	// vlcm
+	template<class A, class... Args>
+	inline constexpr A vlcm(A a, A b, Args... args)
+	{
+		return std::lcm(std::lcm(a, b), args...);
+	}
+
 	// lcm
 	template<typename T>
 	inline constexpr T lcm_compute(const T a, const T b) noexcept

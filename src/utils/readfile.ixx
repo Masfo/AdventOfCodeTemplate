@@ -109,12 +109,10 @@ export
 	}
 
 	template<typename T>
-	std::vector<T> read_lines_as(std::string_view filename, std::string_view delims = "\n", include_emptys ie = include_emptys::no)
+	std::vector<std::vector<T>> read_lines_as(std::string_view filename, std::string_view delims = " ")
 	{
-		if constexpr (std::is_convertible_v<T, std::string>)
-			return read_lines_delimiter(filename, delims, ie);
-		else if constexpr (std::is_integral_v<T> || std::is_floating_point_v<T>)
-			return read_lines_integers_delimiter(filename, delims);
+		if constexpr (std::is_integral_v<T>)
+			return read_lines_integers_delimiter<T>(filename, delims);
 		else
 		{
 			static_assert(true, "Not implemented");
@@ -159,15 +157,16 @@ export
 		return ret;
 	}
 
-	std::vector<i64> read_lines_integers_delimiter(std::string_view filename, std::string_view delim = ",\n")
+	template<typename T = i64>
+	std::vector<std::vector<T>> read_lines_integers_delimiter(std::string_view filename, std::string_view delim = " ")
 	{
-		auto v = read_lines_delimiter(filename, delim);
+		const auto lines = read_lines(filename);
 
-		std::vector<i64> ret;
-		ret.reserve(v.size());
+		std::vector<std::vector<T>> ret;
+		ret.reserve(lines.size());
 
-		for (const auto &i : v)
-			ret.push_back(to_number<i64>(trim(i).data()));
+		for (const auto &line : lines)
+			ret.emplace_back(split<T>(line, delim));
 
 		return ret;
 	}

@@ -201,6 +201,103 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+
+
+    // Shunting Yard, 2020, Day 18
+	// parsing 2021 Day 10
+
+    void apply(std::vector<u64> &a, std::vector<char> &op)
+	{
+		auto v1 = a.back(); a.pop_back();
+		auto v2 = a.back(); a.pop_back();
+		a.push_back(op.back() == '+' ? v1 + v2 : v1 * v2);
+		op.pop_back();
+	}
+
+	u64 shunting_yard(const std::vector<std::string> &lines, bool part2 = false)
+	{
+		static std::unordered_map<char, i32> precedence;
+		precedence['+'] = 2;
+		precedence['*'] = part2 ? 0 : 2;
+		precedence[')'] = -1;
+
+		u64 sum = 0;
+		for(const auto &line : lines)
+		{
+			std::vector<char> operators;
+			std::vector<u64> values;
+			for(const auto &character : line)
+			{
+				switch(character)
+				{
+					case ' ': continue;
+					case '(': operators.push_back(character); continue;
+					case ')':
+					case '+':
+					case '*':
+					{
+						while(!operators.empty() && operators.back() != '(' && (precedence[operators.back()] >= precedence[character]))
+							apply(values, operators);
+
+						if(character == ')')
+						{
+							operators.pop_back();
+							continue;
+						}
+
+						operators.push_back(character);
+						continue;
+					}
+					default: if(std::isdigit(character)) values.push_back((u64)character - '0'); continue;
+				}
+			}
+
+			while(!operators.empty())
+				apply(values, operators);
+
+			sum += values.back();
+		}
+		return sum;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// Chinese Remainder Theorem, AOC 2020 Day 13
+	auto part2b = [&minute_pairs]() -> u64
+	{
+		const u64 M = accumulate(minute_pairs.begin(), minute_pairs.end(), 1ull, [](const auto &a, const auto &b)
+		{
+			return a * b.second;
+		});
+
+		u64 timestamp = 0;
+		for(const auto &id : minute_pairs)
+		{
+			const u64 m = id.second;
+			const u64 a = (m - id.first % m) % m;
+			const u64 b = M / m;
+			const u64 p = math::modinv(b, m);
+			timestamp += a * b * p;
+		}
+		return timestamp % M;
+	};
+
+
+
+
+
         struct ConvertRange
         {
         	i64 dst;

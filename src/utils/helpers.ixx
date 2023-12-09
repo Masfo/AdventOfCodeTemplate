@@ -1,6 +1,9 @@
 export module aoc.helpers;
-import aoc.debug;
 import std;
+import aoc.debug;
+import aoc.stringhelper;
+import aoc.types;
+
 export
 {
 	// sort
@@ -113,4 +116,142 @@ export
 
 		return std::ranges::distance(v.begin(), result);
 	}
+
+	template<typename T>
+	bool contains(const std::vector<T> &v, const auto &value) noexcept
+	{
+		return std::find(v.begin(), v.end(), value) != v.end();
+	}
+
+	// Shunting Yard
+
+	auto apply_binary_op(std::deque<i64> & values, std::vector<char> & op)->i64
+	{
+		assert_msg(values.size() >= 2, "There should be two values for binary operations");
+
+		auto v1 = values.front();
+		values.pop_front();
+
+		auto v2 = values.front();
+		values.pop_front();
+
+		i64 calc = 0;
+		switch (op.back())
+		{
+			case '+': calc = v1 + v2; break;
+			case '-': calc = v1 - v2; break;
+			case '*': calc = v1 * v2; break;
+			case '/': calc = v1 / v2; break;
+			case '%': calc = v1 % v2; break;
+
+			default: panic("'{}' not implemented", op.back());
+		}
+		op.pop_back();
+		values.push_back(calc);
+		return calc;
+	};
+	using PrecedenceType = std::unordered_map<char, i32>;
+	/*
+		default_precedence['*'] = 10;
+		default_precedence['/'] = 10;
+		default_precedence['%'] = 10;
+
+		default_precedence['+'] = 5;
+		default_precedence['-'] = 5;
+
+		default_precedence['('] = 0;
+		default_precedence[')'] = 0;
+	*/
+
+	auto shunting(std::string_view input, const PrecedenceType &precedence)->i64
+	{
+		std::vector<char> operators;
+		std::deque<i64>   values;
+		for (int i = 0; i < input.size(); ++i)
+		{
+			char c = input[i];
+			switch (c)
+			{
+				case ' ': continue;
+				case '(': operators.push_back(c); continue;
+				case ')':
+				case '+':
+				case '-':
+				case '*':
+				case '%':
+				case '/':
+				{
+					while (!operators.empty() && operators.back() != '(' && (precedence.at(operators.back()) >= precedence.at(c)))
+						apply_binary_op(values, operators);
+
+					if (c == ')')
+					{
+						operators.pop_back();
+						continue;
+					}
+
+					operators.push_back(c);
+					continue;
+				}
+				default:
+				{
+					assert_msg(isdigit(c), std::format("Only digits supported. Trying to parse '{}'", c));
+
+					i64 digit = 0;
+					while (isdigit(c) && i <= input.size())
+					{
+						digit = digit * 10 + to_number(c);
+
+						if (i + 1 >= input.size())
+							break;
+						if (!isdigit(input[i + 1]))
+							break;
+
+						c = input[++i];
+					}
+
+					values.push_back(digit);
+					continue;
+				}
+			}
+		}
+
+		while (!operators.empty())
+			apply_binary_op(values, operators);
+
+		assert_msg(values.size() == 1, "There should be just one answer on the stack");
+
+		return values.back();
+	};
+
+	class pratt final
+	{
+	public:
+		enum TokenType
+		{
+			NUMBER,
+			OPERATOR,
+			PAREN_OPEN,
+			PAREN_CLOSE
+		};
+
+		struct token
+		{
+			TokenType   type;
+			std::string value;
+		};
+
+		pratt(std::string_view i)
+			: input(i)
+		{
+		}
+
+		auto parse() { return parse_expression(0); }
+
+		auto parse_expression(int precedence) -> i64 { return precedence; }
+
+	private:
+		std::string input;
+		i64         pos;
+	};
 }

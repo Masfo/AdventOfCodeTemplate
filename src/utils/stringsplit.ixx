@@ -83,7 +83,7 @@ export
 	}
 
 	template<typename T>
-	auto split(const std::string_view str, const std::string_view delims, ignore option = ignore::none)
+	auto split(const std::string_view str, const std::string_view delims = " ", ignore option = ignore::none)
 	{
 		if constexpr (std::is_same_v<T, char>)
 		{
