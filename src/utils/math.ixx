@@ -126,6 +126,18 @@ export
 		}
 	}
 
+	template<typename T = i64>
+	T sum(const auto &container)
+	{
+		return std::ranges::fold_left(container, 0, std::plus{});
+	}
+
+	template<typename T = i64>
+	T product(const auto &container)
+	{
+		return std::ranges::fold_left(container, 1, std::multiplies{});
+	}
+
 	bool between(i64 value, i64 a, i64 b) noexcept { return value >= a && value <= b; }
 
 	template<std::integral T = i64>
