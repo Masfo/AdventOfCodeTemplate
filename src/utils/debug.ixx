@@ -105,6 +105,17 @@ export
 		{
 			trace("PANIC: {}", fmt);
 		}
+
+		auto traces = std::stacktrace::current();
+
+		for (const auto &traceline : traces)
+		{
+			if (traceline.source_file().contains(__FILE__))
+				continue;
+
+			dbgln("{}({}): {}", traceline.source_file(), traceline.source_line(), traceline.description());
+		}
+
 		if (IsDebuggerPresent())
 		{
 			DebugBreak();
@@ -114,6 +125,18 @@ export
 	}
 
 	[[noreturn]] void panic() noexcept { panic(""); }
+
+	// TODO
+	void todo(const std::source_location &loc = std::source_location::current()) noexcept
+	{
+		dbgln("TODO:");
+		dbgln("{}({}): {}", loc.file_name(), loc.line(), loc.function_name());
+
+		if (IsDebuggerPresent())
+		{
+			DebugBreak();
+		}
+	}
 
 	// assert
 

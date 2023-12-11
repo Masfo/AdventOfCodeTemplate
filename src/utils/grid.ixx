@@ -107,9 +107,16 @@ export
 		// [&](ivec2 pos, char c)
 		using GridValue = std::pair<ivec2, T>;
 
-		using FunctionOp = const std::function<void(const ivec2, const T)>;
-		using SearchOp   = const std::function<bool(const ivec2, const ivec2)>;
-		using FindOp     = const std::function<bool(const ivec2, const T)>;
+		using FunctionOp  = const std::function<void(const ivec2, const T)>;
+		using SearchOp    = const std::function<bool(const ivec2, const ivec2)>;
+		using FindOp      = const std::function<bool(const ivec2, const T)>;
+		using FloodFillOp = const std::function<bool(const ivec2, const T)>;
+
+		using row   = std::vector<std::pair<ivec2, T>>;
+		using RowOp = const std::function<void(const row &)>;
+
+		using column   = std::vector<std::pair<ivec2, T>>;
+		using ColumnOp = const std::function<void(const column &)>;
 
 		using type = T;
 
@@ -177,8 +184,9 @@ export
 				min_grid = min(min_grid, pos);
 				max_grid = max(max_grid, pos);
 			}
+			max_grid += ivec2{1, 1};
 
-			resolution = ivec2{min_grid.x() + max_grid.x(), min_grid.y() + max_grid.y()};
+			resolution = ivec2{min_grid.x() + max_grid.x() + 1, min_grid.y() + max_grid.y() + 1};
 		}
 
 		auto get_bounds() -> std::tuple<ivec2, ivec2> { return {min_grid, max_grid}; }
@@ -321,6 +329,12 @@ export
 			return ret;
 		}
 
+		void fill(T value)
+		{
+			for (auto &i : m_grid | std::views::values)
+				i = value;
+		}
+
 		void fill_rect(ivec2 a, ivec2 b, T value)
 		{
 			for (auto y = a.y(); y <= b.y(); ++y)
@@ -335,7 +349,13 @@ export
 
 		void set_border(T c)
 		{
-			//
+			auto minb = min_bound() - ivec2{1, 1};
+			auto maxb = max_bound() + ivec2{1, 1};
+
+			setline(minb, ivec2{minb[0], maxb[1]}, c);
+			setline(minb, ivec2{maxb[0], minb[1]}, c);
+			setline(ivec2{maxb[0], minb[1]}, maxb, c);
+			setline(maxb, ivec2{minb[0], maxb[1]}, c);
 		}
 
 		void setline(ivec2 v1, ivec2 v2, T c)
@@ -353,6 +373,55 @@ export
 				v1 += delta;
 				set(v1, c);
 			}
+		}
+
+		// for_each_row
+		/*
+			g.for_each_row(
+			[](const grid<char>::row &row)
+			{
+				//
+			});
+
+			const std::function<void(const row &)>;
+		*/
+		void for_each_row(const RowOp &op)
+		{
+			for (auto y = min_grid.y(); y < max_grid.y(); ++y)
+			{
+				row ret;
+				for (auto x = min_grid.x(); x < max_grid.x(); ++x)
+				{
+					if (auto v = at(ivec2{x, y}); v)
+						ret.push_back({ivec2{x, y}, *v});
+				}
+				op(ret);
+			}
+			calc_bounds();
+		}
+
+		/*
+			g.for_each_column(
+			[](const grid<char>::column &col)
+			{
+				//
+			});
+
+			const std::function<void(const column &)>;
+		*/
+		void for_each_column(const ColumnOp &op)
+		{
+			for (auto x = min_grid.x(); x < max_grid.x(); ++x)
+			{
+				column ret;
+				for (auto y = min_grid.y(); y < max_grid.y(); ++y)
+				{
+					if (auto v = at(ivec2{x, y}); v)
+						ret.push_back({ivec2{x, y}, *v});
+				}
+				op(ret);
+			}
+			calc_bounds();
 		}
 
 		void for_each(const FunctionOp &op) const
@@ -481,9 +550,16 @@ export
 			return BFS_n_way_distance(start, end, directions_4_way, op);
 		}
 
+		i64 BFS_8way_distance(ivec2 start, ivec2 end, const SearchOp &op = nullptr)
+		{
+			return BFS_n_way_distance(start, end, directions_8_way, op);
+		}
+
 		// DFS
 
-		//
+		// Floodfill
+		void floodfill(ivec2 start, T c, const FindOp &op) { panic("todo"); }
+
 		// ########################################################################
 		void rotate_90()
 		{
@@ -549,6 +625,7 @@ export
 		}
 
 		// Find all with predicate
+		// const std::function<bool(const ivec2, const T)>;
 		auto find_all(const FindOp &op) const
 		{
 			std::vector<std::pair<ivec2, T>> points;
@@ -619,6 +696,66 @@ export
 		// contains
 		bool contains(ivec2 pos) const { return m_grid.contains(pos); }
 
+		// row_from
+
+		row row_at(const ivec2 pos) const
+		{
+			row       ret;
+			const i64 y = pos[1];
+
+			for (auto x = 0; x < max_grid.x(); ++x)
+			{
+				if (auto v = at(ivec2{x, y}); v)
+					ret.push_back({ivec2{x, y}, *v});
+			}
+
+			return ret;
+		}
+
+
+		row row_from(const ivec2 pos) const
+		{
+			row       ret;
+			const i64 y = pos[1];
+
+			for (auto x = pos[0]; x < max_grid.x(); ++x)
+			{
+				if (auto v = at(ivec2{x, y}); v)
+					ret.push_back({ivec2{x, y}, *v});
+			}
+
+			return ret;
+		}
+
+		column column_from(const ivec2 pos) const
+		{
+
+			column    ret;
+			const i64 x = pos[0];
+			//
+			for (auto y = pos[1]; y <= max_grid.y(); ++y)
+			{
+				if (auto v = at(ivec2{x, y}); v)
+					ret.push_back({ivec2{x, y}, *v});
+			}
+			return ret;
+		}
+
+		
+		column column_at(const ivec2 pos) const
+		{
+
+			column    ret;
+			const i64 x = pos[0];
+			//
+			for (auto y = 0; y <= max_grid.y(); ++y)
+			{
+				if (auto v = at(ivec2{x, y}); v)
+					ret.push_back({ivec2{x, y}, *v});
+			}
+			return ret;
+		}
+
 		// at
 		std::optional<T> at(ivec2 pos) const
 		{
@@ -656,11 +793,31 @@ export
 				set(pos, value);
 		}
 
+		void move(ivec2 pos, ivec2 to, T no_value)
+		{
+			if (is_valid(pos))
+			{
+
+				T old_value = *at(pos);
+
+				if (!is_valid(to))
+					set(to, no_value);
+
+				T to_value = *at(to);
+
+				set(pos, to_value);
+				set(to, old_value);
+			}
+		}
+
+		bool in_bounds(ivec2 pos) const { return is_valid(pos); }
+
 		void unset(ivec2 pos) { m_grid.erase(pos); }
 
 		// print
 		void print()
 		{
+			calc_bounds();
 			dbgln("Bounds: {} - {}", min_bound(), max_bound());
 			for (auto y = min_grid.y(); y <= max_grid.y(); ++y)
 			{
@@ -705,6 +862,8 @@ export
 
 		ivec2::type max_x() const { return max_grid[0] + 1; };
 
+		ivec2::type area() const { return resolution[0] * resolution[1]; }
+
 	private:
 		ivec2 resolution{};
 		ivec2 min_grid{MAX_IVEC2};
@@ -712,6 +871,61 @@ export
 
 		std::unordered_map<ivec2, T> m_grid;
 		bool                         m_locked{false};
+	};
+
+	// grid2d
+	struct grid2d final
+	{
+		grid2d(std::string_view filename) { read(filename); }
+
+		void read(std::string_view filename)
+		{
+			auto lines = read_lines(filename);
+			width      = lines[0].size();
+			height     = lines.size();
+
+			data.resize(height);
+			for (auto &d : data)
+				d.resize(width);
+
+			ivec2 pos;
+			for (const auto &line : lines)
+			{
+				for (const auto &c : line)
+				{
+					data[pos.y()][pos.x()] = c;
+					pos[0]++;
+				}
+				pos[1]++;
+				pos[0] = 0;
+			}
+		}
+
+		char operator()(i64 x, i64 y) const noexcept
+		{
+			if ((x >= 0 && x < width) && (y >= 0 && y < height))
+			{
+				return data[y][x];
+			}
+			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
+			static char ret = '\0';
+			return ret;
+		}
+
+		char &operator()(i64 x, i64 y) noexcept
+		{
+			if ((x >= 0 && x < width) && (y >= 0 && y < height))
+			{
+				return data[y][x];
+			}
+			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
+			static char ret = '\0';
+			return ret;
+		}
+
+		std::vector<std::vector<char>> data;
+		i64                            width{0};
+		i64                            height{0};
 	};
 
 	// binary_grid
