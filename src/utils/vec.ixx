@@ -405,60 +405,6 @@ export
 	{
 		return v.product<T>();
 	}
-
-#if 0
-	// Scalar add
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the added value")]] inline constexpr vec<T, len> operator+(const vec<T, len>& lhs, const U scalar)
-	{
-		return lhs + vec<T, len>(scalar);
-	}
-
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the added value")]] inline constexpr vec<T, len> operator+(const U scalar, const vec<T, len>& rhs)
-	{
-		return vec<T, len>(scalar) + rhs;
-	}
-
-	// Scalar sub
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the subtracted value")]] inline constexpr vec<T, len> operator-(const vec<T, len>& lhs, const U scalar)
-	{
-		return lhs - vec<T, len>(scalar);
-	}
-
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the added value")]] inline constexpr vec<T, len> operator-(const U scalar, const vec<T, len>& rhs)
-	{
-		return vec<T, len>(scalar) - rhs;
-	}
-
-	// Scalar mul
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the multiplied value")]] inline constexpr vec<T, len> operator*(const vec<T, len>& lhs, const U scalar)
-	{
-		return lhs * vec<T, len>(scalar);
-	}
-
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the multiplied value")]] inline constexpr vec<T, len> operator*(const U scalar, const vec<T, len>& rhs)
-	{
-		return vec<T, len>(scalar) * rhs;
-	}
-
-	// Scalar div
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the divided value")]] inline constexpr vec<T, len> operator/(const vec<T, len>& lhs, const U scalar)
-	{
-		return lhs / vec<T, len>(scalar);
-	}
-
-	template<typename T, typename U, size_t len>
-	[[nodiscard("Use the divided value")]] inline constexpr vec<T, len> operator/(const U scalar, const vec<T, len>& rhs)
-	{
-		return vec<T, len>(scalar) / rhs;
-	}
-#endif
 }
 
 // STD specials

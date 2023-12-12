@@ -74,7 +74,8 @@ export
 
 		u64 distance(ivec2 from = ZERO_IVEC2) const noexcept { return position.distance(from); };
 	};
-}
+
+} // export
 
 #if 0
 class Walker final

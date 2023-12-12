@@ -235,6 +235,12 @@ export
 		}
 	}
 
+	// count
+	i64 count(std::string_view str, std::string_view interests) noexcept
+	{
+		return std::ranges::count_if(str, [&interests](char c) { return interests.contains(c); });
+	}
+
 	// replace
 	std::string replace(std::string & subject, const std::string_view search, std::string_view replace) noexcept
 	{
