@@ -15,6 +15,7 @@ export import aoc.helpers;
 export import aoc.types;
 export import aoc.tree;
 export import aoc.grid;
+export import aoc.grid2d;
 export import aoc.walker;
 
 export import aoc.sprite;

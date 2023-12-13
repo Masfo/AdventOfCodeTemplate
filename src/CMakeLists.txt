@@ -36,10 +36,12 @@ target_sources(aoc
     utils/types.ixx
     utils/debug.ixx
     utils/math.ixx 
+	utils/polygon.ixx
 	utils/vec.ixx
 	utils/walker.ixx
 	utils/tree.ixx
 	utils/grid.ixx
+	utils/grid2d.ixx
 	utils/graph.ixx
 	utils/helpers.ixx
 

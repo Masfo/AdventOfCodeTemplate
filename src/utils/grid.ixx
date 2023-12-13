@@ -7,6 +7,7 @@ import aoc.readfile;
 import aoc.vec;
 import aoc.debug;
 import aoc.stringhelper;
+import aoc.stringsplit;
 
 export
 {
@@ -145,14 +146,12 @@ export
 		{
 		}
 
-		void read(std::string_view filename)
+		void read_grid_lines(std::string_view lines)
 		{
 			reset();
-
-			auto lines = read_lines(filename);
 			// dbgln("Reading '{}' as {}x{} grid.", filename, lines[0].size() - 1, lines.size() - 1);
 			ivec2 pos;
-			for (const auto &row : lines)
+			for (const auto &row : split(lines))
 			{
 				pos[0] = 0;
 				for (const auto &c : row)
@@ -163,6 +162,14 @@ export
 				pos[1]++;
 			}
 			calc_bounds();
+		}
+
+		void read(std::string_view filename)
+		{
+			reset();
+
+			auto lines = read_lines(filename);
+			read_grid_lines(lines[0]);
 		}
 
 		void read_from_vector(const std::vector<ivec2> &points, T value)
@@ -184,7 +191,7 @@ export
 				min_grid = min(min_grid, pos);
 				max_grid = max(max_grid, pos);
 			}
-			max_grid += ivec2{1, 1};
+			// max_grid += ivec2{1, 1};
 
 			resolution = ivec2{min_grid.x() + max_grid.x() + 1, min_grid.y() + max_grid.y() + 1};
 		}
@@ -703,7 +710,7 @@ export
 			row       ret;
 			const i64 y = pos[1];
 
-			for (auto x = 0; x < max_grid.x(); ++x)
+			for (auto x = 0; x < max_grid.x() + 1; ++x)
 			{
 				if (auto v = at(ivec2{x, y}); v)
 					ret.push_back({ivec2{x, y}, *v});
@@ -712,6 +719,18 @@ export
 			return ret;
 		}
 
+		std::string string_row_at(const ivec2::type y) const
+		{
+			std::string ret;
+
+			for (auto x = 0; x < max_grid.x() + 1; ++x)
+			{
+				if (auto v = at(ivec2{x, y}); v)
+					ret += *v;
+			}
+
+			return ret;
+		}
 
 		row row_from(const ivec2 pos) const
 		{
@@ -741,7 +760,19 @@ export
 			return ret;
 		}
 
-		
+		std::string string_column_at(const ivec2::type x) const
+		{
+
+			std::string ret;
+			//
+			for (auto y = 0; y <= max_grid.y(); ++y)
+			{
+				if (auto v = at(ivec2{x, y}); v)
+					ret += *v;
+			}
+			return ret;
+		}
+
 		column column_at(const ivec2 pos) const
 		{
 
@@ -755,6 +786,31 @@ export
 			}
 			return ret;
 		}
+
+		// columns
+		std::vector<std::string> columns() const
+		{
+			std::vector<std::string> ret;
+
+			for (ivec2::type i = 0; i < width(); ++i)
+				ret.push_back(string_column_at(i));
+
+			return ret;
+		}
+
+		// rows
+		std::vector<std::string> rows() const
+		{
+			std::vector<std::string> ret;
+
+			for (ivec2::type i = 0; i < height(); ++i)
+				ret.push_back(string_row_at(i));
+
+			return ret;
+		}
+
+		// transpose
+		void transpose() noexcept { }
 
 		// at
 		std::optional<T> at(ivec2 pos) const
@@ -864,6 +920,10 @@ export
 
 		ivec2::type area() const { return resolution[0] * resolution[1]; }
 
+		ivec2::type width() const { return max_grid[0] - min_grid[0] + 1; }
+
+		ivec2::type height() const { return max_grid[1] - min_grid[1] + 1; }
+
 	private:
 		ivec2 resolution{};
 		ivec2 min_grid{MAX_IVEC2};
@@ -871,61 +931,6 @@ export
 
 		std::unordered_map<ivec2, T> m_grid;
 		bool                         m_locked{false};
-	};
-
-	// grid2d
-	struct grid2d final
-	{
-		grid2d(std::string_view filename) { read(filename); }
-
-		void read(std::string_view filename)
-		{
-			auto lines = read_lines(filename);
-			width      = lines[0].size();
-			height     = lines.size();
-
-			data.resize(height);
-			for (auto &d : data)
-				d.resize(width);
-
-			ivec2 pos;
-			for (const auto &line : lines)
-			{
-				for (const auto &c : line)
-				{
-					data[pos.y()][pos.x()] = c;
-					pos[0]++;
-				}
-				pos[1]++;
-				pos[0] = 0;
-			}
-		}
-
-		char operator()(i64 x, i64 y) const noexcept
-		{
-			if ((x >= 0 && x < width) && (y >= 0 && y < height))
-			{
-				return data[y][x];
-			}
-			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
-			static char ret = '\0';
-			return ret;
-		}
-
-		char &operator()(i64 x, i64 y) noexcept
-		{
-			if ((x >= 0 && x < width) && (y >= 0 && y < height))
-			{
-				return data[y][x];
-			}
-			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
-			static char ret = '\0';
-			return ret;
-		}
-
-		std::vector<std::vector<char>> data;
-		i64                            width{0};
-		i64                            height{0};
 	};
 
 	// binary_grid
