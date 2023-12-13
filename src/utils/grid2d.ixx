@@ -13,6 +13,9 @@ export
 
 	struct grid2d final
 	{
+		using Type    = char;
+		using VecType = std::vector<char>;
+
 		grid2d() = default;
 
 		grid2d(std::string_view filename) { read(filename); }
@@ -27,7 +30,7 @@ export
 			width  = lines[0].size();
 			height = lines.size();
 
-			std::vector<std::vector<char>> result(height, std::vector<char>(width));
+			std::vector<std::vector<Type>> result(height, std::vector<Type>(width));
 
 			data.resize(height);
 			for (auto &d : data)
@@ -54,20 +57,55 @@ export
 		}
 
 		// column
-		std::string column(i64 x) const
+		VecType column(i64 x) const
 		{
-			std::string ret;
+			VecType ret;
 
 			for (i64 y = 0; y < height; ++y)
-				ret += at(x, y);
+				ret.emplace_back(at(x, y));
 
 			return ret;
 		}
 
-		// columns
-		std::vector<std::string> columns() const
+		// column_as_string
+		std::string column_as_string(i64 x) const
 		{
-			std::vector<std::string> ret;
+			std::string ret;
+			auto        r = column(x);
+			ret.reserve(r.size());
+
+			for (const char &i : r)
+				ret += i;
+			return ret;
+		}
+
+		// row
+		VecType row(i64 y) const
+		{
+			VecType ret;
+
+			for (i64 x = 0; x < width; ++x)
+				ret.emplace_back(at(x, y));
+
+			return ret;
+		}
+
+		// row_as_string
+		std::string row_as_string(i64 y) const
+		{
+			std::string ret;
+			auto        r = row(y);
+			ret.reserve(r.size());
+
+			for (const char &i : r)
+				ret += i;
+			return ret;
+		}
+
+		// columns
+		std::vector<VecType> columns() const
+		{
+			std::vector<VecType> ret;
 
 			for (i64 x = 0; x < width; ++x)
 				ret.push_back(column(x));
@@ -75,21 +113,10 @@ export
 			return ret;
 		}
 
-		// row
-		std::string row(i64 y) const
-		{
-			std::string ret;
-
-			for (i64 x = 0; x < width; ++x)
-				ret += at(x, y);
-
-			return ret;
-		}
-
 		// rows
-		std::vector<std::string> rows() const
+		std::vector<VecType> rows() const
 		{
-			std::vector<std::string> ret;
+			std::vector<VecType> ret;
 
 			for (i64 y = 0; y < width; ++y)
 				ret.push_back(row(y));
@@ -97,7 +124,11 @@ export
 			return ret;
 		}
 
-		// transpose / rotate cw 90°
+		// transpose
+		// 
+		// 123    147
+		// 456 => 258
+		// 789    369
 		void transpose() noexcept
 		{
 			std::vector<std::vector<char>> result(width, std::vector<char>(height));
@@ -110,7 +141,36 @@ export
 			recalc_size();
 		}
 
-		void rotate_cw() noexcept { transpose(); }
+		// rotate cw 90
+		void rotate_cw_90() noexcept
+		{
+			transpose();
+			reverse_rows();
+		}
+
+		// rotate ccw 90
+		void rotate_ccw_90() noexcept
+		{
+			transpose();
+			reverse_columns();
+		}
+
+		void rotate_180() noexcept { reverse_rows_and_columns(); }
+
+		// reverse
+		void reverse_columns() noexcept { std::ranges::reverse(data); }
+
+		void reverse_rows() noexcept
+		{
+			for (auto &row : data)
+				std::ranges::reverse(row);
+		}
+
+		void reverse_rows_and_columns() noexcept
+		{
+			reverse_columns();
+			reverse_rows();
+		}
 
 		bool valid(i64 x, i64 y) const noexcept { return (x >= 0 && x < width) && (y >= 0 && y < height); }
 
@@ -168,7 +228,7 @@ export
 			data.clear();
 		}
 
-		std::vector<std::vector<char>> data;
+		std::vector<std::vector<Type>> data;
 		i64                            width{0};
 		i64                            height{0};
 	};

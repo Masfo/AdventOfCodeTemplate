@@ -201,6 +201,8 @@ export
 
 	void panic() noexcept { }
 
+	void todo(std::string_view) { }
+
 	void assert_msg(bool, std::string_view) noexcept { }
 
 	void assert(bool) noexcept { }
