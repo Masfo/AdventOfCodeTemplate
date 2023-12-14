@@ -100,6 +100,7 @@ export
 		return as<i64>(t);
 	}
 
+	// hash
 	template<typename T>
 	void hash_combine(std::size_t & seed, const T &val)
 	{

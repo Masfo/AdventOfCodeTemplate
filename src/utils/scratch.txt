@@ -265,6 +265,20 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+	 // Cycles skip
+	 	i64       cycles = 0;
+		const i64 target = 1'000'000'000;
+
+		std::unordered_map<grid2d::hash_type, i64> cyclemap;
+
+		if (cyclemap.contains(g))
+			{
+				auto len  = cycles - cyclemap[g];
+				auto skip = (target - cycles) / len;
+				cycles += skip * len;
+			}
+			cyclemap[g] = cycles;
+
 
 
 

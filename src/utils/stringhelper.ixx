@@ -236,7 +236,7 @@ export
 	}
 
 	// count
-	i64 count(std::string_view str, std::string_view interests) noexcept
+	i64 count(auto str, std::string_view interests) noexcept
 	{
 		return std::ranges::count_if(str, [&interests](char c) { return interests.contains(c); });
 	}
