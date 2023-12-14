@@ -181,6 +181,8 @@ export
 		{
 			if (valid(x, y))
 				data[y][x] = value;
+			else
+				dbgln("grid2d: trying to set out-of-bounds: {}", ivec2(x, y));
 		}
 
 		void set(ivec2 pos, Type value) noexcept { set(pos[0], pos[1], value); }
@@ -257,7 +259,7 @@ export
 
 			for (i64 y = 0; y < height; ++y)
 				for (i64 x = 0; x < width; ++x)
-					hash_combine(seed, at(x, y));
+					hash_combine(seed, data[y][x]);
 			return seed;
 		}
 
