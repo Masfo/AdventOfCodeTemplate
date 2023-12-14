@@ -282,6 +282,15 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+		if (seen.contains(g))
+			{
+				auto index     = seen[g];
+				auto len       = cycles - index;
+				auto remaining = (target - cycles) % len;
+				cycles += index + remaining;
+			}
+			seen[g] = cycles;
+
 
 
 

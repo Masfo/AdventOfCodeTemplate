@@ -247,7 +247,25 @@ export
 
 		char &operator()(const ivec2 pos) noexcept { return at(pos[0], pos[1]); }
 
-		bool operator==(const grid2d &lhs) const noexcept { return data == lhs.data && width == lhs.width && height == lhs.height; }
+		void swap(grid2d &other) noexcept
+		{
+			using std::swap;
+			swap(width, other.width);
+			swap(height, other.height);
+			swap(data, other.data);
+		}
+
+		grid2d &operator=(grid2d lhs) noexcept
+		{
+			swap(lhs);
+			return *this;
+		}
+
+		bool operator==(const grid2d &lhs) const noexcept
+		{
+			//
+			return data == lhs.data && width == lhs.width && height == lhs.height;
+		}
 
 		// hash
 		operator hash_type() const noexcept { return hash(); }
