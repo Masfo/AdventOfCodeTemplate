@@ -13,8 +13,9 @@ export
 
 	struct grid2d final
 	{
-		using Type    = char;
-		using VecType = std::vector<char>;
+		using Type      = char;
+		using VecType   = std::vector<char>;
+		using hash_type = size_t;
 
 		grid2d() = default;
 
@@ -125,7 +126,7 @@ export
 		}
 
 		// transpose
-		// 
+		//
 		// 123    147
 		// 456 => 258
 		// 789    369
@@ -174,28 +175,53 @@ export
 
 		bool valid(i64 x, i64 y) const noexcept { return (x >= 0 && x < width) && (y >= 0 && y < height); }
 
+		bool valid(ivec2 pos) const noexcept { return valid(pos[0], pos[1]); }
+
+		void set(i64 x, i64 y, Type value) noexcept
+		{
+			if (valid(x, y))
+				data[y][x] = value;
+		}
+
+		void set(ivec2 pos, Type value) noexcept { set(pos[0], pos[1], value); }
+
 		// at
-		char at(i64 x, i64 y) const noexcept
+		Type at(i64 x, i64 y) const noexcept
 		{
 			if (valid(x, y))
 			{
 				return data[y][x];
 			}
 			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
-			static char ret = '\0';
+			static Type ret = '\0';
 			return ret;
 		}
 
 		// at
-		char &at(i64 x, i64 y) noexcept
+		Type &at(i64 x, i64 y) noexcept
 		{
 			if (valid(x, y))
 			{
 				return data[y][x];
 			}
 			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
-			static char ret = '\0';
+			static Type ret = '\0';
 			return ret;
+		}
+
+		Type at_helper(i64 x, i64 y) const { return data[y][x]; }
+
+		Type &at(ivec2 pos) noexcept { return at(pos[0], pos[1]); }
+
+		Type at(ivec2 pos) const noexcept { return at(pos[0], pos[1]); }
+
+		// move
+		void move(ivec2 pos, ivec2 newpos)
+		{
+			auto oldv = at(pos);
+			auto newv = at(newpos);
+			set(pos, newv);
+			set(newpos, oldv);
 		}
 
 		void print() const noexcept
@@ -214,6 +240,26 @@ export
 		char operator()(i64 x, i64 y) const noexcept { return at(x, y); }
 
 		char &operator()(i64 x, i64 y) noexcept { return at(x, y); }
+
+		char operator()(const ivec2 pos) const noexcept { return at(pos[0], pos[1]); }
+
+		char &operator()(const ivec2 pos) noexcept { return at(pos[0], pos[1]); }
+
+		bool operator==(const grid2d &lhs) const noexcept { return data == lhs.data && width == lhs.width && height == lhs.height; }
+
+		// hash
+		operator hash_type() const noexcept { return hash(); }
+
+		// hash
+		hash_type hash(size_t seed = 0) const noexcept
+		{
+			hash_combine(seed, width, height);
+
+			for (i64 y = 0; y < height; ++y)
+				for (i64 x = 0; x < width; ++x)
+					hash_combine(seed, at(x, y));
+			return seed;
+		}
 
 		void recalc_size() noexcept
 		{
@@ -234,3 +280,15 @@ export
 	};
 
 } // export
+
+// STD specials
+export namespace std
+{
+
+	template<>
+	struct hash<grid2d>
+	{
+		grid2d::hash_type operator()(const grid2d &grid) const { return grid.hash(); }
+	};
+
+} // namespace std
