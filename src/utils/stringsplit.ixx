@@ -53,8 +53,13 @@ export
 	auto split_n(const std::string_view str, const std::string_view delims = "\n", ignore option = ignore::none)
 	{
 		const auto s = split(str, delims, option);
-		if (s.size() < N)
-			throw std::range_error(std::format("Invalid delimiter/strip character, expected to get {} splits, got {}", N, s.size()));
+		if (s.size() != N)
+		{
+			dbgln("split_n: Delimiter split input '{}' to {} parts. Expected to get {} parts", str, s.size(), N);
+			for (const auto &i : s)
+				dbgln("{}'{}'", "  ", i);
+			assert_msg(s.size() == N, "Invalid delimiter/strip character");
+		}
 
 		std::array<std::string, N> ret{};
 		std::copy_n(s.begin(), N, ret.begin());
@@ -67,7 +72,12 @@ export
 	{
 		const auto s = split(str, delims, option);
 		if (s.size() < N)
-			throw std::range_error(std::format("Invalid delimiter/strip character, expected to get {} splits, got {}", N, s.size()));
+		{
+			dbgln("split_n: Delimiter split input '{}' to {} parts. Expected to get {} parts", str, s.size(), N);
+			for (const auto &i : s)
+				dbgln("{}'{}'", "  ", i);
+			assert_msg(s.size() == N, "Invalid delimiter/strip character");
+		}
 
 		if constexpr (N == 1)
 			return convert_to_type<T>(s[0]);
@@ -212,13 +222,15 @@ export
 		const auto s = split(str, delims, option);
 
 		if (I1 >= s.size())
-			throw std::range_error(std::format(
-				"split<T1,T2>(\"{}\", \"{}\", {}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
-				str,
-				delims,
-				I1,
-				I1,
-				s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I1,
+				  s.size() - 1);
+			panic();
+		}
 
 		T t1 = convert_to_type<T>(s[I1]);
 
@@ -232,17 +244,19 @@ export
 		const auto s = split(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size())
-			throw std::range_error(std::format(
-				"split<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
-				str,
-				delims,
-				I1,
-				I2,
-				std::max(I1, I2),
-				s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  std::max(I1, I2),
+				  s.size() - 1);
+			panic();
+		}
 
-		T t1 = convert_to_type<T>(s[I1]);
-		T t2 = convert_to_type<T>(s[I2]);
+		T t1 = convert_to_type<T>(trim(s[I1]));
+		T t2 = convert_to_type<T>(trim(s[I2]));
 
 		return std::make_tuple(t1, t2);
 	}
@@ -254,15 +268,17 @@ export
 		const auto s = split(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size())
-			throw std::range_error(std::format(
-				"split<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
-				str,
-				delims,
-				I1,
-				I2,
-				I3,
-				vmax(I1, I2, I3),
-				s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  I3,
+				  vmax(I1, I2, I3),
+				  s.size() - 1);
+			panic();
+		}
 
 		T t1 = convert_to_type<T>(s[I1]);
 		T t2 = convert_to_type<T>(s[I2]);
@@ -279,16 +295,19 @@ export
 		const auto s = split(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size() || I4 >= s.size())
-			throw std::range_error(std::format("split<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was splitted. "
-											   "Tried to index {} with maximum of {}",
-											   str,
-											   delims,
-											   I1,
-											   I2,
-											   I3,
-											   I4,
-											   vmax(I1, I2, I3, I4),
-											   s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was splitted. "
+				  "Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  I3,
+				  I4,
+				  vmax(I1, I2, I3, I4),
+				  s.size() - 1);
+			panic();
+		}
 
 		T t1 = convert_to_type<T>(s[I1]);
 		T t2 = convert_to_type<T>(s[I2]);
@@ -305,14 +324,16 @@ export
 		const auto s = split_n<2>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size())
-			throw std::range_error(std::format(
-				"split<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
-				str,
-				delims,
-				I1,
-				I2,
-				std::max(I1, I2),
-				s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  std::max(I1, I2),
+				  s.size() - 1);
+			panic();
+		}
 
 		T1 t1 = convert_to_type<T1>(s[I1]);
 		T2 t2 = convert_to_type<T2>(s[I2]);
@@ -327,15 +348,17 @@ export
 		const auto s = split_n<3>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size())
-			throw std::range_error(std::format(
-				"split<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
-				str,
-				delims,
-				I1,
-				I2,
-				I3,
-				vmax(I1, I2, I3),
-				s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  I3,
+				  vmax(I1, I2, I3),
+				  s.size() - 1);
+			panic();
+		}
 
 		T1 t1 = convert_to_type<T1>(s[I1]);
 		T2 t2 = convert_to_type<T2>(s[I2]);
@@ -351,16 +374,19 @@ export
 		const auto s = split_n<4>(str, delims, option);
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size() || I4 >= s.size())
-			throw std::range_error(std::format("split<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was splitted. "
-											   "Tried to index {} with maximum of {}",
-											   str,
-											   delims,
-											   I1,
-											   I2,
-											   I3,
-											   I4,
-											   vmax(I1, I2, I3, I4),
-											   s.size() - 1));
+		{
+			trace("split<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was splitted. "
+				  "Tried to index {} with maximum of {}",
+				  str,
+				  delims,
+				  I1,
+				  I2,
+				  I3,
+				  I4,
+				  vmax(I1, I2, I3, I4),
+				  s.size() - 1);
+			panic();
+		}
 
 		T1 t1 = convert_to_type<T1>(s[I1]);
 		T2 t2 = convert_to_type<T2>(s[I2]);
@@ -496,13 +522,15 @@ export
 		std::optional<T1> t1{};
 
 		if (I1 >= s.size())
-			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {}): Tried to index beyond what was splitted. Tried to index {} with maximum "
+		{
+			trace("split_optional<T1,T2>(\"{}\", \"{}\", {}): Tried to index beyond what was splitted. Tried to index {} with maximum "
 				  "of {}",
 				  str,
 				  delims,
 				  I1,
 				  I1,
 				  s.size() - 1);
+		}
 
 		if (s.size() >= 1)
 			t1 = convert_to_type<std::optional<T1>>(s[I1]);
@@ -518,7 +546,8 @@ export
 		std::optional<T2> t2{};
 
 		if (I1 >= s.size() || I2 >= s.size())
-			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. "
+		{
+			trace("split_optional<T1,T2>(\"{}\", \"{}\", {},{}): Tried to index beyond what was splitted. "
 				  "Tried to index {} with maximum of {}",
 				  str,
 				  delims,
@@ -526,6 +555,7 @@ export
 				  I2,
 				  std::max(I1, I2),
 				  s.size() - 1);
+		}
 
 		if (s.size() >= 1)
 			t1 = convert_to_type<std::optional<T1>>(s[I1]);
@@ -545,7 +575,8 @@ export
 		std::optional<T3> t3{};
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size())
-			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. "
+		{
+			trace("split_optional<T1,T2>(\"{}\", \"{}\", {},{},{}): Tried to index beyond what was splitted. "
 				  "Tried to index {} with maximum of {}",
 				  str,
 				  delims,
@@ -554,6 +585,7 @@ export
 				  I3,
 				  vmax(I1, I2, I3),
 				  s.size() - 1);
+		}
 
 		if (s.size() >= 1)
 			t1 = convert_to_type<std::optional<T1>>(s[I1]);
@@ -576,7 +608,8 @@ export
 		std::optional<T4> t4{};
 
 		if (I1 >= s.size() || I2 >= s.size() || I3 >= s.size() || I4 >= s.size())
-			dbgln("split_optional<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was "
+		{
+			trace("split_optional<T1,T2>(\"{}\", \"{}\", {},{},{},{}): Tried to index beyond what was "
 				  "splitted. Tried to index {} with maximum of {}",
 				  str,
 				  delims,
@@ -587,6 +620,7 @@ export
 				  I4,
 				  vmax(I1, I2, I3),
 				  s.size() - 1);
+		}
 
 		if (s.size() >= 1)
 			t1 = convert_to_type<std::optional<T1>>(s[I1]);

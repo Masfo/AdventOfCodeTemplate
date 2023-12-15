@@ -117,13 +117,13 @@ export
 		}
 		else if (ec == std::errc::invalid_argument)
 		{
-			dbgln("to_number: Invalid argument '{}'", str);
-			throw std::invalid_argument(std::format("Invalid argument: '{}'", str));
+			trace("to_number: Invalid argument '{}'", str);
+			panic();
 		}
 		else if (ec == std::errc::result_out_of_range)
 		{
-			dbgln("to_number: out of range '{}'", str);
-			throw std::out_of_range(std::format("Out of range: '{}'", str));
+			trace("to_number: out of range '{}'", str);
+			panic();
 		}
 		return {0};
 	}
@@ -242,9 +242,7 @@ export
 	}
 
 	// contains
-	bool contains(std::string_view input, std::string_view check) 
-	{ return input.contains(check);
-	}
+	bool contains(std::string_view input, std::string_view check) { return input.contains(check); }
 
 	// replace
 	std::string replace(std::string & subject, const std::string_view search, std::string_view replace) noexcept
