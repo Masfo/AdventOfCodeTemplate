@@ -241,6 +241,11 @@ export
 		return std::ranges::count_if(str, [&interests](char c) { return interests.contains(c); });
 	}
 
+	// contains
+	bool contains(std::string_view input, std::string_view check) 
+	{ return input.contains(check);
+	}
+
 	// replace
 	std::string replace(std::string & subject, const std::string_view search, std::string_view replace) noexcept
 	{

@@ -10,6 +10,28 @@ import aoc.stringsplit;
 // grid2d
 export
 {
+	/* TODO:
+	 *		Static and dynamic, for moving objects
+	 *			- mark during loading, what are dynamic elements
+	 *			- move only dynamic elements
+	 *		Maybe layers
+
+	struct grid2d;
+
+	auto match = [](grid2d &grid, ivec2 pos, char c)
+	{
+		//
+		switch (c)
+		{					// Layer
+			case '.':       // ↓
+			case '#': grid.set(0, pos, c); break;
+			case 'O': grid.set(1, pos, c); break;
+			default: break;
+		}
+	};
+
+	grid2d g("filename", match);
+	 */
 
 	struct grid2d final
 	{
@@ -218,13 +240,7 @@ export
 		Type at(ivec2 pos) const noexcept { return at(pos[0], pos[1]); }
 
 		// move
-		void move(ivec2 pos, ivec2 newpos)
-		{
-			auto oldv = at(pos);
-			auto newv = at(newpos);
-			set(pos, newv);
-			set(newpos, oldv);
-		}
+		void move(ivec2 pos, ivec2 newpos) { std::swap(at(pos), at(newpos)); }
 
 		void print() const noexcept
 		{
