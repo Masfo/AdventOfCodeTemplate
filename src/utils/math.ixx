@@ -146,12 +146,26 @@ export
 		return as<T>(std::abs(a) + std::abs(b));
 	}
 
-	// vmod
+	// vmin
 	template<class A, class... Args>
-	inline constexpr A vmodulus(A a, A b, Args... args)
+	inline constexpr A vmin(A a, A b, Args... args)
 	{
-		return std::modulus(std::modulus(a, b), args...);
+		if constexpr (sizeof...(args) == 0)
+			return std::min(a, b);
+		else
+			return vmin(vmin(a, b), args...);
 	}
+
+	// vmax
+	template<class A, class... Args>
+	inline constexpr A vmax(A a, A b, Args... args)
+	{
+		if constexpr (sizeof...(args) == 0)
+			return std::max(a, b);
+		else
+			return vmax(vmax(a, b), args...);
+	}
+
 
 	// vlcm
 	template<class A, class... Args>

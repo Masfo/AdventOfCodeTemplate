@@ -4,6 +4,7 @@ import std;
 import aoc.types;
 import aoc.vec;
 import aoc.debug;
+import aoc.math;
 import aoc.stringhelper;
 
 using namespace std::string_literals;
