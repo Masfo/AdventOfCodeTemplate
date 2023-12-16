@@ -364,6 +364,15 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 
 
 
+	std::unordered_map<char, std::unordered_map<ivec2, std::vector<ivec2>>> mirrors;
+
+	mirrors['.']  = {{right, {right}}, {left, {left}}, {up, {up}}, {down, {down}}};
+	mirrors['-']  = {{right, {right}}, {left, {left}}, {up, {left, right}}, {down, {left, right}}};
+	mirrors['|']  = {{right, {up, down}}, {left, {up, down}}, {up, {up}}, {down, {down}}};
+	mirrors['/']  = {{right, {up}}, {left, {down}}, {up, {right}}, {down, {left}}};
+	mirrors['\\'] = {{right, {down}}, {left, {up}}, {up, {left}}, {down, {right}}};
+
+
 
 
 

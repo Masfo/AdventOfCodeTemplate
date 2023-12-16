@@ -184,7 +184,7 @@ struct vec final
 	}
 
 	// compare
-	auto operator<=>(const vec_type&) const = default;
+	constexpr auto operator<=>(const vec_type& other) const noexcept = default;
 
 	// methods
 	[[nodiscard("Use the minimum value")]] constexpr vec_type min(const vec_type& other) const noexcept
