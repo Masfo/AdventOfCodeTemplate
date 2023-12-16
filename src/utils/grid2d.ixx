@@ -244,6 +244,7 @@ export
 
 		void print() const noexcept
 		{
+			dbgln();
 			for (i64 y = 0; y < height; ++y)
 			{
 				for (i64 x = 0; x < width; ++x)
@@ -308,6 +309,15 @@ export
 			width  = 0;
 			height = 0;
 			data.clear();
+		}
+
+		i64 count(std::string_view input) const noexcept
+		{
+			i64 count = 0;
+			for (i64 y = 0; y < height; ++y)
+				for (i64 x = 0; x < width; ++x)
+					count += input.contains(at(x, y)) ? 1 : 0;
+			return count;
 		}
 
 		std::vector<std::vector<Type>> data;

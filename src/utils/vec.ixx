@@ -322,6 +322,7 @@ export
 	const ivec2 MAX_IVEC2(MAX_I64);
 	const ivec2 MIN_IVEC2(MIN_I64);
 	const ivec2 ZERO_IVEC2(0);
+	const ivec2 ivec2_zero(0, 0);
 
 	const ivec3 MAX_IVEC3(MAX_I64);
 	const ivec3 MIN_IVEC3(MIN_I64);
@@ -360,7 +361,7 @@ export
 
 	struct ivec2_hash
 	{
-		size_t operator()(const ivec2& k) const { return hash_val(k[0], k[1]); }
+		size_t operator()(const ivec2& k) const { return hash_values(k[0], k[1]); }
 	};
 
 	template<typename T, size_t len>
@@ -417,12 +418,21 @@ export namespace std
 		size_t operator()(const ivec2& value) const { return hash_val(value[0], value[1]); }
 	};
 
+	// pair ivec2s
+	template<>
+	struct hash<std::pair<ivec2, ivec2>>
+	{
+		size_t operator()(const std::pair<ivec2, ivec2>& p) const { return hash_val(p.first, p.second); }
+	};
+
+	// ivec3
 	template<>
 	struct hash<ivec3>
 	{
 		size_t operator()(const ivec3& value) const { return hash_val(value[0], value[1], value[2]); }
 	};
 
+	// ivec4
 	template<>
 	struct hash<ivec4>
 	{
@@ -431,6 +441,7 @@ export namespace std
 
 	template<typename T, size_t len>
 	struct formatter<vec<T, len>>
+
 	{
 		constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
 

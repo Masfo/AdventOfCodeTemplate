@@ -116,7 +116,7 @@ export
 	void hash_combine(std::size_t &) { }
 
 	template<typename... Types>
-	std::size_t hash_val(const Types &...args)
+	std::size_t hash_values(const Types &...args)
 	{
 		std::size_t seed = 0;
 		hash_combine(seed, args...);
