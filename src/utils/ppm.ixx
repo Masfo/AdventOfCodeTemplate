@@ -40,8 +40,8 @@ public:
 	void put(i64 x, i64 y, rgb color)
 	{
 		//
-		if ((x >= 0 && x <= width) && (y >= 0 && y <= height))
-			image[y * width + x] = color;
+		if (auto index = index2D(x, y, width, height); index)
+			image[*index] = color;
 		else
 			dbgln("trying to index outside image {}x{} != {}x{}", x, y, width, height);
 	}

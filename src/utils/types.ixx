@@ -118,12 +118,37 @@ export
 		return y * WIDTH + x;
 	}
 
+	template<std::integral T, std::integral U>
+	std::optional<T> index2D(T x, T y, U WIDTH, U HEIGHT)
+	{
+		assert_msg(WIDTH > 0, "Width must be positive");
+		assert_msg(HEIGHT > 0, "Height must be positive");
+
+		if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+			return {};
+
+		return y * WIDTH + x;
+	}
+
 	template<std::integral T, size_t WIDTH, size_t HEIGHT, size_t DEPTH>
 	std::optional<T> index3D(T x, T y, T z)
 	{
 		static_assert(WIDTH > 0, "Width must be positive");
 		static_assert(HEIGHT > 0, "Height must be positive");
 		static_assert(DEPTH > 0, "DEPTH must be positive");
+
+		if (x < 0 || y < 0 || z < 0 || x >= WIDTH || y >= HEIGHT || z >= DEPTH)
+			return {};
+
+		return (z * WIDTH * HEIGHT) + (y * HEIGHT) + x;
+	}
+
+	template<std::integral T, T WIDTH, T HEIGHT, T DEPTH>
+	std::optional<T> index3D(T x, T y, T z)
+	{
+		assert_msg(WIDTH > 0, "Width must be positive");
+		assert_msg(HEIGHT > 0, "Height must be positive");
+		assert_msg(DEPTH > 0, "DEPTH must be positive");
 
 		if (x < 0 || y < 0 || z < 0 || x >= WIDTH || y >= HEIGHT || z >= DEPTH)
 			return {};
