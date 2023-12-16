@@ -100,20 +100,46 @@ export
 		return as<i64>(t);
 	}
 
-	// hash
+	// Hash
+
+	// xorshift
 	template<typename T>
-	void hash_combine(std::size_t & seed, const T &val)
+	T xorshift(const T &n, int i)
 	{
-		seed ^= std::hash<T>()(val) + 0x9e37'79b9 + (seed << 6) + (seed >> 2);
+		return n ^ (n >> i);
 	}
 
-	template<typename T, typename... Types>
-	void hash_combine(std::size_t & seed, const T &val, const Types &...args)
+	u32 distribute(const u32 &n)
 	{
-		hash_combine(seed, val);
-		hash_combine(seed, args...);
+		u32 p = 0x5555'5555ul;
+		u32 c = 3'423'571'495ul;
+		return c * xorshift(p * xorshift(n, 16), 16);
 	}
-	void hash_combine(std::size_t &) { }
+
+	u64 distribute(const u64 &n)
+	{
+		u64 p = 0x5555'5555'5555'5555ull;
+		u64 c = 17'316'035'218'449'499'591ull;
+		return c * xorshift(p * xorshift(n, 32), 32);
+	}
+
+#if 0
+	// old
+	template<typename T, typename... Rest>
+	void hash_combine(std::size_t & seed, const T &v, const Rest &...rest)
+	{
+		seed ^= std::hash<T>{}(v) + 0x9e37'79b9 + (seed << 6) + (seed >> 2);
+		(hash_combine(seed, rest), ...);
+	}
+#endif
+
+	//
+	template<typename T, typename... Rest>
+	inline void hash_combine(std::size_t & seed, const T &v, Rest... rest)
+	{
+		seed = std::rotl(seed, std::numeric_limits<size_t>::digits / 3) ^ distribute(std::hash<T>{}(v));
+		(hash_combine(seed, rest), ...);
+	}
 
 	template<typename... Types>
 	std::size_t hash_values(const Types &...args)
@@ -253,3 +279,16 @@ export
 
 	*/
 }
+
+// STD specials
+export namespace std
+{
+
+	// hash pairs
+	template<typename S, typename T>
+	struct hash<std::pair<S, T>>
+	{
+		size_t operator()(const std::pair<S, T> &p) const { return hash_values(p.first, p.second); }
+	};
+
+} // namespace std

@@ -415,28 +415,21 @@ export namespace std
 	template<>
 	struct hash<ivec2>
 	{
-		size_t operator()(const ivec2& value) const { return hash_val(value[0], value[1]); }
-	};
-
-	// pair ivec2s
-	template<>
-	struct hash<std::pair<ivec2, ivec2>>
-	{
-		size_t operator()(const std::pair<ivec2, ivec2>& p) const { return hash_val(p.first, p.second); }
+		size_t operator()(const ivec2& value) const { return hash_values(value[0], value[1]); }
 	};
 
 	// ivec3
 	template<>
 	struct hash<ivec3>
 	{
-		size_t operator()(const ivec3& value) const { return hash_val(value[0], value[1], value[2]); }
+		size_t operator()(const ivec3& value) const { return hash_values(value[0], value[1], value[2]); }
 	};
 
 	// ivec4
 	template<>
 	struct hash<ivec4>
 	{
-		size_t operator()(const ivec4& value) const { return hash_val(value[0], value[1], value[2], value[3]); }
+		size_t operator()(const ivec4& value) const { return hash_values(value[0], value[1], value[2], value[3]); }
 	};
 
 	template<typename T, size_t len>
