@@ -58,15 +58,18 @@ export
 	}
 
 	// common
-	i64 pow(i64 base, i64 exponent) noexcept
+	template<typename T=i64>
+	T pow(T base, T exponent) noexcept
 	{
-		if (exponent < 0)
-			return 0;
-
+		T temp{};
 		if (exponent == 0)
 			return 1;
+
+		temp = pow(base, exponent / 2);
+		if ((exponent % 2) == 0)
+			return temp * temp;
 		else
-			return base * pow(base, exponent - 1);
+			return base * temp * temp;
 	}
 
 	i64 mod(i64 x, i64 N) noexcept
@@ -165,7 +168,6 @@ export
 		else
 			return vmax(vmax(a, b), args...);
 	}
-
 
 	// vlcm
 	template<class A, class... Args>

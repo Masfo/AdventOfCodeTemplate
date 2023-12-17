@@ -640,3 +640,26 @@ void Graph::BFS(int s)
 		{
 			dbgln("{}", word);
 		}
+
+
+
+
+    Grid biggrid;
+    biggrid.set_size(grid.width() * 5, grid.height() * 5);
+    i64 stride_x = grid.width();
+    i64 stride_y = grid.height();
+    for (i64 gy = 0; gy < 5; gy++)
+    {
+        for (i64 gx = 0; gx < 5; gx++)
+        {
+            grid.for_each(
+                [&](i64 x, i64 y, i64 cell)
+                {
+                    ivec2 pos{gx * stride_x + x, gy * stride_y + y};
+                    i64   cost = cell + gx + gy;
+                    if (cost > 9)
+                        cost -= 9;
+
+                    biggrid.set(pos.x, pos.y, cost);
+                });
+        }

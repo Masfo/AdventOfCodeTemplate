@@ -203,48 +203,81 @@ export
 
 		bool valid(ivec2 pos) const noexcept { return valid(pos[0], pos[1]); }
 
+		// set
 		void set(i64 x, i64 y, Type value) noexcept
 		{
 			if (valid(x, y))
-				data[y][x] = value;
+				set_unsafe(x, y, value);
 			else
 				dbgln("grid2d: trying to set out-of-bounds: {}", ivec2(x, y));
 		}
 
 		void set(ivec2 pos, Type value) noexcept { set(pos[0], pos[1], value); }
 
+		// set_unsafe
+		void set_unsafe(const ivec2 pos, Type value) noexcept { set_unsafe(pos[0], pos[1], value); }
+
+		void set_unsafe(i64 x, i64 y, Type value) noexcept { data[y][x] = value; }
+
+		// fill
+		void fill(Type value = '.')
+		{
+			for (i64 y = 0; y < height; ++y)
+				for (i64 x = 0; x < width; ++x)
+					set_unsafe(x, y, value);
+		}
+
+		// at_unsafe
+		Type at_unsafe(i64 x, i64 y) const noexcept { return data[y][x]; }
+
+		Type &at_unsafe(i64 x, i64 y) noexcept { return data[y][x]; }
+
+		Type at_unsafe(const ivec2 pos) const noexcept { return data[pos[1]][pos[0]]; }
+
+		Type &at_unsafe(const ivec2 pos) noexcept { return data[pos[1]][pos[0]]; }
+
 		// at
 		Type at(i64 x, i64 y) const noexcept
 		{
 			if (valid(x, y))
-			{
-				return data[y][x];
-			}
+				return at_unsafe(x, y);
+
 			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
 			static Type ret = '\0';
 			return ret;
 		}
 
-		// at
 		Type &at(i64 x, i64 y) noexcept
 		{
 			if (valid(x, y))
-			{
-				return data[y][x];
-			}
+				return at_unsafe(x, y);
+
 			dbgln("grid2d: indexing out of bounds: {}", ivec2(x, y));
 			static Type ret = '\0';
 			return ret;
 		}
-
-		Type at_helper(i64 x, i64 y) const { return data[y][x]; }
 
 		Type &at(ivec2 pos) noexcept { return at(pos[0], pos[1]); }
 
 		Type at(ivec2 pos) const noexcept { return at(pos[0], pos[1]); }
 
+		// operator() / at
+		char operator()(i64 x, i64 y) const noexcept { return at(x, y); }
+
+		char &operator()(i64 x, i64 y) noexcept { return at(x, y); }
+
+		char operator()(const ivec2 pos) const noexcept { return at(pos[0], pos[1]); }
+
+		char &operator()(const ivec2 pos) noexcept { return at(pos[0], pos[1]); }
+
 		// move
-		void move(ivec2 pos, ivec2 newpos) { std::swap(at(pos), at(newpos)); }
+		void move(ivec2 pos, ivec2 newpos)
+		{
+			if (valid(pos) && valid(newpos))
+				std::swap(at_unsafe(pos), at_unsafe(newpos));
+			else
+				dbgln("grid2d::move({},{}) - both coords need to be valid", pos, newpos);
+		}
 
 		void print() const noexcept
 		{
@@ -259,14 +292,6 @@ export
 			}
 			dbgln();
 		}
-
-		char operator()(i64 x, i64 y) const noexcept { return at(x, y); }
-
-		char &operator()(i64 x, i64 y) noexcept { return at(x, y); }
-
-		char operator()(const ivec2 pos) const noexcept { return at(pos[0], pos[1]); }
-
-		char &operator()(const ivec2 pos) noexcept { return at(pos[0], pos[1]); }
 
 		void swap(grid2d &other) noexcept
 		{
@@ -285,7 +310,7 @@ export
 		bool operator==(const grid2d &lhs) const noexcept
 		{
 			//
-			return data == lhs.data && width == lhs.width && height == lhs.height;
+			return width == lhs.width && height == lhs.height && data == lhs.data;
 		}
 
 		// hash
@@ -302,6 +327,7 @@ export
 			return seed;
 		}
 
+		// recalc
 		void recalc_size() noexcept
 		{
 			width  = data[0].size();
@@ -310,6 +336,7 @@ export
 			visited_map.resize(width * height);
 		}
 
+		// reset
 		void reset()
 		{
 			width  = 0;
@@ -318,6 +345,7 @@ export
 			visited_map.clear();
 		}
 
+		// count
 		i64 count(std::string_view input) const noexcept
 		{
 			i64 count = 0;
@@ -362,6 +390,7 @@ export
 
 // STD specials
 export namespace std
+
 {
 
 	template<>
