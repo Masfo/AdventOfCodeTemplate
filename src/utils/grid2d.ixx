@@ -70,6 +70,7 @@ export
 				pos[1]++;
 				pos[0] = 0;
 			}
+			recalc_size();
 		}
 
 		// read from file
@@ -77,6 +78,7 @@ export
 		{
 			auto lines = read_lines(filename);
 			from_lines(lines);
+			recalc_size();
 		}
 
 		// column
@@ -161,6 +163,8 @@ export
 					result[x][y] = data[y][x];
 
 			data = result;
+
+			dbgln("Warning: visited map reset on transpose");
 			recalc_size();
 		}
 
@@ -302,6 +306,8 @@ export
 		{
 			width  = data[0].size();
 			height = data.size();
+
+			visited_map.resize(width * height);
 		}
 
 		void reset()
@@ -309,6 +315,7 @@ export
 			width  = 0;
 			height = 0;
 			data.clear();
+			visited_map.clear();
 		}
 
 		i64 count(std::string_view input) const noexcept
@@ -323,6 +330,32 @@ export
 		std::vector<std::vector<Type>> data;
 		i64                            width{0};
 		i64                            height{0};
+
+		// visited
+		std::vector<u8> visited_map;
+
+		void visit(const ivec2 pos, u8 value = 1) { visit(pos[0], pos[1], value); }
+
+		void visit(i64 x, i64 y, u8 value = 1)
+		{
+			if (valid(x, y))
+				visited_map[*index2D(x, y, width, height)] |= value;
+		}
+
+		u8 visited(const ivec2 pos) const { return visited(pos[0], pos[1]); }
+
+		u8 visited(i64 x, i64 y) const
+		{
+			if (valid(x, y))
+				return visited_map[*index2D(x, y, width, height)];
+			else
+			{
+				dbgln("grid2d::visited({},{}) invalid position", x, y);
+				return '\0';
+			}
+		}
+
+		void clear_visited() noexcept { std::ranges::fill(visited_map, static_cast<u8>(0)); }
 	};
 
 } // export

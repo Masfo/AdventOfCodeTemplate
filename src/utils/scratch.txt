@@ -201,6 +201,19 @@ Save Position: \u001b[{u} restores the cursor to the last saved position
 \u001b[?1049l	disables the alternative buffer
 
 
+		// DIJKSTRA
+			struct point_cost
+			{
+				ivec2 pos;
+				ivec2 dir;
+				int   cost;
+			
+				bool operator<(const point_cost &other) const { return other.cost < cost; }
+			};
+
+		std::priority_queue<point_cost> to_visit;
+
+
 
 
 

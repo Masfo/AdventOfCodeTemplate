@@ -217,6 +217,12 @@ export namespace std
 		size_t operator()(const std::pair<S, T> &p) const { return hash_values(p.first, p.second); }
 	};
 
+	template<typename S, typename T, typename I>
+	struct hash<std::tuple<S, T, I>>
+	{
+		size_t operator()(const std::tuple<S, T, I> &p) const { return hash_values(std::get<0>(p), std::get<1>(p), std::get<2>(p)); }
+	};
+
 } // namespace std
 
 // from index: x: index % width
