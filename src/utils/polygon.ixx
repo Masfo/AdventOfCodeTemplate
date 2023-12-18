@@ -9,6 +9,7 @@ import aoc.debug;
 export
 {
 
+	// non-intersecting
 	class linesegments final
 	{
 	public:
@@ -17,7 +18,7 @@ export
 		void reset()
 		{
 			vertices.clear();
-			interior_count = boundary_count = 0;
+			interior_count = perimeter_count = 0;
 		}
 
 		void insert(Type x, Type y) { insert(ivec2(x, y)); }
@@ -30,18 +31,26 @@ export
 			return interior_count;
 		}
 
-		Type boundary() noexcept
+		Type perimeter() noexcept
 		{
 			calc();
 
-			return boundary_count;
+			return perimeter_count;
 		}
 
 		Type total_area() noexcept
 		{
 			calc();
 
-			return interior_count + boundary_count;
+			return interior_count + perimeter_count;
+		}
+
+		ivec2 center() const noexcept
+		{
+			ivec2 sum;
+			for (const auto &pos : vertices)
+				sum += pos;
+			return sum / 2;
 		}
 
 		std::vector<ivec2> verts() { return vertices; }
@@ -74,8 +83,8 @@ export
 				return -1;
 			}
 
-			i64 area       = 0;
-			boundary_count = 0;
+			i64 area        = 0;
+			perimeter_count = 0;
 			for (size_t i = 0; i < vertices.size(); ++i)
 			{
 				size_t j = (i + 1) % vertices.size();
@@ -83,7 +92,7 @@ export
 				area += vertices[i][0] * vertices[j][1];
 				area -= vertices[j][0] * vertices[i][1];
 
-				boundary_count += distance(vertices[i], vertices[j]);
+				perimeter_count += distance(vertices[i], vertices[j]);
 			}
 			return std::abs(area) / 2;
 		}
@@ -91,11 +100,11 @@ export
 		void calc() noexcept
 		{
 			// Pick's Theorem: https://artofproblemsolving.com/wiki/index.php/Pick%27s_Theorem
-			interior_count = (shoelace_theorem() - (boundary_count / 2) + 1);
+			interior_count = (shoelace_theorem() - (perimeter_count / 2) + 1);
 		}
 
-		Type boundary_count = 0;
-		Type interior_count = 0;
+		Type perimeter_count = 0;
+		Type interior_count  = 0;
 
 		std::vector<ivec2> vertices;
 		//

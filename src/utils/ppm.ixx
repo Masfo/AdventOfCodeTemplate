@@ -110,8 +110,9 @@ export class ppm
 public:
 	ppm() = default;
 
-	void fill(rgb color)
-	{ /*std::ranges::fill(image, color);*/
+	ppm(rgb fc)
+		: fill_color(fc)
+	{
 	}
 
 	void put(ivec2 coord, rgb color) { put(coord[0], coord[1], color); }
@@ -165,6 +166,7 @@ public:
 		ivec2      border(10, 10);
 		ivec2      half{border[0] / 2, border[1] / 2};
 		static_ppm img(border[0] + res[0], border[1] + res[1]);
+		img.fill(fill_color);
 
 		for (const auto &[pos, color] : image)
 			img.put(half + pos + offset, color);
@@ -173,5 +175,6 @@ public:
 	}
 
 private:
+	rgb                            fill_color{255, 255, 255};
 	std::unordered_map<ivec2, rgb> image;
 };

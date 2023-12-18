@@ -150,20 +150,49 @@ struct vec final
 		return result;
 	}
 
-	// div
 	constexpr vec_type& operator/=(const vec_type& other) noexcept
 	{
-		for (size_t i = 0; i < other.length; ++i)
+		if (other.has_zero())
 		{
-			m_data[i] /= other[i];
+			panic("vec<{}>: {} / 0 - divide by zero", *this, length);
+			std::unreachable();
 		}
+
+		for (size_t i = 0; i < length; ++i)
+			m_data[i] /= other[i];
+
 		return *this;
 	}
 
 	constexpr vec_type operator/(const vec_type& other) const noexcept
 	{
+		if (other.has_zero())
+		{
+			panic("vec<{}>: {} / 0 - divide by zero", *this, length);
+			std::unreachable();
+		}
+
 		vec_type result = *this;
-		result /= other;
+		for (size_t i = 0; i < length; ++i)
+			result[i] /= other[i];
+
+		return result;
+	}
+
+	template<std::integral T>
+	constexpr vec_type operator/(const T& scalar) const noexcept
+	{
+		if (scalar == 0)
+		{
+			panic("vec<{}>: {} / 0 - divide by zero", *this, length);
+			std::unreachable();
+		}
+
+		vec_type result = *this;
+
+		for (size_t i = 0; i < length; ++i)
+			result[i] /= scalar;
+
 		return result;
 	}
 
@@ -250,6 +279,16 @@ struct vec final
 			result *= as<U>(m_data[i]);
 		return result;
 	}
+
+	// has_zero()
+	bool has_zero() const noexcept
+	{
+
+		for (int i = 0; i < length; ++i)
+			if (m_data[i] == 0)
+				return true;
+		return false;
+	};
 
 	// xyzw
 	[[nodiscard("Use the x-coordinate")]] T x() const noexcept
