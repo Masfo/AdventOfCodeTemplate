@@ -241,9 +241,14 @@ export
 		}
 
 		// flood fill
+		void floodfill(ivec2 pos, Type filler) { floodfill(pos, at(pos), filler); }
+
+		void floodfill(ivec2 pos, Type target, Type filler) { floodfill(pos[0], pos[1], target, filler); }
+
 		void floodfill(i64 x, i64 y, Type target, Type filler)
 		{
-			std::deque<ivec2> to_visit;
+			std::unordered_set<ivec2> seen;
+			std::deque<ivec2>         to_visit;
 			to_visit.push_back({x, y});
 
 			while (!to_visit.empty())
@@ -253,10 +258,14 @@ export
 
 				if (!valid(pos))
 					continue;
+				if (seen.contains(pos))
+					continue;
+				seen.insert(pos);
+
 				if (at_unsafe(pos) != target)
 					continue;
 
-				set_unsafe(x, y, filler);
+				set_unsafe(pos, filler);
 
 				to_visit.push_back({pos + right});
 				to_visit.push_back({pos + left});
