@@ -50,7 +50,7 @@ export
 			ivec2 sum;
 			for (const auto &pos : vertices)
 				sum += pos;
-			return sum / 2;
+			return sum / vertices.size();
 		}
 
 		std::vector<ivec2> verts() { return vertices; }

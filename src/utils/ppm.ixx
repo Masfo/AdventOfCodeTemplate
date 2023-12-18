@@ -164,7 +164,7 @@ public:
 		ivec2      res    = mmax - mmin;
 		ivec2      offset = mmin.abs();
 		ivec2      border(10, 10);
-		ivec2      half{border[0] / 2, border[1] / 2};
+		ivec2      half{border / 2};
 		static_ppm img(border[0] + res[0], border[1] + res[1]);
 		img.fill(fill_color);
 
