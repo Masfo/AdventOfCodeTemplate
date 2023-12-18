@@ -9,7 +9,7 @@ import aoc.debug;
 export
 {
 
-	class polygon2d final
+	class linesegments final
 	{
 	public:
 		using Type = i64;
@@ -43,6 +43,8 @@ export
 
 			return interior_count + boundary_count;
 		}
+
+		std::vector<ivec2> verts() { return vertices; }
 
 	private:
 		/*
