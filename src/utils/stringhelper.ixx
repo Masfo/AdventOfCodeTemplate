@@ -105,10 +105,26 @@ export
 	template<typename T = i64>
 	inline T constexpr to_number(std::string_view str, int base = 10)
 	{
+		if (str.empty())
+		{
+			panic("to_number: empty string");
+			return {};
+		}
 
 		T val{};
-		if (not str.empty() && str[0] == '+')
+		if (str[0] == '#')
+		{
 			str.remove_prefix(1);
+			auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, 16)};
+			if (ec == std::errc())
+				return val;
+			trace("try_to_number(\"{}\", base({})). Is not a hex number", str, 16);
+			panic();
+		}
+
+		if (str[0] == '+')
+			str.remove_prefix(1);
+
 		auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, base)};
 
 		if (ec == std::errc())
@@ -147,7 +163,17 @@ export
 			return {};
 
 		T val{};
-		if (!str.empty() && (str[0] == '+'))
+		if (str[0] == '#')
+		{
+			str.remove_prefix(1);
+			auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, 16)};
+			if (ec == std::errc())
+				return val;
+			trace("try_to_number(\"{}\", base({})). Is not a hex number", str, 16);
+			return {};
+		}
+
+		if (str[0] == '+')
 			str.remove_prefix(1);
 
 		auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, base)};

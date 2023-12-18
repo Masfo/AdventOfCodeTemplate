@@ -64,6 +64,26 @@ export
 
 	};
 
+	const std::unordered_map<std::string, ivec2> string_to_dir{
+		{"north", north},
+		{"east", east},
+		{"south", south},
+		{"west", west},
+		{"n", north},
+		{"e", east},
+		{"s", south},
+		{"w", west},
+
+		{"U", up},
+		{"D", down},
+		{"L", left},
+		{"R", right},
+		{"u", up},
+		{"d", down},
+		{"l", left},
+		{"r", right},
+	};
+
 	const std::array<ivec2, 6> hex_coords{
 		north_east,
 		east,

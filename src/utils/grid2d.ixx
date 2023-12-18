@@ -6,6 +6,7 @@ import aoc.vec;
 import aoc.debug;
 import aoc.readfile;
 import aoc.stringsplit;
+import aoc.grid;
 
 // grid2d
 export
@@ -36,10 +37,22 @@ export
 	struct grid2d final
 	{
 		using Type      = char;
-		using VecType   = std::vector<char>;
+		using VecType   = std::vector<Type>;
 		using hash_type = size_t;
 
 		grid2d() = default;
+
+		grid2d(i64 w, i64 h, Type f = '.')
+		{
+			width  = w;
+			height = h;
+			data.resize(height);
+			for (auto &d : data)
+				d.resize(width);
+			recalc_size();
+
+			fill(f);
+		}
 
 		grid2d(std::string_view filename) { read(filename); }
 
@@ -225,6 +238,31 @@ export
 			for (i64 y = 0; y < height; ++y)
 				for (i64 x = 0; x < width; ++x)
 					set_unsafe(x, y, value);
+		}
+
+		// flood fill
+		void floodfill(i64 x, i64 y, Type target, Type filler)
+		{
+			std::deque<ivec2> to_visit;
+			to_visit.push_back({x, y});
+
+			while (!to_visit.empty())
+			{
+				auto pos = to_visit.front();
+				to_visit.pop_front();
+
+				if (!valid(pos))
+					continue;
+				if (at_unsafe(pos) != target)
+					continue;
+
+				set_unsafe(x, y, filler);
+
+				to_visit.push_back({pos + right});
+				to_visit.push_back({pos + left});
+				to_visit.push_back({pos + up});
+				to_visit.push_back({pos + down});
+			}
 		}
 
 		// at_unsafe
