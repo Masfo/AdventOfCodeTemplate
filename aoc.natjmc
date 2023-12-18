@@ -6,6 +6,10 @@
 
 	<File Name="graph.ixx"/>
 	<File Name="grid.ixx"/>
+	<File Name="grid2d.ixx"/>
+	<File Name="polygon.ixx"/>
+
+
 	<File Name="sprite.ixx"/>
 	<File Name="tree.ixx"/>
 
@@ -18,8 +22,10 @@
 
 	<File Name="types.ixx"/>
 	<File Name="helpers.ixx"/>
+	<File Name="math.ixx"/>
+
 
 	<!-- Functions -->
-	<Function Name="std::*" />
+	<Function Name="std\:\:.*" />
 
 </NonUserCode>
