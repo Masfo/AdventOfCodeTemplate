@@ -103,59 +103,12 @@ export
 	}
 
 	template<typename T = i64>
-	inline T constexpr to_number(std::string_view str, int base = 10)
-	{
-		if (str.empty())
-		{
-			panic("to_number: empty string");
-			return {};
-		}
-
-		T val{};
-		if (str[0] == '#')
-		{
-			str.remove_prefix(1);
-			auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, 16)};
-			if (ec == std::errc())
-				return val;
-			trace("try_to_number(\"{}\", base({})). Is not a hex number", str, 16);
-			panic();
-		}
-
-		if (str[0] == '+')
-			str.remove_prefix(1);
-
-		auto [ptr, ec]{std::from_chars(str.data(), str.data() + str.size(), val, base)};
-
-		if (ec == std::errc())
-		{
-			return val;
-		}
-		else if (ec == std::errc::invalid_argument)
-		{
-			trace("to_number: Invalid argument '{}'", str);
-			panic();
-		}
-		else if (ec == std::errc::result_out_of_range)
-		{
-			trace("to_number: out of range '{}'", str);
-			panic();
-		}
-		return {0};
-	}
-
-	template<typename T = i64>
-	inline T constexpr to_number(char c, [[maybe_unused]] int base = 10)
-	{
-		return to_number(std::string_view{&c}, base);
-	}
-
-	template<typename T = i64>
 	inline char constexpr to_char(T value, int base = 10)
 	{
 		return to_string(value, base)[0];
 	}
 
+	// try_to_number
 	template<typename T = i64>
 	inline std::optional<T> try_to_number(std::string_view str, int base = 10)
 	{
@@ -182,6 +135,24 @@ export
 
 		trace("try_to_number(\"{}\", base({})). Is not a number", str, base);
 		return {};
+	}
+
+	// to_number
+	template<typename T = i64>
+	inline T constexpr to_number(std::string_view str, int base = 10)
+	{
+
+		if (auto result = try_to_number<T>(str, base); result)
+			return *result;
+		else
+			panic("to_number(\"{}\"): failed to convert to number", str);
+		return T{0};
+	}
+
+	template<typename T = i64>
+	inline T constexpr to_number(char c, [[maybe_unused]] int base = 10)
+	{
+		return to_number(std::string_view{&c}, base);
 	}
 
 	// convert_to_vector
