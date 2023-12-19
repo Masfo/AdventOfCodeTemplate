@@ -26,35 +26,35 @@ export
 	}
 
 	template<typename T = i64>
-	struct range
+	struct irange
 	{
-		range() = default;
+		irange() = default;
 
-		range(T s, T e)
+		irange(T s, T e)
 			: min(s)
 			, max(e)
 		{
 		}
 
-		bool contains(const range<T> &other) const noexcept
+		bool contains(const irange<T> &other) const noexcept
 		{
 			return (min >= other.min && max <= other.max) || (other.min >= min && other.max <= max);
 		}
 
-		bool overlaps(const range<T> &other) const noexcept { return !(max < other.min || min > other.max); }
+		bool overlaps(const irange<T> &other) const noexcept { return !(max < other.min || min > other.max); }
 
 		T min{};
 		T max{};
 	};
 
 	template<typename T = i64>
-	bool contains(range<T> r1, range<T> r2)
+	bool contains(irange<T> r1, irange<T> r2)
 	{
 		return r1.contains(r2);
 	}
 
 	template<typename T = i64>
-	bool overlaps(range<T> r1, range<T> r2)
+	bool overlaps(irange<T> r1, irange<T> r2)
 	{
 		return r1.overlaps(r2);
 	}

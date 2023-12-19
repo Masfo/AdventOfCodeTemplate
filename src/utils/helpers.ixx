@@ -124,7 +124,18 @@ export
 	}
 
 	// upto 0..n-1
-	inline constexpr auto upto = []<std::integral I>(I n) { return std::views::iota(I{}, n); };
+	inline constexpr auto upto = []<std::integral I>(I n)
+	{
+		//
+		return std::views::iota(I{}, n);
+	};
+
+	// range(start, stop, step)
+	inline constexpr auto range = []<std::integral I>(I begin, I end, I stepsize = 1)
+	{
+		const auto boundary = [end](int i) { return i < end; };
+		return std::ranges::views::iota(begin) | std::ranges::views::stride(stepsize) | std::ranges::views::take_while(boundary);
+	};
 
 	// Shunting Yard
 
