@@ -105,7 +105,7 @@ export
 	}
 
 	template<typename T, typename U>
-	size_t index_of(T & v, U find)
+	size_t index_of(const T &v, U find)
 	{
 		auto result = std::ranges::find(v, find);
 		if (result == v.end())
@@ -122,6 +122,9 @@ export
 	{
 		return std::find(v.begin(), v.end(), value) != v.end();
 	}
+
+	// upto 0..n-1
+	inline constexpr auto upto = []<std::integral I>(I n) { return std::views::iota(I{}, n); };
 
 	// Shunting Yard
 

@@ -38,7 +38,6 @@ struct alignas(64) FormatLocation
 
 export
 {
-
 	using namespace std::string_view_literals;
 #ifdef _DEBUG
 	// debug

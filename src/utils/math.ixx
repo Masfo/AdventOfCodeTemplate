@@ -28,21 +28,23 @@ export
 	template<typename T = i64>
 	struct range
 	{
+		range() = default;
+
 		range(T s, T e)
-			: start(s)
-			, length(e)
+			: min(s)
+			, max(e)
 		{
 		}
 
 		bool contains(const range<T> &other) const noexcept
 		{
-			return (start >= other.start && length <= other.end) || (other.start >= start && other.end <= length);
+			return (min >= other.min && max <= other.max) || (other.min >= min && other.max <= max);
 		}
 
-		bool overlaps(const range<T> &other) const noexcept { return !(length < other.start || start > other.end); }
+		bool overlaps(const range<T> &other) const noexcept { return !(max < other.min || min > other.max); }
 
-		T start{};
-		T length{};
+		T min{};
+		T max{};
 	};
 
 	template<typename T = i64>
@@ -58,7 +60,7 @@ export
 	}
 
 	// common
-	template<typename T=i64>
+	template<typename T = i64>
 	T pow(T base, T exponent) noexcept
 	{
 		T temp{};
