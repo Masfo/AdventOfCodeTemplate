@@ -39,7 +39,6 @@ struct alignas(64) FormatLocation
 export
 {
 	using namespace std::string_view_literals;
-#ifdef _DEBUG
 	// debug
 
 	template<typename... Args>
@@ -105,6 +104,7 @@ export
 		{
 			dbgln();
 			trace("PANIC: {}", fmt);
+			dbgln();
 		}
 
 		auto traces = std::stacktrace::current();
@@ -114,15 +114,15 @@ export
 			if (traceline.source_file().contains(__FILE__))
 				continue;
 
-			dbgln("{}({}): {}", traceline.source_file(), traceline.source_line(), traceline.description());
+			if (!traceline.source_file().empty())
+				dbgln("{}", traceline);
 		}
 
 		if (IsDebuggerPresent())
 		{
 			DebugBreak();
 		}
-		FatalExit(0);
-		std::unreachable();
+		std::terminate();
 	}
 
 	[[noreturn]] void panic() noexcept { panic(""); }
@@ -168,7 +168,7 @@ export
 		assert_msg(expr, "assert", loc);
 	}
 
-#else
+#if 0
 
 	template<typename... Args>
 	void dbg(const std::format_string<Args...>, Args &&...)
@@ -194,13 +194,6 @@ export
 	}
 
 	void trace() noexcept { }
-
-	template<typename... Args>
-	void panic(std::string_view, Args && ...) noexcept
-	{
-	}
-
-	void panic() noexcept { }
 
 	void todo(std::string_view) { }
 
