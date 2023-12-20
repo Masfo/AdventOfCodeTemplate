@@ -335,6 +335,14 @@ export
 		return trim_back(s);
 	};
 
+	std::string trim_copy(const std::string &s) noexcept
+	{
+		std::string ret = s;
+		ret             = trim_front(ret);
+		ret             = trim_back(ret);
+		return ret;
+	};
+
 	std::vector<std::string> trim(const std::vector<std::string> &from) noexcept
 	{
 		std::vector<std::string> ret;

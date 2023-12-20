@@ -22,7 +22,7 @@ export
 		std::vector<std::string> tokens;
 		while (std::string::npos != stop || std::string::npos != start)
 		{
-			tokens.emplace_back(new_str.substr(start, stop - start));
+			tokens.emplace_back(trim(new_str.substr(start, stop - start)));
 
 			start = new_str.find_first_not_of(delims, stop);
 			stop  = new_str.find_first_of(delims, start);
