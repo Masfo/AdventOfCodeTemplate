@@ -36,27 +36,73 @@ export
 		{
 		}
 
-		bool contains(const irange<T> &other) const noexcept
+		inline auto empty() const { return irange<T>{std::numeric_limits<T>::max(), std::numeric_limits<T>::min()}; }
+
+		[[nodiscard]] bool is_empty() const { return min > max; };
+
+		[[nodiscard]] bool intersects(const irange &r) const
 		{
-			return (min >= other.min && max <= other.max) || (other.min >= min && other.max <= max);
+			return !r.is_empty() && (contains(r.min) || contains(r.max) || r.contains(min) || r.contains(max));
 		}
 
-		bool overlaps(const irange<T> &other) const noexcept { return !(max < other.min || min > other.max); }
+		[[nodiscard]] auto width() const { return is_empty() ? T{} : max - min + 1; };
+
+		[[nodiscard]] bool contains(T v) const { return min <= v && v <= max; };
+
+		[[nodiscard]] bool contains(const irange &other) const noexcept { return (other.min >= min && other.max <= max); }
+
+		// intersection
+		[[nodiscard]] auto intersection(const irange &r) const noexcept
+		{
+			if (is_empty() || r.is_empty())
+				return empty();
+			if (!intersects(r))
+				return empty();
+
+			return irange{std::max(min, r.min), std::min(max, r.max)};
+		}
+
+		[[nodiscard]] inline auto operator&(const irange &r) const { return intersection(r); }
+
+		// merged/union
+		[[nodiscard]] auto merge(const irange &r) const noexcept
+		{
+			if (is_empty())
+				return r;
+			if (r.is_empty())
+				return *this;
+
+			return irange{std::min(min, r.min), std::max(max, r.max)};
+		}
+
+		[[nodiscard]] inline auto operator+(const irange &r) const { return merge(r); }
+
+		// intersects one-way
+		[[nodiscard]] inline auto operator&=(const irange &r) const { return intersects(r); }
+
+		// contains one-way
+		[[nodiscard]] inline auto operator|=(const irange &r) const { return contains(r); }
+
+		// contains both
+		inline bool operator&&(const irange &r) const { return r.contains(*this) || contains(r); };
+
+		// intersects both
+		inline bool operator||(const irange &r) const { return r.intersects(*this) || intersects(r); };
 
 		T min{};
 		T max{};
 	};
 
 	template<typename T = i64>
-	bool contains(irange<T> r1, irange<T> r2)
+	[[nodiscard]] bool contains(const irange<T> &r1, const irange<T> &r2)
 	{
-		return r1.contains(r2);
+		return r1 && r2;
 	}
 
 	template<typename T = i64>
-	bool overlaps(irange<T> r1, irange<T> r2)
+	[[nodiscard]] bool intersects(const irange<T> &r1, const irange<T> &r2)
 	{
-		return r1.overlaps(r2);
+		return r1 || r2;
 	}
 
 	// common
@@ -80,6 +126,7 @@ export
 			return 0;
 		return (x % N + N) % N;
 	}
+
 	i64 modinv(i64 a, i64 b) noexcept
 	{
 		// Extended Euclidean Algorithm and Modular Inverse, from
@@ -183,6 +230,16 @@ export
 	inline constexpr T lcm_compute(const T a, const T b) noexcept
 	{
 		return abs(a * (b / gcd(a, b)));
+	}
+
+	// lcm
+	template<typename T>
+	T lcm(const std::vector<T> &vec) noexcept
+	{
+		T ret{1};
+		for (const auto &i : vec)
+			ret = std::lcm(ret, i);
+		return ret;
 	}
 
 	// https://en.wikipedia.org/wiki/Category:Figurate_numbers
