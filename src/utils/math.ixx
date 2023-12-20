@@ -77,17 +77,17 @@ export
 
 		[[nodiscard]] inline auto operator+(const irange &r) const { return merge(r); }
 
-		// intersects one-way
-		[[nodiscard]] inline auto operator&=(const irange &r) const { return intersects(r); }
-
 		// contains one-way
-		[[nodiscard]] inline auto operator|=(const irange &r) const { return contains(r); }
+		[[nodiscard]] inline auto operator&=(const irange &r) const { return contains(r); }
+
+		// intersects one-way
+		[[nodiscard]] inline auto operator|=(const irange &r) const { return intersects(r); }
 
 		// contains both
-		inline bool operator&&(const irange &r) const { return r.contains(*this) || contains(r); };
+		inline bool operator&&(const irange &r) const { return contains(r) || r.contains(*this); };
 
 		// intersects both
-		inline bool operator||(const irange &r) const { return r.intersects(*this) || intersects(r); };
+		inline bool operator||(const irange &r) const { return intersects(r) || r.intersects(*this); };
 
 		T min{};
 		T max{};
