@@ -123,14 +123,14 @@ export
 		return std::find(v.begin(), v.end(), value) != v.end();
 	}
 
-	// loop (n, n+1, n+..)
-	inline constexpr auto loop = []<std::integral I>(I start) { return std::views::iota(start); }
-
 	// upto 0..n-1
 	inline constexpr auto upto = []<std::integral I>(I n) { return std::views::iota(I{}, n); };
 
+	// loop (n, n+1, n+..)
+	inline constexpr auto loop = []<std::integral I>(I start) { return std::views::iota(start); }
+
 	// range(start, stop, step)
-	inline constexpr auto range = []<std::integral I>(I begin, I end, I stepsize = 1)
+	inline constexpr auto range = []<std::integral I, std::integral U>(I begin, U end, U stepsize = 1)
 	{
 		const auto boundary = [end](int i) { return i < end; };
 		return std::ranges::views::iota(begin) | std::ranges::views::stride(stepsize) | std::ranges::views::take_while(boundary);

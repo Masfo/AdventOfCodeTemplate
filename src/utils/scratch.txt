@@ -632,6 +632,23 @@ void Graph::BFS(int s)
 
 
 
+    std::vector<std::unordered_set<ivec2>> visited;
+	visited.resize(maxstep + 1);
+	visited[0].insert(starting[0]);
+
+	for (i64 step : upto(maxstep))
+	{
+		for (const auto pos : visited[step])
+		{
+			for (const auto &offset : directions_4_way)
+			{
+				if (grid(pos + offset) != '#')
+					visited[step + 1].insert(pos + offset);
+			}
+		}
+	}
+
+
 
 		
 		

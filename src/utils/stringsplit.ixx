@@ -3,8 +3,8 @@ export module aoc.stringsplit;
 import std;
 import aoc.types;
 import aoc.vec;
-import aoc.debug;
 import aoc.math;
+import aoc.debug;
 import aoc.stringhelper;
 
 using namespace std::string_literals;

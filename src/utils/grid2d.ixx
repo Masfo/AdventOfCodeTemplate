@@ -94,6 +94,9 @@ export
 			recalc_size();
 		}
 
+		// width/height as ivec
+		operator ivec2() const { return ivec2{width, height}; }
+
 		// column
 		VecType column(i64 x) const
 		{
@@ -402,9 +405,42 @@ export
 			return count;
 		}
 
-		std::vector<std::vector<Type>> data;
-		i64                            width{0};
-		i64                            height{0};
+		// find_all, returns points in grid order
+		template<typename T = Type>
+		[[nodiscard]] auto find_all(T to_find) const -> std::vector<ivec2>
+		{
+			std::vector<ivec2> points;
+
+			for (i64 y = 0; y < height; ++y)
+			{
+				for (i64 x = 0; x < width; ++x)
+				{
+					if (data[y][x] == to_find)
+						points.emplace_back(ivec2{x, y});
+				}
+			}
+
+			if (points.empty())
+			{
+				dbgln("find_all: no points '{}' found. Defaulting to [0,0]", to_find);
+				points.push_back(ZERO_IVEC2);
+			}
+
+			std::ranges::sort(points, grid_order());
+
+			return points;
+		}
+
+		template<typename T = Type>
+		auto replace_all(T to_find, T with) -> std::vector<ivec2>
+		{
+			auto points = find_all(to_find);
+
+			for (const auto &point : points)
+				set(point, with);
+
+			return points;
+		}
 
 		// visited
 		std::vector<u8> visited_map;
@@ -431,6 +467,11 @@ export
 		}
 
 		void clear_visited() noexcept { std::ranges::fill(visited_map, static_cast<u8>(0)); }
+
+		//
+		std::vector<std::vector<Type>> data;
+		i64                            width{0};
+		i64                            height{0};
 	};
 
 } // export

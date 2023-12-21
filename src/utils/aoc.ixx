@@ -3,8 +3,8 @@ module;
 export module aoc;
 
 export import aoc.debug;
-export import aoc.math;
 export import aoc.vec;
+export import aoc.math;
 export import aoc.polygon;
 export import aoc.readfile;
 

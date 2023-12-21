@@ -75,6 +75,7 @@ export
 			return irange{std::min(min, r.min), std::max(max, r.max)};
 		}
 
+		// merge/union
 		[[nodiscard]] inline auto operator+(const irange &r) const { return merge(r); }
 
 		// contains one-way
@@ -120,9 +121,10 @@ export
 			return base * temp * temp;
 	}
 
-	i64 mod(i64 x, i64 N) noexcept
+	template<std::integral T = i64>
+	T mod(T x, T N) noexcept
 	{
-		if (N == 0)
+		if (N == T{0})
 			return 0;
 		return (x % N + N) % N;
 	}

@@ -3,6 +3,14 @@ import std;
 import aoc.debug;
 import aoc.types;
 
+template<std::integral T = i64>
+T modulus(T x, T N) noexcept
+{
+	if (N == T{0})
+		return 0;
+	return (x % N + N) % N;
+}
+
 template<typename Data, size_t size>
 concept HasEnoughData = requires(Data data) { data.size() >= size; };
 
@@ -277,6 +285,16 @@ struct vec final
 		U result{m_data[0]};
 		for (size_t i = 1; i < length; ++i)
 			result *= as<U>(m_data[i]);
+		return result;
+	}
+
+	[[nodiscard("Use the mod value")]] constexpr vec_type mod(const vec_type& other) const noexcept
+	requires(length > 1)
+	{
+		vec_type result;
+		for (size_t i = 0; i < length; ++i)
+			result[i] = modulus(m_data[i], other[i]);
+
 		return result;
 	}
 
