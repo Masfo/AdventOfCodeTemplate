@@ -104,6 +104,7 @@ export
 			std::rotate(v.begin() + oldIndex, v.begin() + oldIndex + 1, v.begin() + newIndex + 1);
 	}
 
+	// index_ofs
 	template<typename T, typename U>
 	size_t index_of(const T &v, U find)
 	{
@@ -117,27 +118,27 @@ export
 		return std::ranges::distance(v.begin(), result);
 	}
 
+	// contains
 	template<typename T>
 	bool contains(const std::vector<T> &v, const auto &value) noexcept
 	{
 		return std::find(v.begin(), v.end(), value) != v.end();
 	}
 
+	// range(start, stop, step)
+	inline constexpr auto range = []<std::integral I, std::integral U>(I begin, U end, U stepsize = 1)
+	{
+		const auto boundary = [end]<U>(I i) { return i < end; };
+		return std::ranges::views::iota(begin) | std::ranges::views::stride(stepsize) | std::ranges::views::take_while(boundary);
+	};
+
 	// upto 0..n-1
 	inline constexpr auto upto = []<std::integral I>(I n) { return std::views::iota(I{}, n); };
 
 	// loop (n, n+1, n+..)
-	inline constexpr auto loop = []<std::integral I>(I start) { return std::views::iota(start); }
-
-	// range(start, stop, step)
-	inline constexpr auto range = []<std::integral I, std::integral U>(I begin, U end, U stepsize = 1)
-	{
-		const auto boundary = [end](int i) { return i < end; };
-		return std::ranges::views::iota(begin) | std::ranges::views::stride(stepsize) | std::ranges::views::take_while(boundary);
-	};
+	inline constexpr auto loop = []<std::integral I>(I start) { return std::views::iota(start); };
 
 	// Shunting Yard
-
 	auto apply_binary_op(std::deque<i64> & values, std::vector<char> & op)->i64
 	{
 		assert_msg(values.size() >= 2, "There should be two values for binary operations");

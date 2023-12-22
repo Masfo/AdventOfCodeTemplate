@@ -26,7 +26,10 @@ export
 		{					// Layer
 			case '.':       // ↓
 			case '#': grid.set(0, pos, c); break;
-			case 'O': grid.set(1, pos, c); break;
+			case 'O':
+				grid.set(1, pos, c);		//
+				grid.set(0, pos, '.');      // . under the O
+				break;
 			default: break;
 		}
 	};
@@ -94,8 +97,8 @@ export
 			recalc_size();
 		}
 
-		// width/height as ivec
-		operator ivec2() const { return ivec2{width, height}; }
+		// dimensions
+		const ivec2 &dimensions() const { return dimension; }
 
 		// column
 		VecType column(i64 x) const
@@ -383,6 +386,9 @@ export
 			width  = data[0].size();
 			height = data.size();
 
+			dimension[0] = width;
+			dimension[1] = height;
+
 			visited_map.resize(width * height);
 		}
 
@@ -472,6 +478,7 @@ export
 		std::vector<std::vector<Type>> data;
 		i64                            width{0};
 		i64                            height{0};
+		ivec2                          dimension{};
 	};
 
 } // export

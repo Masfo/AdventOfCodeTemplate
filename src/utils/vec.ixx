@@ -4,7 +4,7 @@ import aoc.debug;
 import aoc.types;
 
 template<std::integral T = i64>
-T modulus(T x, T N) noexcept
+constexpr T modulus(T x, T N) noexcept
 {
 	if (N == T{0})
 		return 0;
@@ -210,15 +210,16 @@ struct vec final
 	constexpr vec_type& operator+() const noexcept { return *this; }
 
 	// compare
-	constexpr bool operator==(const vec_type& other) const noexcept
-	{
-		for (size_t i = 0; i < length; ++i)
-		{
-			if (m_data[i] != other[i])
-				return false;
-		}
-		return true;
-	}
+	// constexpr bool operator==(const vec_type& other) const noexcept
+	//{
+	//	return m_data == other.m_data;
+	//	//for (size_t i = 0; i < length; ++i)
+	//	//{
+	//	//	if (m_data[i] != other[i])
+	//	//		return false;
+	//	//}
+	//	//return true;
+	//}
 
 	// compare
 	constexpr auto operator<=>(const vec_type& other) const noexcept = default;
@@ -504,34 +505,6 @@ export
 							ret.emplace_back(ivec4{origin[0] + x, origin[1] + y, origin[2] + z, origin[4] + w});
 		return ret;
 	}
-
-	// Cuboid
-	struct cuboid
-	{
-		cuboid() = default;
-
-		cuboid(const ivec3& min, const ivec3& max, int on)
-			: min(min)
-			, max(max)
-			, on(on)
-		{
-		}
-
-		ivec3 min, max;
-		int   on{-1};
-
-		u64 volume() const { return (1ull + max[0] - min[0]) * (1ull + max[1] - min[1]) * (1ull + max[2] - min[2]); }
-
-		std::optional<cuboid> intersects(const cuboid& b) const
-		{
-			if (min[0] > b.max[0] || max[0] < b.min[0] || min[1] > b.max[1] || max[1] < b.min[1] || min[2] > b.max[2] || max[2] < b.min[2])
-				return {};
-
-			return cuboid{{std::max(min[0], b.min[0]), std::max(min[1], b.min[1]), std::max(min[2], b.min[2])},
-						  {std::min(max[0], b.max[0]), std::min(max[1], b.max[1]), std::min(max[2], b.max[2])},
-						  -b.on};
-		}
-	};
 }
 
 // STD specials

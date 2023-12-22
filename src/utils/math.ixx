@@ -30,26 +30,26 @@ export
 	{
 		irange() = default;
 
-		irange(T s, T e)
-			: min(s)
-			, max(e)
+		irange(T f, T l)
+			: first(f)
+			, last(l)
 		{
 		}
 
 		inline auto empty() const { return irange<T>{std::numeric_limits<T>::max(), std::numeric_limits<T>::min()}; }
 
-		[[nodiscard]] bool is_empty() const { return min > max; };
+		[[nodiscard]] bool is_empty() const { return first > last; };
 
 		[[nodiscard]] bool intersects(const irange &r) const
 		{
-			return !r.is_empty() && (contains(r.min) || contains(r.max) || r.contains(min) || r.contains(max));
+			return !r.is_empty() && (contains(r.first) || contains(r.last) || r.contains(first) || r.contains(last));
 		}
 
-		[[nodiscard]] auto width() const { return is_empty() ? T{} : max - min + 1; };
+		[[nodiscard]] auto width() const { return is_empty() ? T{} : last - first + 1; };
 
-		[[nodiscard]] bool contains(T v) const { return min <= v && v <= max; };
+		[[nodiscard]] bool contains(T v) const { return v >= first && v <= last; };
 
-		[[nodiscard]] bool contains(const irange &other) const noexcept { return (other.min >= min && other.max <= max); }
+		[[nodiscard]] bool contains(const irange &other) const noexcept { return (other.first >= first && other.last <= last); }
 
 		// intersection
 		[[nodiscard]] auto intersection(const irange &r) const noexcept
@@ -59,7 +59,7 @@ export
 			if (!intersects(r))
 				return empty();
 
-			return irange{std::max(min, r.min), std::min(max, r.max)};
+			return irange{std::max(first, r.first), std::min(last, r.last)};
 		}
 
 		[[nodiscard]] inline auto operator&(const irange &r) const { return intersection(r); }
@@ -72,7 +72,7 @@ export
 			if (r.is_empty())
 				return *this;
 
-			return irange{std::min(min, r.min), std::max(max, r.max)};
+			return irange{std::min(first, r.first), std::max(last, r.last)};
 		}
 
 		// merge/union
@@ -90,8 +90,22 @@ export
 		// intersects both
 		inline bool operator||(const irange &r) const { return intersects(r) || r.intersects(*this); };
 
-		T min{};
-		T max{};
+		bool operator==(const irange &other) const = default;
+
+		auto operator<(const irange &other) const noexcept
+		{
+			if (first < other.first)
+				return true;
+			if (first == other.first)
+			{
+				if (last < other.last)
+					return true;
+			}
+			return false;
+		}
+
+		T first{};
+		T last{};
 	};
 
 	template<typename T = i64>
