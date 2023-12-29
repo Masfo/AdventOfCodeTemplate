@@ -4,8 +4,11 @@ import aoc.debug;
 import aoc.stringhelper;
 import aoc.types;
 
+
 export
 {
+
+
 	// sort
 	template<typename T>
 	void sort(std::vector<T> & v)
@@ -128,7 +131,7 @@ export
 	// range(start, stop, step)
 	inline constexpr auto range = []<std::integral I, std::integral U>(I begin, U end, U stepsize = 1)
 	{
-		const auto boundary = [end]<U>(I i) { return i < end; };
+		const auto boundary = [end](U i) { return i < end; };
 		return std::ranges::views::iota(begin) | std::ranges::views::stride(stepsize) | std::ranges::views::take_while(boundary);
 	};
 
@@ -138,6 +141,8 @@ export
 	// loop (n, n+1, n+..)
 	inline constexpr auto loop = []<std::integral I>(I start) { return std::views::iota(start); };
 
+
+	//
 	// Shunting Yard
 	auto apply_binary_op(std::deque<i64> & values, std::vector<char> & op)->i64
 	{
@@ -268,4 +273,6 @@ export
 		std::string input;
 		i64         pos;
 	};
+
+	// combinations
 }

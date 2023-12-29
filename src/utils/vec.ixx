@@ -24,7 +24,8 @@ struct vec final
 	using vec_type = vec<T, length>;
 	using type     = T;
 
-	vec() = default;
+	size_t size = length;
+	vec()       = default;
 
 	vec(T v) noexcept { m_data.fill(v); }
 
@@ -299,6 +300,27 @@ struct vec final
 		return result;
 	}
 
+	[[nodiscard("Use the cross product")]] constexpr vec_type cross(const vec_type& other) const noexcept
+	requires(length == 3)
+	{
+		vec_type result;
+
+		result[0] = m_data[1] * other[2] - m_data[2] * other[1];
+		result[1] = m_data[2] * other[0] - m_data[0] * other[2];
+		result[2] = m_data[0] * other[1] - m_data[1] * other[0];
+
+		return result;
+	}
+
+	template<typename U = T>
+	[[nodiscard("Use the dot product value")]] constexpr U dot(const vec_type& other) const noexcept
+	{
+		U result{};
+		for (size_t i = 0; i < length; ++i)
+			result += as<U>(m_data[i] * other[i]);
+		return result;
+	}
+
 	// has_zero()
 	bool has_zero() const noexcept
 	{
@@ -308,6 +330,12 @@ struct vec final
 				return true;
 		return false;
 	};
+
+	constexpr vec<T, 2> as_ivec2() const noexcept
+	requires(length >= 2)
+	{
+		return vec<T, 2>(m_data[0], m_data[1]);
+	}
 
 	// xyzw
 	[[nodiscard("Use the x-coordinate")]] T x() const noexcept
@@ -374,6 +402,13 @@ export
 	using uvec2 = vec<u64, 2>;
 	using uvec3 = vec<u64, 3>;
 	using uvec4 = vec<u64, 4>;
+
+	using f32vec2 = vec<f32, 2>;
+	using f32vec3 = vec<f32, 3>;
+
+	using f64vec2 = vec<f64, 2>;
+	using f64vec3 = vec<f64, 3>;
+
 
 	using rgb = vec<u8, 3>;
 

@@ -691,6 +691,15 @@ void Graph::BFS(int s)
         }
 
 
+	std::vector<std::array<ivec2, 3>> priority{
+        {north, north_east, north_west},
+        {south, south_east, south_west},
+        {west, north_west, south_west},
+        {east, north_east, south_east},
+    };
+
+	std::ranges::rotate(priority, priority.begin() + 1);
+
 
 
 
