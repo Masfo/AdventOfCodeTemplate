@@ -19,6 +19,8 @@ import aoc.vec;
 export
 {
 
+
+
 	template<typename T>
 	bool between(T v, T vmin, T vmax) noexcept
 	{
@@ -291,6 +293,90 @@ export
 		return n * (3 * n - 2);
 	}
 
+	/*
+			f32 x1  = p1[0];
+			f32 y1  = p1[1];
+			f32 dx1 = v1[0];
+			f32 dy1 = v1[1];
+
+			f32 x2  = p2[0];
+			f32 y2  = p2[1];
+			f32 dx2 = v2[0];
+			f32 dy2 = v2[1];
+
+			f32 m1 = dy1 / dx1;
+			f32 m2 = dy2 / dx2;
+
+
+			f32 fe = std::abs(m2 - m1);
+			if (std::abs(m2 - m1) < f32_epsilon)
+				continue;
+
+			f32 x = (m1 * x1 - m2 * x2 + y2 - y1) / (m1 - m2);
+			f32 y = (m1 * m2 * (x2 - x1) + m2 * y1 - m1 * y2) / (m2 - m1);
+
+			##
+
+				const s64 minC = 200'000'000'000'000;
+				const s64 maxC = 400'000'000'000'000;
+				s32 intersect = 0;
+				for (s32 i = 0; i < stones.Count(); i++)
+				{
+				  for (s32 j = i + 1; j < stones.Count(); j++)
+				  {
+					auto &si = stones[i];
+					auto &sj = stones[j];
+
+					double cx = double(si.pos.x);
+					double cy = double(si.pos.y);
+					double dx = double(si.vel.x);
+					double dy = double(si.vel.y);
+
+					double ax = double(sj.pos.x);
+					double ay = double(sj.pos.y);
+					double bx = double(sj.vel.x);
+					double by = double(sj.vel.y);
+
+					double det = (dx*by - dy*bx);
+					if (det == 0)
+					  { continue; }
+
+					double u = (bx*(cy-ay) + by*(ax-cx))/det;
+					double t = (dx*(cy-ay) + dy*(ax-cx))/det;
+
+					double x = ax + bx * t;
+					double y = ay + by * t;
+
+					if (u < 0 || t < 0)
+					  { continue; }
+
+					if (x >= double(minC) && x <= double(maxC) && y >= double(minC) && y <= double(maxC))
+					  { intersect++; }
+				  }
+				}
+
+
+
+//#############
+		[[nodiscard]] auto line() const {
+            auto x0 = position(0);
+            auto x1 = velocity(0) + x0;
+
+            auto y0 = position(1);
+            auto y1 = velocity(1) + y0;
+
+            auto m = static_cast<double>(y1-y0) / (x1-x0);
+            auto b = y0-m*x0;
+            return std::pair{m, b};
+        }
+
+        [[nodiscard]] auto crossed_in_the_future(Eigen::Vector2d v) const {
+            return std::signbit(v(0) - position(0)) == std::signbit(velocity(0)) &&
+                   std::signbit(v(1) - position(1)) == std::signbit(velocity(1));
+        }
+
+	*/
+
 	// line
 	struct line
 	{
@@ -304,29 +390,75 @@ export
 		ivec2 p2;
 	};
 
-	std::optional<ivec2> intersect(const ivec2 &a, const ivec2 &b, const ivec2 &c, const ivec2 &d) noexcept
+	std::optional<f64vec2> intersect2d(const f64vec2 &a, const f64vec2 &b, const f64vec2 &c, const f64vec2 &d) noexcept
 	{
 
 		// Line AB represented as a1x + b1y = c1
-		i64 a1 = b.y() - a.y();
-		i64 b1 = a.x() - b.x();
-		i64 c1 = a1 * (a.x()) + b1 * (a.y());
+		f64 a1 = b.y() - a.y();
+		f64 b1 = a.x() - b.x();
+		f64 c1 = a1 * (a.x()) + b1 * (a.y());
 
 		// Line CD represented as a2x + b2y = c2
-		i64 a2 = d.y() - c.y();
-		i64 b2 = c.x() - d.x();
-		i64 c2 = a2 * (c.x()) + b2 * (c.y());
+		f64 a2 = d.y() - c.y();
+		f64 b2 = c.x() - d.x();
+		f64 c2 = a2 * (c.x()) + b2 * (c.y());
 
-		i64 determinant = a1 * b2 - a2 * b1;
+		f64 determinant = a1 * b2 - a2 * b1;
 
 		if (determinant == 0)
-			return {};
+			return std::nullopt;
 
-		i64 x = (b2 * c1 - b1 * c2) / determinant;
-		i64 y = (a1 * c2 - a2 * c1) / determinant;
+		f64 x = (b2 * c1 - b1 * c2) / determinant;
+		f64 y = (a1 * c2 - a2 * c1) / determinant;
 
-		return ivec2(x, y);
+		return f64vec2(x, y);
 	}
 
-	std::optional<ivec2> intersect(const line &a, const line &b) noexcept { return intersect(a.p1, a.p2, b.p1, b.p2); }
+	std::optional<ivec2> intersect2d(const ivec2 &a, const ivec2 &b, const ivec2 &c, const ivec2 &d) noexcept
+	{
+		const f64vec2 fa(static_cast<f64>(a[0]), static_cast<f64>(a[1]));
+		const f64vec2 fb(static_cast<f64>(b[0]), static_cast<f64>(b[1]));
+		const f64vec2 fc(static_cast<f64>(c[0]), static_cast<f64>(c[1]));
+		const f64vec2 fd(static_cast<f64>(d[0]), static_cast<f64>(d[1]));
+
+		auto r = intersect2d(fa, fb, fc, fd);
+		if (r)
+		{
+			auto rb = *r;
+			return ivec2(static_cast<ivec2::type>(rb[0]), static_cast<ivec2::type>(rb[1]));
+		}
+		return {};
+	}
+
+	std::optional<ivec2> intersect2d(const line &a, const line &b) noexcept { return intersect2d(a.p1, a.p2, b.p1, b.p2); }
+
+	/*
+	https://stackoverflow.com/questions/2316490/the-algorithm-to-find-the-point-of-intersection-of-two-3d-line-segment
+
+
+	std::optional<point3d> intersection(const point& lhs, const point& rhs)
+	{
+		const auto p0 = lhs.position;
+		const auto p1 = lhs.position+lhs.velocity;
+		const auto p2 = rhs.position;
+		const auto p3 = rhs.position+rhs.velocity;
+
+		const double t0_num = (p0.x-p2.x)*(p2.y-p3.y) - (p0.y-p2.y)*(p2.x-p3.x);
+		const double den = (p0.x-p1.x)*(p2.y-p3.y) - (p0.y-p1.y)*(p2.x-p3.x);
+
+		if(den==0)
+			return std::nullopt;
+
+		const double t1_num = (p0.x-p2.x)*(p0.y-p1.y) - (p0.y-p2.y)*(p0.x-p1.x);
+
+		const auto t0 = t0_num/den;
+		const auto t1 = t1_num/den;
+
+		if(t0<0 || t1<0)
+			return std::nullopt;
+
+		return point3d(lhs.position.x + lhs.velocity.x*t0, lhs.position.y+lhs.velocity.y*t0,0);
+	}
+
+	*/
 }

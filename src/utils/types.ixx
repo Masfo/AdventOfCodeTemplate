@@ -33,6 +33,9 @@ export
 	constexpr i8 MIN_I8 = std::numeric_limits<i8>::min();
 	constexpr i8 MAX_I8 = std::numeric_limits<i8>::max();
 
+	constexpr f32 f32_epsilon = std::numeric_limits<f32>::epsilon();
+	constexpr f64 f64_epsilon = std::numeric_limits<f64>::epsilon();
+
 	template<typename T>
 	using undirected_graph = std::unordered_map<T, std::unordered_set<T>>;
 
